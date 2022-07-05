@@ -1,0 +1,174 @@
+:root {
+    --color-1: #ff8000;
+    --color-2: #ffb03b;
+
+    --color-3: #07212e;
+}
+.restoCard h6 {
+    transition: all 0.5s;
+}
+
+.restoCard h6:hover {
+    transform: scale(1.2) translateY(12%);
+
+    transition: all 0.5s;
+}
+
+.restoCard .headerResto {
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 300px;
+    background-position: center;
+}
+
+.restoCard .titleResto {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+.menuResto li a {
+    color: #012738 !important;
+}
+.menuResto .nav-item .active {
+    color: #fea116 !important;
+    border: none !important;
+    font-weight: bold !important;
+}
+.btn-group .active {
+    background-color: #fea116 !important;
+    border: none !important;
+    border: 1px solid #fea116 !important;
+}
+.btn-outline-primary:active {
+    background-color: #fea116 !important;
+    border: 1px solid #fea116 !important;
+}
+.btn-outline-primary:hover {
+    background-color: #fea116 !important;
+    color: #012738 !important;
+}
+.btn-outline-primary:not(.active) > div .fa-check-circle {
+    display: none;
+}
+.close-btn {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 20px;
+}
+
+.close-btn span {
+    color: #ccc;
+}
+
+.modal .btn {
+    background-color: #023047;
+    color: white;
+}
+
+.modal .btn:hover {
+    background-color: var(--color-1);
+    color: white;
+}
+
+.close-btn:hover span {
+    color: #000;
+}
+
+.modal {
+    border-radius: 7px;
+    overflow: hidden;
+    background-color: transparent;
+}
+
+.modal .logo a img {
+    width: 30px;
+}
+
+.modal .modal-content {
+    background-color: transparent;
+    border: none;
+    border-radius: 7px;
+}
+
+.modal .modal-content .modal-body {
+    border-radius: 7px;
+    overflow: hidden;
+    background-color: #fff;
+    padding-left: 0px;
+    padding-right: 0px;
+    -webkit-box-shadow: 0 10px 50px -10px rgba(0, 0, 0, 0.9);
+    box-shadow: 0 10px 50px -10px rgba(0, 0, 0, 0.9);
+}
+
+.modal .modal-content .modal-body h2 {
+    font-size: 18px;
+}
+
+.modal .modal-content .modal-body p {
+    color: #777;
+    font-size: 14px;
+}
+
+.modal .modal-content .modal-body h3 {
+    color: #000;
+    font-size: 22px;
+}
+
+.modal .modal-content .modal-body .close-btn {
+    color: #000;
+}
+
+.modal .modal-content .modal-body .promo-img {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+}
+
+.modal .modal-content .modal-body .promo-img .price {
+    top: 20px;
+    left: 20px;
+    position: absolute;
+    color: #fff;
+}
+
+.modal .btn {
+    border-radius: 30px;
+}
+
+.modal .warp-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    position: relative;
+    background: rgba(62, 100, 255, 0.05);
+    color: #023047;
+    border-radius: 50%;
+}
+.modal .warp-icon span {
+    font-size: 40px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.input-group {
+    padding-left: 0;
+    padding-right: 0;
+    transition: all linear 0.4s;
+    border: 1px solid #ccc !important;
+}
+
+.input-group:active,
+.input-group:focus,
+.input-group:hover {
+    border: 1px solid var(--color-1) !important;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    outline: none;
+    transition: all linear 0.4s;
+}

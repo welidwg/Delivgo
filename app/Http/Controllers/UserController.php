@@ -123,7 +123,7 @@ class UserController extends Controller
             $password = Hash::make($req->json("password"));
             $phone = $req->json("phone");
             $type = $req->json("type");
-            $state = $req->json("state");
+            $state = "Tunisia";
             $city = $req->json("city");
             $address = $req->json("address");
             $user = new User;

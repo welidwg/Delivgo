@@ -21,9 +21,9 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string("avatar", 500)->nullable();
             $table->integer("type")->default(1);
-            $table->string("state");
-            $table->string("city");
-            $table->string("address", 500);
+            $table->string("state")->nullable();
+            $table->string("city")->nullable();
+            $table->string("address", 500)->nullable();
             $table->integer("phone")->unique();
             $table->integer("statut")->default(1);
             $table->integer("deliveryPrice")->nullable();

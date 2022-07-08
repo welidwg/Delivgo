@@ -15,7 +15,7 @@ class AddEmailCode extends Migration
     {
         //
         Schema::table("codes", function (Blueprint $table) {
-            $table->string("email")->unique();
+            $table->string("email");
         });
     }
 

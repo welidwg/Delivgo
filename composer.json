@@ -12,7 +12,9 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
-        "stevebauman/location": "^6.5"
+        "nexmo/client": "^2.4",
+        "stevebauman/location": "^6.5",
+        "twilio/sdk": "^6.38"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -57,7 +59,12 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true
+        },
+        "disable-tls": true,
+        "secure-http": false
     },
     "minimum-stability": "dev",
     "prefer-stable": true

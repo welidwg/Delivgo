@@ -15,11 +15,9 @@ class CreateDrinksTable extends Migration
     {
         Schema::create('drinks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("resto_id")->constrained()->cascadeOnDelete();
-            $table->foreignId("product_id")->constrained()->cascadeOnDelete();
+            $table->foreignId("resto_id")->references("user_id")->on("users")->onDelete("cascade");
             $table->string("label");
-            $table->integer("price");
-            $table->integer("maxPer");
+            $table->float("price");
             $table->timestamps();
         });
     }

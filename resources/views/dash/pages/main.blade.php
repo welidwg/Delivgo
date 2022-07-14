@@ -12,55 +12,7 @@
 @endsection
 
 @section('content')
-    @if ($user->address == '')
-        <div class="modal fade in" id="Astuces" aria-labelledby="astuces" data-bs-backdrop="static" data-bs-keyboard="false"
-            aria-hidden="false">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content rounded-0">
-                    <div class="modal-body p-4 px-5 ">
-
-
-                        <div class="main-content text-center mb-3 py-auto">
-
-
-
-
-                            <label for="" class="mb-3 fs-1 color-3">Hello , {{ $user->name }}</label>
-                            <p class="fw-bold">We are very glad that you joined us .<br> But before starting, we ask
-                                you to
-                                complete your profile information quindly. <br>
-
-
-                            </p>
-
-                            <div class="mx-auto mt-3">
-                                <a href={{ url('/dash/profile') }} id="checkBtnSubmit" class="btn  w-100">Proceed to
-                                    profile <i class="fad fa-angle-double-right"></i></a>
-                            </div>
-                            <div class="mx-auto mt-3">
-                                <a role="button" href="/logout" id="resendBtn" class="color-1 w-100">Logout</a>
-                            </div>
-                        </div>
-
-
-
-
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <script>
-            $(window).on("load", function() {
-                $('#Astuces').modal('show');
-                // $("#launchAstuces").click()
-
-                // document.getElementById("launchAstuces").click();
-
-            });
-        </script>
-    @endif
+ 
     {{-- <div class="row">
         <div class="col-md-4 col-xl-3 mb-2">
             <div class="card shadow border-start-primary py-2">

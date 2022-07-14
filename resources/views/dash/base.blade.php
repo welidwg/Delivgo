@@ -22,7 +22,6 @@ $user = Auth::user();
     <link rel="icon" type="image/png" sizes="16x16" href={{ asset('images/icons/favicon.ico') }} />
     <!-- Custom CSS -->
     <link href="{{ asset('dist/css/style.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('dist/css/custom.css') }}" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"
@@ -34,7 +33,8 @@ $user = Auth::user();
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"
         integrity="sha512-xIPqqrfvUAc/Cspuj7Bq0UtHNo/5qkdyngx6Vwt+tmbvTLDszzXM0G6c91LXmGrRx8KEPulT+AfOOez+TeVylg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" href="assets/fa/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/fa/css/all.min.css') }}">
+
     {{-- <link href="assets/libs/chartist/dist/chartist.min.css" rel="stylesheet">
     <link href="assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.css" rel="stylesheet"> --}}
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -52,7 +52,32 @@ $user = Auth::user();
         integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    <link href="{{ asset('dist/css/custom.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/css/alertify.min.css"
+        integrity="sha512-IXuoq1aFd2wXs4NqGskwX2Vb+I8UJ+tGJEu/Dc0zwLNKeQ7CW3Sr6v0yU3z5OQWe3eScVIkER4J9L7byrgR/fA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/alertify.min.js"
+        integrity="sha512-JnjG+Wt53GspUQXQhc+c4j8SBERsgJAoHeehagKHlxQN+MtCCmFDghX9/AcbkkNRZptyZU4zC8utK59M5L45Iw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/css/themes/bootstrap.min.css"
+        integrity="sha512-6xVTeh6P+fsqDhF7t9sE9F6cljMrK+7eR7Qd+Py7PX5QEVVDLt/yZUgLO22CXUdd4dM+/S6fP0gJdX2aSzpkmg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css" />
+
+    <script type="text/javascript"
+        src="https://cdn.datatables.net/v/bs5/dt-1.11.5/fh-3.2.2/sc-2.0.5/sb-1.3.2/sp-2.0.0/datatables.min.js"></script>
+
+    {{-- <link rel="stylesheet" href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+
+    <script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script> --}}
+    <script>
+        alertify.defaults.theme.input = "form-control focus text-dark"
+        alertify.defaults.theme.ok = "btn btn-success"
+        alertify.defaults.theme.cancel = "btn btn-light"
+    </script>
+
 </head>
+
 
 <body>
     <script>
@@ -205,9 +230,9 @@ $user = Auth::user();
                                 <a class="dropdown-item" href="javascript:void(0)"><i
                                         class="ti-wallet m-r-5 m-l-5"></i>
                                     My Balance</a>
-                                <a class="dropdown-item" href="javascript:void(0)"><i
+                                <a class="dropdown-item" href={{ url('/logout') }}><i
                                         class="ti-email m-r-5 m-l-5"></i>
-                                    Inbox</a>
+                                    Logout</a>
                             </ul>
                         </li>
                         <!-- ============================================================== -->
@@ -230,15 +255,23 @@ $user = Auth::user();
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
                         <li class="sidebar-item {{ request()->routeIs('dash') ? 'selected' : '' }}">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link " href="{{ route('dash') }}"
-                                aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span
-                                    class="hide-menu">Dashboard</span></a>
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link "
+                                href="{{ route('dash') }}" aria-expanded="false"><i
+                                    class="mdi mdi-view-dashboard"></i><span class="hide-menu">Dashboard</span></a>
                         </li>
                         <li class="sidebar-item {{ request()->routeIs('dash.profile') ? 'selected' : '' }} ">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="{{ route('dash.profile') }}" aria-expanded="false"><i
                                     class="mdi mdi-account-network"></i><span class="hide-menu">Profile</span></a>
                         </li>
+                        @if (Auth::user()->type == 2)
+                            <li class="sidebar-item {{ request()->routeIs('dash.menu') ? 'selected' : '' }} ">
+                                <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                    href="{{ route('dash.menu') }}" aria-expanded="false">
+
+                                    <i class="fal fa-burger-soda"></i>&nbsp;<span class="hide-menu">My Menu</span></a>
+                            </li>
+                        @endif
                         <li class="sidebar-item">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="table-basic.html"
                                 aria-expanded="false"><i class="mdi mdi-border-all"></i><span
@@ -255,9 +288,9 @@ $user = Auth::user();
                                     class="hide-menu">Blank</span></a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="error-404.html"
-                                aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span
-                                    class="hide-menu">404</span></a>
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/"
+                                aria-expanded="false"><i class="fal fa-arrow-circle-left"></i><span
+                                    class="hide-menu">Go to main</span></a>
                         </li>
 
                     </ul>
@@ -270,7 +303,7 @@ $user = Auth::user();
         <div class="page-wrapper">
             <div class="page-breadcrumb">
                 <div class="row align-items-center">
-                    <div class="col-6">
+                    <div class="col-12 ">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb mb-0 d-flex align-items-center">
                                 <li class="breadcrumb-item">
@@ -304,7 +337,44 @@ $user = Auth::user();
         </div>
 
     </div>
+    @if ($user->address == '' && Route::currentRouteName() != 'dash.profile')
+        <div class="modal fade in" id="Astuces" aria-labelledby="astuces" data-bs-backdrop="static"
+            data-bs-keyboard="false" aria-hidden="false">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content rounded-0">
+                    <div class="modal-body p-4 px-5 ">
+                        <div class="main-content text-center mb-3 py-auto">
+                            <label for="" class="mb-3 fs-1 color-3">Hello , {{ $user->name }}</label>
+                            <p class="fw-bold">We are very glad that you joined us .<br> But before starting, we ask
+                                you to
+                                complete your profile information quindly. <br>
+                            </p>
+                            <div class="mx-auto mt-3">
+                                <a href={{ url('/dash/profile') }} id="checkBtnSubmit" class="btn  w-100">Proceed
+                                    to
+                                    profile <i class="fad fa-angle-double-right"></i></a>
+                            </div>
+                            <div class="mx-auto mt-3">
+                                <a role="button" href="/logout" id="resendBtn" class="color-1 w-100">Logout</a>
+                                <br>
 
+                                <a role="button" href="/" id="resendBtn" class="color-1 w-100">Go to main</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            $(window).on("load", function() {
+                $('#Astuces').modal('show');
+                // $("#launchAstuces").click()
+
+                // document.getElementById("launchAstuces").click();
+
+            });
+        </script>
+    @endif
 
 
 

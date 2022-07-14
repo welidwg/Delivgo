@@ -15,36 +15,23 @@
       <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
           <div class="logo navbar-brand me-auto">
-              <!-- Uncomment below if you prefer to use an image logo -->
               <a href="index.html" class="d-flex text-primary align-items-center ">
-                  <img src="images/logo/logowhite.png" alt="" class="img-fluid w-100">
+                  <img src="images/logo/logowhite.png" alt="" class="img-fluid w-50">
                   <h1 class="">Delivgo</h1>
 
               </a>
           </div>
 
-          <nav id="navbar" class="navbar order-last order-lg-0">
+          <nav id="navbar" class="navbar order-last order-lg-0 mx-3">
               <ul>
                   <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
                   <li><a class="nav-link scrollto" href="#about">About</a></li>
                   <li><a class="nav-link scrollto" href="#menu">Menu</a></li>
-                  @if (Auth::check())
-                      <li><a class="nav-link scrollto" href={{ url('/logout') }}>Logout</a></li>
-                  @endif
+
 
                   <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
                       <ul>
                           <li><a href="#">Drop Down 1</a></li>
-                          <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i
-                                      class="bi bi-chevron-right"></i></a>
-                              <ul>
-                                  <li><a href="#">Deep Drop Down 1</a></li>
-                                  <li><a href="#">Deep Drop Down 2</a></li>
-                                  <li><a href="#">Deep Drop Down 3</a></li>
-                                  <li><a href="#">Deep Drop Down 4</a></li>
-                                  <li><a href="#">Deep Drop Down 5</a></li>
-                              </ul>
-                          </li>
                           <li><a href="#">Drop Down 2</a></li>
                           <li><a href="#">Drop Down 3</a></li>
                           <li><a href="#">Drop Down 4</a></li>
@@ -55,19 +42,40 @@
 
               <i class="bi bi-list mobile-nav-toggle"></i>
           </nav><!-- .navbar -->
-          <a class="scrollto fs-5" data-bs-toggle="offcanvas" href="#cart"><i class="fas fa-shopping-cart"></i></a>
+          <a class="scrollto fs-5 mx-3" data-bs-toggle="offcanvas" href="#cart"><i
+                  class="fas fa-shopping-cart"></i></a>
+          @if (!Auth::check())
+              <div class="dropdown">
+                  <a href="#!" class="btn   shadow-none rounded-pill  bg-color-1 mx-2 ">Start</a>
+                  <ul>
+                      <li><a href="#" data-bs-toggle="modal" data-bs-target="#loginModal1"> <i
+                                  class="fal fa-sign-in-alt"></i> Login</a></li>
 
-          <div class="dropdown">
-              <a href="#!" class="btn   shadow-none rounded-pill  bg-color-1 mx-2 ">Start</a>
-              <ul>
-                  <li><a href="#" data-bs-toggle="modal" data-bs-target="#loginModal1"> <i
-                              class="fal fa-sign-in-alt"></i> Login</a></li>
+                      <li><a href="#" data-bs-toggle="modal" data-bs-target="#registerModal"><i
+                                  class="fal fa-user-plus"></i> Register</a></li>
 
-                  <li><a href="#" data-bs-toggle="modal" data-bs-target="#registerModal"><i
-                              class="fal fa-user-plus"></i> Register</a></li>
+                  </ul>
+              </div>
+          @else
+              <div class="dropdown">
+                  <a href="#!" class="btn    mx-2 d-flex align-items-center justify-content-between">
+                      <img src="{{ asset('uploads/logos/' . Auth::user()->avatar) }}" alt=""
+                          class="rounded-circle shadow mx-2" width="30px">
+                      <span class="text-white d-none d-lg-flex"> {{ Auth::user()->username }}</span></a>
+                  <ul>
+                      @if (Auth::user()->type != 1)
+                          <li><a href={{ url('/dash') }}> <i class="fal fa-tachometer"></i> Dashboard</a></li>
+                      @endif
+                      <li><a href={{ Auth::user()->type == 1 ? url('/profile') : url('/dash/profile') }}> <i
+                                  class="fal fa-user"></i> My profile</a></li>
 
-              </ul>
-          </div>
+
+                      <li><a href={{ url('/logout') }}><i class="fal fa-sign-out-alt"></i> Logout</a></li>
+
+                  </ul>
+              </div>
+          @endif
+
 
 
       </div>
@@ -87,8 +95,8 @@
                       </a>
 
 
-                      <form action="#" id="loginForm">
-                          <label for="" class="mb-3 fs-3 color-3">Log in to Delivgo</label>
+                      <form action="#" class="formsModal" id="loginForm">
+                          <h6 for="" class="mb-3 fs-3 color-3">Log in to Delivgo</h6>
 
                           <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                               <label for="" class="px-2 color-3 fs-5"><i class="fal fa-user"></i></label>
@@ -106,7 +114,8 @@
                                       class="fal fa-sign-in-alt"></i></button>
                           </div>
                           <div class="mx-auto mt-3">
-                              <a role="button" class=" w-100">Forget your password ?</a>
+                              <a role="button" data-bs-target="#passwrodResetModal" data-bs-toggle="modal"
+                                  class=" w-100">Forget your password ?</a>
                           </div>
                   </div>
 
@@ -198,28 +207,26 @@
                       </a>
 
 
-                      <form action="#" id="registerForm" enctype="multipart/form-data">
+                      <form action="# " class="formsModal" id="registerForm" enctype="multipart/form-data">
                           @csrf
 
-                          <label for="" class="mb-3 fs-3 color-3">Join Delivgo </label>
+                          <h6 for="" class="mb-3 fs-3 color-3">Join Delivgo </h6>
 
                           <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                               <label for="" class="px-2 color-3 fs-5"><i class="fal fa-user"></i></label>
-                              <input type="text"
-                                  class="form-control shadow-none border-0 text-center bg-transparent"
+                              <input type="text" class="form-control shadow-none border-0  bg-transparent"
                                   placeholder="Your name (exp: Paul John)" name="name" id="name">
                           </div>
                           <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                               <label for="" class="px-2 color-3 fs-5"><i
-                                      class="fal fa-user-check"></i></label>
-                              <input type="text"
-                                  class="form-control shadow-none border-0 text-center bg-transparent"
+                                      class="fal fa-user-circle"></i></label>
+                              <input type="text" class="form-control shadow-none border-0  bg-transparent"
                                   placeholder="Your username (exp: paul_john)" name="username" id="username">
                           </div>
                           <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                               <label for="" class="px-2 color-3 fs-5"><i class="fal fa-at"></i></label>
                               <input type="email" id="email"
-                                  class="form-control shadow-none border-0 text-center bg-transparent"
+                                  class="form-control shadow-none border-0 bg-transparent"
                                   placeholder="Email (exp:paul_john@domain.com)" name="email">
                           </div>
                           <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
@@ -235,7 +242,8 @@
                           <div class="input-group mb-2 rounded-pill bg-light  align-items-center justify-content-center"
                               id="avatarContainer" style="display: none">
 
-                              <label for="avatar" class="test-center"> <i class="fal fa-camera"></i> Please add
+                              <label for="avatar" class="test-center" style="width: auto"> <i
+                                      class="fal fa-camera"></i> Please add
                                   your logo</label>
 
                               <input type="file"
@@ -393,26 +401,26 @@
                       </a>
 
 
-                      <form action="#" id="checkCodeForm">
-                          <label for="" class="mb-3 fs-3 color-3">Confirm your email</label>
-                          <p class="fw-bold">We have sent a code to your email.<br> Please check it and type it
-                              below<br>
-                              <span class="text-danger fw-bold">PS: the code will be expired in 15 minutes</span>
+                      <form action="#" class="formsModal" id="checkCodeForm">
+                          <h6 for="" class="mb-3 fs-3 color-3">Confirm your email</label>
+                              <p class="fw-bold">We have sent a code to your email.<br> Please check it and type it
+                                  below<br>
+                                  <span class="text-danger fw-bold">PS: the code will be expired in 15 minutes</span>
 
-                          </p>
-                          <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
-                              <label for="" class="px-2 color-3 fs-5"><i class="fal fa-lock"></i></label>
-                              <input type="text"
-                                  class="form-control shadow-none border-0 text-center bg-transparent"
-                                  placeholder="Code field" id="code">
-                          </div>
-                          <div class="mx-auto mt-3">
-                              <button href="#!" type="submit" id="checkBtnSubmit" class="btn w-100">Check <i
-                                      class="fal fa-sign-in-alt"></i></button>
-                          </div>
-                          <div class="mx-auto mt-3">
-                              <a role="button" id="resendBtn" class=" w-100">resend the code</a>
-                          </div>
+                              </p>
+                              <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
+                                  <label for="" class="px-2 color-3 fs-5"><i class="fal fa-lock"></i></label>
+                                  <input type="text"
+                                      class="form-control shadow-none border-0 text-center bg-transparent"
+                                      placeholder="Code field" id="code">
+                              </div>
+                              <div class="mx-auto mt-3">
+                                  <button href="#!" type="submit" id="checkBtnSubmit" class="btn w-100">Check
+                                      <i class="fal fa-sign-in-alt"></i></button>
+                              </div>
+                              <div class="mx-auto mt-3">
+                                  <a role="button" id="resendBtn" class=" w-100 fs-5">resend the code</a>
+                              </div>
                   </div>
 
 
@@ -455,6 +463,7 @@
                   $('#confirmModal').modal('hide');
                   $("#registerForm").trigger("reset");
                   toastr.success(res.data.message)
+                  localStorage.removeItem("email")
 
               }).catch((err) => {
                   console.log(err.response.data);
@@ -487,4 +496,202 @@
               })
           })
       </script>
+  </div>
+
+  <div class="modal fade" id="passwrodResetModal" aria-labelledby="passwrodResetModal" tabindex="-1"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content rounded-0">
+              <div class="modal-body p-4 px-5 ">
+
+
+                  <div class="main-content text-center mb-3 py-auto">
+
+                      <a href="#" style="" class="close-btn" id="closeModalConfirm">
+                          <span aria-hidden="true"><span class="fal fa-times"></span></span>
+                      </a>
+
+                      <h6 for="" class="mb-3 fs-3 color-3">Password Recovery</label>
+
+                          <form action="#" class="formsModal" id="verifEmailForm">
+                              <p class="fw-bold">Please type your email below <br>
+
+                              </p>
+                              <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
+                                  <label for="" class="px-2 color-3 fs-5"><i class="fal fa-at"></i></label>
+                                  <input type="email" name="email"
+                                      class="form-control shadow-none border-0 text-center bg-transparent"
+                                      placeholder="paul_john@domain.com" id="email">
+                              </div>
+                              <div class="mx-auto mt-3">
+                                  <button href="#!" type="submit" id="verifBtnSubmit" class="btn w-100">Send
+                                      <i class="fal fa-paper-plane"></i></button>
+                              </div>
+                              @csrf
+                              {{-- <div class="mx-auto mt-3">
+                              <a role="button" id="resendBtn" class=" w-100">resend the code</a>
+                          </div> --}}
+                          </form>
+                          <form action="#" class="formsModal" id="codeVerifPasswordForm" style="display: none">
+                              <p class="fw-bold">Please insert the received code below<br>
+
+                              </p>
+                              <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
+                                  <label for="" class="px-2 color-3 fs-5"><i
+                                          class="fal fa-lock-alt"></i></label>
+                                  <input type="text" name="code"
+                                      class="form-control shadow-none border-0 text-center bg-transparent"
+                                      placeholder="Code field" id="code">
+                              </div>
+                              <div class="mx-auto mt-3">
+                                  <button href="#!" type="submit" id="verifCodeBtnSubmit"
+                                      class="btn w-100">Verify
+                                      <i class="fal fa-check"></i></button>
+                              </div>
+                              @csrf
+                              {{-- <div class="mx-auto mt-3">
+                              <a role="button" id="resendBtn" class=" w-100">resend the code</a>
+                          </div> --}}
+                          </form>
+                          <form class="formsModal" action="#" id="newPassForm" style="display: none">
+                              <p class="fw-bold">Set up your new password<br>
+
+                              </p>
+                              <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
+                                  <label for="" class="px-2 color-3 fs-5"><i
+                                          class="fal fa-lock-alt"></i></label>
+                                  <input type="password" name="password"
+                                      class="form-control shadow-none border-0 text-center bg-transparent"
+                                      placeholder="New Password" id="newPassword">
+                              </div>
+                              <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
+                                  <label for="" class="px-2 color-3 fs-5"><i
+                                          class="fal fa-lock-alt"></i></label>
+                                  <input type="password"
+                                      class="form-control shadow-none border-0 text-center bg-transparent"
+                                      placeholder="Repeat your password" id="confirm">
+                              </div>
+                              <div class="mx-auto mt-3">
+                                  <button href="#!" type="submit" id="newPassBtnSubmit"
+                                      class="btn w-100">Confirm
+                                      <i class="fal fa-check"></i></button>
+                              </div>
+                              @csrf
+                              {{-- <div class="mx-auto mt-3">
+                              <a role="button" id="resendBtn" class=" w-100">resend the code</a>
+                          </div> --}}
+                          </form>
+
+                  </div>
+
+
+
+
+              </div>
+              <script>
+                  $("#verifEmailForm").on("submit", (e) => {
+                      e.preventDefault()
+                      let oldval = $("#verifBtnSubmit").html()
+                      $("#verifBtnSubmit").html(spinner)
+                      axios.post("/password_recovery", $("#verifEmailForm").serialize())
+                          .then(res => {
+                              console.log(res)
+                              if (res.data.type != undefined) {
+                                  toastr.success(res.data.message)
+                                  $("#verifEmailForm").fadeOut()
+                                  setTimeout(() => {
+                                      $("#codeVerifPasswordForm").fadeIn('slow')
+
+                                  }, 500);
+                              }
+                          })
+                          .catch(err => {
+                              console.error(err);
+                              if (err.response.data.type != undefined) {
+                                  toastr.error(err.response.data.message)
+                              }
+                          })
+                          .finally(() => {
+                              $("#verifBtnSubmit").html(oldval)
+                          })
+                  })
+
+                  $('#codeVerifPasswordForm').on("submit", (e) => {
+                      e.preventDefault()
+                      let btn = $("#verifCodeBtnSubmit")
+                      let oldval = $("#verifCodeBtnSubmit").html()
+                      btn.html(spinner)
+                      axios.post("/verify_code_password", $("#codeVerifPasswordForm").serialize())
+                          .then(res => {
+                              console.log(res)
+                              if (res.data.type != undefined) {
+                                  toastr.success(res.data.message)
+                                  localStorage.setItem("email", res.data.email)
+                              }
+                              $('#codeVerifPasswordForm').fadeOut()
+                              setTimeout(() => {
+                                  $('#newPassForm').fadeIn("slow")
+
+                              }, 500);
+                          })
+                          .catch(err => {
+                              console.error(err.response.data);
+                              if (err.response.data.type != undefined) {
+                                  toastr.error(err.response.data.message)
+                              }
+                          }).finally(() => {
+                              btn.html(oldval)
+                          })
+
+                  })
+
+                  $('#newPassForm').on("submit", (e) => {
+                      e.preventDefault()
+                      let btn = $("#newPassBtnSubmit")
+                      let oldval = $("#newPassBtnSubmit").html()
+                      btn.html(spinner)
+                      let password = $("#newPassword").val()
+                      let confirm = $("#confirm").val()
+                      let email = localStorage.getItem("email")
+                      if (password !== confirm) {
+                          toastr.error("Please repeat correcly your new password !")
+                          btn.html(oldval)
+
+                      } else {
+                          axios.post("/password_update", {
+                                  email: email,
+                                  password: password
+                              })
+                              .then(res => {
+                                  console.log(res)
+                                  if (res.data.type != undefined) {
+                                      toastr.success(res.data.message)
+                                  }
+                                  $("#passwrodResetModal").modal("hide")
+                                  $("#loginModal1").modal("show")
+                                  localStorage.removeItem("email")
+                              })
+                              .catch(err => {
+                                  if (err.response.data.type != undefined) {
+                                      toastr.error(err.response.data.message)
+                                  } else {
+                                      for (let k in err.response.data) {
+                                          toastr.error(err.response.data[k])
+                                      }
+                                  }
+                                  console.error(err.response.data);
+
+                              }).finally(() => {
+                                  btn.html(oldval)
+                              })
+
+                      }
+
+
+
+                  })
+              </script>
+
+          </div>
+      </div>
   </div>

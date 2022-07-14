@@ -20,6 +20,11 @@ class Product extends Model
     {
         return $this->belongsTo(User::class, "resto_id");
     }
+    public function Category(): BelongsTo
+    {
+        # code...
+        return $this->belongsTo(Category::class, "category_id");
+    }
 
     public $primaryKey  = 'product_id';
 }

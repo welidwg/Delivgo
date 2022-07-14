@@ -15,6 +15,7 @@
                                 <h2 class="animate__animated animate__fadeInDown display-1"><span>Deliv</span>Go</h2>
                                 <p class="animate__animated animate__fadeInUp w-100 fs-5 fw-bold subtitle">DELIVERING GOOD
                                     VIBES
+                                    <br>
 
                                 </p>
 
@@ -73,81 +74,43 @@
                 <p class="fw-bold" style="letter-spacing: 3px">These are our most popular restaurants</p>
             </div>
 
-            <div class="row restoCard" style="zoom: 0.87">
+            <div class="row restoCard" style="zoom: 0.97">
+                @forelse ($restos as $resto)
+                    <div class="col col-md-4 col-sm-12 mb-3">
+                        <a href="{{ url('/resto/' . $resto->user_id) }}">
+                            <div class="card shadow " style="border-radius: 20px">
+                                <div class="d-flex align-items-center justify-content-center w-100 text-center headerResto"
+                                    style="background-image: url(uploads/logos/{{ $resto->avatar }});background-size: contain; background-repeat: no-repeat;height: 200px;background-position: center">
+                                    <div class="w-100 h-100 d-flex justify-content-center  align-items-center titleResto ">
+                                        <h6 class="display-3 text-white fw-bold">{{ $resto->name }}</h6>
 
-                <div class="col col-md-4 col-sm-12 mb-3">
-                    <div class="card shadow " style="border-radius: 20px">
-                        <div class="d-flex align-items-center justify-content-center w-100 text-center headerResto"
-                            style="background-image: url(images/london-food.png);background-size: contain; background-repeat: no-repeat;height: 200px;background-position: center">
-                            <div class="w-100 h-100 d-flex justify-content-center  align-items-center titleResto ">
-                                <h6 class="display-3 text-white fw-bold">London Food</h6>
-
-                            </div>
-                        </div>
-                        <div class="card-body pt-0 px-0 ">
-                            <div class="row mb-0 p-3" style="flex-wrap: nowrap">
-                                <div class="col">
-                                    <i class="fal fa-thumbs-up"></i> 55%
+                                    </div>
                                 </div>
-                                <div class="col d-flex align-items-center justify-content-start"
-                                    style="flex-wrap: nowrap;white-space: nowrap;">
-                                    <div><i class="fal fa-biking-mountain"></i> 3.000 DT</div> &nbsp;|&nbsp;
-                                    <div><i class="fas fa-dot"></i> 45-55 min</div>
+                                <div class="card-body pt-0 px-0 ">
+                                    <div class="row mb-0 p-3" style="flex-wrap: nowrap">
+                                        <div class="col">
+                                            <i class="fal fa-thumbs-up"></i> 55%
+                                        </div>
+                                        <div class="col d-flex align-items-center justify-content-start"
+                                            style="flex-wrap: nowrap;white-space: nowrap;">
+                                            <div><i class="fal fa-biking-mountain"></i> {{ $resto->deliveryPrice }}.000 DT
+                                            </div>
+                                            &nbsp;|&nbsp;
+                                            <div><i class="fas fa-dot"></i> 45-55 min</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                     </div>
-                </div>
+                    </a>
+                @empty
+                    @include('main/layouts/notfound')
+                    <span class="text-center fs-4 fw-bold">Sorry<br>There is no restaurants yet !</span>
+                @endforelse
 
-                <div class="col col-md-4 col-sm-12 mb-3">
-                    <div class="card shadow" style="border-radius: 20px">
-                        <div class="d-flex align-items-center justify-content-center w-100 text-center"
-                            style="background-image: url(images/cantine.jpg);background-size: contain; background-repeat: no-repeat;height: 200px;background-position: center;">
-                            <div class="w-100 h-100 d-flex justify-content-center  align-items-center"
-                                style="border-top-left-radius: 20px;border-top-right-radius: 20px;background-color: rgba(0, 0, 0, 0.5);position: relative;">
-                                <h6 class="display-3 text-white">La Cantine</h6>
 
-                            </div>
-                        </div>
-                        <div class="card-body pt-0 px-0 ">
-                            <div class="row mb-0 p-3 align-items-center" style="flex-wrap: nowrap">
-                                <div class="col">
-                                    <i class="fal fa-thumbs-up"></i> 55%
-                                </div>
-                                <div class="col d-flex align-items-center justify-content-start"
-                                    style="flex-wrap: nowrap;white-space: nowrap;">
-                                    <div><i class="fal fa-biking-mountain"></i> 3.000 DT</div> &nbsp;|&nbsp;
-                                    <div><i class="fas fa-dot"></i> 45-55 min</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col col-md-4 col-sm-12 mb-3">
-                    <div class="card shadow" style="border-radius: 20px">
-                        <div class="d-flex align-items-center justify-content-center w-100 text-center"
-                            style="background-image: url(images/cabane.jpg);background-size: contain; background-repeat: no-repeat;height: 200px;background-position: center;">
-                            <div class="w-100 h-100 d-flex justify-content-center  align-items-center"
-                                style="border-top-left-radius: 20px;border-top-right-radius: 20px;background-color: rgba(0, 0, 0, 0.5);position: relative;">
-                                <h6 class="display-3 text-white">La Cabane</h6>
 
-                            </div>
-                        </div>
-                        <div class="card-body pt-0 px-0 ">
-                            <div class="row mb-0 p-3 align-items-center" style="flex-wrap: nowrap">
-                                <div class="col">
-                                    <i class="fal fa-thumbs-up"></i> 55%
-                                </div>
-                                <div class="col d-flex align-items-center justify-content-start"
-                                    style="flex-wrap: nowrap;white-space: nowrap;">
-                                    <div><i class="fal fa-biking-mountain"></i> 3.000 DT</div> &nbsp;|&nbsp;
-                                    <div><i class="fas fa-dot"></i> 45-55 min</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
             </div>
 

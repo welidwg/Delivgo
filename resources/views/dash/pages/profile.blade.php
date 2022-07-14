@@ -21,13 +21,13 @@
 
                                 <img id="avatarContainer"
                                     src={{ $user->avatar == '' ? asset('images/users/1.jpg') : asset('uploads/logos/' . $user->avatar) }}
-                                    class="rounded-circle shadow-lg" width="150" />
-                                <label for="avatar" class="btn text-dark position-absolute fs-2 fw-bold"
-                                    style="bottom: -10px;right:20%"><i class="fas fa-edit"></i></label>
+                                    class="rounded shadow" width="150" />
+                                <br>
+                                <label for="avatar" class="btn text-dark position-relative fs-4 fw-bold"><i
+                                        class="fas fa-edit"></i></label>
                                 <input type="file" id="avatar" accept="image/*" hidden name="avatar">
                             </div>
                             @csrf
-
                             <button id="submitAvatar" style="display: none" type="submit"
                                 class="btn btn-primary mt-3 ">Save</button>
 
@@ -57,8 +57,6 @@
                                     })
                             })
                         </script>
-
-
                         <h4 class="card-title m-t-10">{{ $user->name }}</h4>
                         <h6 class="card-subtitle">{{ '@' . $user->username }}</h6>
                         {{-- <div class="row text-center justify-content-md-center">
@@ -152,14 +150,14 @@
                                 <label class="col-md-12">Delivery price (DT)</label>
                                 <div class="col-md-12">
                                     <input type="number" name="deliveryPrice" value="{{ $user->deliveryPrice }}"
-                                        placeholder="(ex:7 )" class="form-control form-control-line">
+                                        placeholder="(ex:7 )" required class="form-control form-control-line">
                                 </div>
                             </div>
                         @endif
                         <div class="form-group">
                             <label class="col-sm-12">Select City</label>
                             <div class="col-sm-12">
-                                <select class="form-select shadow-none form-control-line" name="city">
+                                <select required class="form-select shadow-none form-control-line" name="city">
                                     @if ($user->city != '')
                                         <option>{{ $user->city }}</option>
                                     @endif
@@ -174,7 +172,7 @@
                         <div class="form-group">
                             <label class="col-md-12">Address</label>
                             <div class="col-md-12">
-                                <textarea rows="3" name="address" class="form-control form-control-line"
+                                <textarea rows="3" name="address" class="form-control form-control-line" required
                                     placeholder="Please insert your address">{{ $user->address != '' ? $user->address : null }}</textarea>
                             </div>
                         </div>

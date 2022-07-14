@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddEmailCode extends Migration
+class CreateCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class AddEmailCode extends Migration
      */
     public function up()
     {
-        //
-        Schema::table("codes", function (Blueprint $table) {
-            $table->string("email");
+        Schema::create('categories', function (Blueprint $table) {
+            $table->id();
+            $table->string("label");
+            $table->foreignId("resto_id")->references("user_id")->on("users")->onDelete("cascade");
+            $table->timestamps();
         });
     }
 
@@ -26,6 +28,6 @@ class AddEmailCode extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('categories');
     }
 }

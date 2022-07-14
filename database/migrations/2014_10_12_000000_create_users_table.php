@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->string("address", 500)->nullable();
             $table->integer("phone")->unique();
             $table->integer("statut")->default(1);
+            $table->integer("onDuty")->nullable()->default(0);
             $table->integer("deliveryPrice")->nullable();
             $table->timestamps();
         });

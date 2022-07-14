@@ -15,9 +15,9 @@ class CreateDeliveriesTable extends Migration
     {
         Schema::create('deliveries', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("user_id")->constrained()->cascadeOnDelete();
-            $table->foreignId("deliverer_id")->constrained()->cascadeOnDelete();
-            $table->foreignId("commande_id")->constrained()->cascadeOnDelete();
+            $table->foreignId("user_id")->references("user_id")->on("users")->onDelete("cascade");
+            $table->foreignId("deliverer_id")->references("user_id")->on("users")->onDelete("cascade");
+            $table->foreignId("commande_id")->references("id")->on("commandes")->onDelete("cascade");
             $table->string("fromLocation");
             $table->string("toLocation");
             $table->timestamps();

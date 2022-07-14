@@ -16,7 +16,9 @@ class CreateCodesTable extends Migration
         Schema::create('codes', function (Blueprint $table) {
             $table->id();
             $table->string("code")->unique();
+            $table->string("email");
             $table->dateTime("expire");
+            $table->string("type");
             $table->string("statut")->default("fresh");
             $table->timestamps();
         });

@@ -43,7 +43,7 @@ class UserController extends Controller
         if ($validate->fails()) {
             return response(json_encode($validate->errors()), 500);
         }
-        $email = $req->json("email");
+        $email = $req->email;
         $user = User::where("email", $email)->first();
         if ($user) {
             if ($user->statut == 1) {
@@ -58,9 +58,10 @@ class UserController extends Controller
                 $codeModel->expire = $expirecy;
                 $codeModel->email = $email;
                 $codeModel->type = "password";
+
                 if ($codeModel->save()) {
                     $mail->SendPasswordRecovery($email, "recovery", $user->name, $code);
-                    return response(json_encode(["type" => "success", "message" => "We have send you an email , check your inbox or spam"]), 200);
+                    return response(json_encode(["type" => "success", "message" => "We have send you an email with a verification code , check your inbox or spam"]), 200);
                 }
             }
         } else {
@@ -70,7 +71,7 @@ class UserController extends Controller
     public function VerifyCodePassword(Request $req)
     {
         try {
-            $code = $req->json("code");
+            $code = $req->code;
             $validate = Validator::make($req->all(), [
                 "code" => "required"
             ]);
@@ -80,8 +81,9 @@ class UserController extends Controller
             $codeverif = Code::where("code", $code)->first();
             if ($codeverif) {
                 if ($codeverif->statut == "fresh") {
+                    $email = $codeverif->email;
                     $codeverif->delete();
-                    return response(json_encode(["type" => "success", "message" => "Good , now type your new password"]), 200);
+                    return response(json_encode(["type" => "success", "message" => "Good , now set up your  new password", "email" => $email]), 200);
                 } else {
 
                     return response(json_encode(["type" => "error", "message" => "This code is expired ! Restart the operation "]), 500);
@@ -98,18 +100,16 @@ class UserController extends Controller
 
         try {
             $validate = Validator::make($req->all(), [
-                "password" => "bail|required",
+                "password" => "bail|required|min:8",
                 "email" => "bail|required|email"
             ]);
             if ($validate->fails()) {
                 return response(json_encode($validate->errors()), 500);
             }
-            $password = $req->json("password");
-            $email = $req->json("email");
+            $password = $req->password;
+            $email = $req->email;
             $user = User::where("email", $email)->first();
             if ($user) {
-
-
                 $user->password = Hash::make($password);
                 $user->save();
                 return response(json_encode(["type" => "success", "message" => "Password updated successfully"]), 200);
@@ -171,8 +171,10 @@ class UserController extends Controller
                 $file_name = time() . "." . $file->getClientOriginalExtension();
                 $file->move("uploads/logos", $file_name);
                 $user->avatar = $file_name;
+            } else {
+                $user->avatar = "d3.jpg";
             }
-            $statut = 2;
+            $statut = 1;
             $user->name = $name;
             $user->username = $username;
             $user->email = $email;
@@ -243,10 +245,7 @@ class UserController extends Controller
     public function Login(Request $req)
     {
         try {
-            // $this->validate($req, [
-            //     'email' => "bail|required|email",
-            //     'password' => "bail|required"
-            // ]);
+
             $validate = Validator::make($req->all(), [
                 'email' => "bail|required|email",
                 'password' => "bail|required"

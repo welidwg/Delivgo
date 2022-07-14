@@ -16,8 +16,14 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id("product_id");
             $table->string("label");
-            $table->foreignId("resto_id")->constrained()->cascadeOnDelete();
+            $table->foreignId("resto_id")->references("user_id")->on("users")->onDelete("cascade");
+            $table->text("description")->nullable();
             $table->float("price");
+            $table->string("picture");
+            $table->boolean("have_supplement");
+            $table->boolean("have_toppings");
+            $table->boolean("have_sauces");
+            $table->boolean("have_drinks");
             $table->integer("statut")->default(1);
             $table->timestamps();
         });

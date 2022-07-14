@@ -19,20 +19,53 @@ class ProductController extends Controller
                 'label' => "bail|required",
                 'resto_id' => "bail|required",
                 'price' => "bail|required",
+                'category' => "bail|required",
+                'picture' => "bail|required",
             ]);
             if ($validate->fails()) {
                 return response(json_encode($validate->errors()), 500);
             }
-            $label = $req->json("label");
-            $resto_id = $req->json("resto_id");
-            $price = $req->json("price");
-            $statut = $req->json("statut");
+            $label = $req->label;
+
+            $resto_id = $req->resto_id;
+            $price = $req->price;
+            $statut = 1;
+            $description = $req->description;
+            $category_id  = $req->category;
+            $supp = 0;
+            $topping = 0;
+            $sauce = 0;
+            $drink = 0;
+            if ($req->has("supplement")) {
+                $supp = 1;
+            }
+            if ($req->has("topping")) {
+                $topping = 1;
+            }
+            if ($req->has("sauce")) {
+                $sauce = 1;
+            }
+            if ($req->has("drink")) {
+                $drink = 1;
+            }
             $product = new Product;
+            if ($req->hasFile("picture")) {
+                $file = $req->file("picture");
+                $filename = time() . "." . $file->getClientOriginalExtension();
+                $product->picture = $filename;
+            }
             $product->label = $label;
+            $product->description = $description;
             $product->resto_id = $resto_id;
+            $product->category_id = $category_id;
             $product->price = $price;
             $product->statut = $statut;
+            $product->have_supplement = $supp;
+            $product->have_drinks = $drink;
+            $product->have_sauces = $sauce;
+            $product->have_toppings = $topping;
             if ($product->save()) {
+                $file->move("uploads/products", $filename);
                 return response(json_encode(["type" => "success", "message" => "Product created successfully"]), 200);
             }
         } catch (\Throwable $th) {
@@ -99,8 +132,11 @@ class ProductController extends Controller
         try {
             $product = Product::where("product_id", $id)->first();
             if ($product) {
+                if ($product->picture != "") {
+                    unlink(base_path() . "/public/uploads/products/$product->picture");
+                }
                 if ($product->delete()) {
-                    return response(json_encode(["type" => "success", "message" => "Product deleted successfully ! "]), 500);
+                    return response(json_encode(["type" => "success", "message" => "Product deleted successfully ! "]), 200);
                 }
             } else {
                 return response(json_encode(["type" => "error", "message" => "This product doesn't exist in our records"]), 500);

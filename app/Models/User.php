@@ -39,13 +39,36 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     public $primaryKey  = 'user_id';
+
     public function products(): HasMany
     {
         # code...
         return $this->hasMany(Product::class, "resto_id");
     }
 
+    public function toppings(): HasMany
+    {
+        # code...
+        return $this->hasMany(Garniture::class, "resto_id");
+    }
 
+    public function sauces(): HasMany
+    {
+        # code...
+        return $this->hasMany(Sauce::class, "resto_id");
+    }
+
+    public function drinks(): HasMany
+    {
+        # code...
+        return $this->hasMany(Drink::class, "resto_id");
+    }
+
+    public function supplements(): HasMany
+    {
+        # code...
+        return $this->hasMany(Supplement::class, "resto_id");
+    }
     protected $hidden = [
         'password',
     ];

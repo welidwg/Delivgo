@@ -4,7 +4,13 @@
 
     --color-3: #07212e;
 }
-
+.formsModal label {
+    width: 50px;
+}
+.formsModal input,
+.formsModal select {
+    text-align: left !important;
+}
 .restoCard h6 {
     transition: all 0.5s;
 }
@@ -79,7 +85,6 @@
 
 .modal {
     border-radius: 7px;
-    overflow: hidden;
     background-color: transparent;
 }
 
@@ -88,19 +93,16 @@
 }
 
 .modal .modal-content {
-    background-color: transparent;
+    background-color: white;
     border: none;
-    border-radius: 7px;
+    border-radius: 7px !important;
 }
 
 .modal .modal-content .modal-body {
     border-radius: 7px;
-    overflow: hidden;
     background-color: #fff;
     padding-left: 0px;
     padding-right: 0px;
-    -webkit-box-shadow: 0 10px 50px -10px rgba(0, 0, 0, 0.9);
-    box-shadow: 0 10px 50px -10px rgba(0, 0, 0, 0.9);
 }
 
 .modal .modal-content .modal-body h2 {
@@ -171,7 +173,6 @@
     border: 1px solid #ccc !important;
     box-shadow: none !important;
 } */
-
 
 /* .modal-backdrop {
     display: none;

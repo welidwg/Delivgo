@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddTypeCode extends Migration
+class AddForeignKeyCategoryProduct extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddTypeCode extends Migration
      */
     public function up()
     {
-        Schema::table("codes", function (Blueprint $table) {
-            $table->string("type");
+        Schema::table("products", function (Blueprint $table) {
+            $table->foreignId("category_id")->references("id")->on("categories")->onDelete("cascade");
         });
         //
     }

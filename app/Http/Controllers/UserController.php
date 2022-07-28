@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\MailController;
 use App\Jobs\TestJob;
 use App\Models\Code;
+use App\Models\RestoConfig;
 use Twilio\Rest\Client;
 
 class UserController extends Controller
@@ -172,7 +173,7 @@ class UserController extends Controller
                 $file->move("uploads/logos", $file_name);
                 $user->avatar = $file_name;
             } else {
-                $user->avatar = "d3.jpg";
+                $user->avatar = "default.jpg";
             }
             $statut = 1;
             $user->name = $name;
@@ -355,6 +356,23 @@ class UserController extends Controller
                 }
                 if ($user->type == 2) {
                     $user->deliveryPrice = $req->deliveryPrice;
+                    $check = RestoConfig::where("resto_id", $id)->first();
+                    if ($check) {
+                        $check->perSupp = $req->perSupp;
+                        $check->perTopp = $req->perTopp;
+                        $check->perSauce = $req->perSauce;
+                        $check->perDrink = $req->perDrink;
+                        $check->save();
+                    } else {
+                        $newConfig = new RestoConfig;
+                        $newConfig->resto_id = $id;
+
+                        $newConfig->perSupp = $req->perSupp;
+                        $newConfig->perTopp = $req->perTopp;
+                        $newConfig->perSauce = $req->perSauce;
+                        $newConfig->perDrink = $req->perDrink;
+                        $newConfig->save();
+                    }
                 }
                 $phone = $req->phone;
                 $city = $req->city;
@@ -380,7 +398,7 @@ class UserController extends Controller
 
         try {
             $user = User::where("user_id", $id)->first();
-            if ($user->avatar != "") {
+            if ($user->avatar != "" && $user->avatar != "default.jpg") {
                 unlink(base_path() . "/public/uploads/logos/$user->avatar");
             }
             $file = $req->file("avatar");
@@ -423,6 +441,21 @@ class UserController extends Controller
                 return response(json_encode($users), 200);
             }
             return response(json_encode(["type" => "error", "message" => "There is no restaurants yet"]), 500);
+        } catch (\Throwable $th) {
+            return response(json_encode(["type" => "error", "message" => $th->getMessage()]), 500);
+        }
+    }
+    public function DutyManager($id)
+    {
+        try {
+            $user = User::where("user_id", $id)->first();
+            if ($user->onDuty) {
+                $user->onDuty = 0;
+            } else {
+                $user->onDuty = 1;
+            }
+            $user->save();
+            return response(json_encode(["type" => "success", "message" => "Disponibilité modifiée"]), 200);
         } catch (\Throwable $th) {
             return response(json_encode(["type" => "error", "message" => $th->getMessage()]), 500);
         }

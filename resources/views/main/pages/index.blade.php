@@ -21,9 +21,9 @@
 
                                 <div class="mb-5">
                                     <a href="#menu"
-                                        class="btn-menu animate__animated animate__fadeInUp scrollto mb-2">Restaurants</a>
-                                    <a href="#book-a-table"
-                                        class="btn-book animate__animated animate__fadeInUp scrollto">Contact US</a>
+                                        class="btn-menu animate__animated animate__fadeInUp scrollto mb-2">Join us</a>
+                                    {{-- <a href="#book-a-table"
+                                        class="btn-book animate__animated animate__fadeInUp scrollto">Contact US</a> --}}
                                 </div>
                                 <div class=" animate__animated animate__fadeInUp">
                                     <form action="">
@@ -66,7 +66,7 @@
     </section>
 
 
-    <section id="why-us" class="why-us">
+    <section id="menu" class="why-us">
         <div class="container">
 
             <div class="section-title">
@@ -91,18 +91,20 @@
                                         <div class="col">
                                             <i class="fal fa-thumbs-up"></i> 55%
                                         </div>
-                                        <div class="col d-flex align-items-center justify-content-start"
+                                        <div class="col d-flex align-items-center justify-content-end"
                                             style="flex-wrap: nowrap;white-space: nowrap;">
                                             <div><i class="fal fa-biking-mountain"></i> {{ $resto->deliveryPrice }}.000 DT
                                             </div>
-                                            &nbsp;|&nbsp;
-                                            <div><i class="fas fa-dot"></i> 45-55 min</div>
+                                            {{-- &nbsp;|&nbsp; --}}
+                                            {{-- <div><i class="fas fa-dot"></i> 45-55 min</div> --}}
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </a>
+
                     </div>
-                    </a>
+
                 @empty
                     @include('main/layouts/notfound')
                     <span class="text-center fs-4 fw-bold">Sorry<br>There is no restaurants yet !</span>

@@ -16,7 +16,7 @@ class CategoryController extends Controller
         $categ = new Category;
         $categ->label = $label;
         $categ->resto_id = $id;
-        $check = Category::where("label", $label)->first();
+        $check = Category::where("label", $label)->where("resto_id", $id)->first();
         if ($check) {
             return response(json_encode(["type" => "error", "message" => "This category is already exists"]), 500);
         }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Console\Command;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -69,6 +70,23 @@ class User extends Authenticatable
         # code...
         return $this->hasMany(Supplement::class, "resto_id");
     }
+
+    public function configs(): HasMany
+    {
+        # code...
+        return $this->hasMany(RestoConfig::class, "resto_id");
+    }
+    public function commandesPassed(): HasMany
+    {
+        # code...
+        return $this->hasMany(commande_ref::class, "user_id");
+    }
+    public function commandesReceived(): HasMany
+    {
+        # code...
+        return $this->hasMany(commande_ref::class, "resto_id");
+    }
+
     protected $hidden = [
         'password',
     ];

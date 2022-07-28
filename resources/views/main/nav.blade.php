@@ -11,12 +11,15 @@
   <span class="visually-hidden">Loading...</span>
 </div>`;
   </script>
+  @php
+      use App\Models\Notification;
+  @endphp
   <header id="header" class="fixed-top d-flex align-items-center header-transparent">
       <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
           <div class="logo navbar-brand me-auto">
               <a href="index.html" class="d-flex text-primary align-items-center ">
-                  <img src="images/logo/logowhite.png" alt="" class="img-fluid w-50">
+                  <img src="{{ asset('images/logo/logowhite.png') }}" alt="" class="img-fluid w-50">
                   <h1 class="">Delivgo</h1>
 
               </a>
@@ -24,27 +27,34 @@
 
           <nav id="navbar" class="navbar order-last order-lg-0 mx-3">
               <ul>
-                  <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
-                  <li><a class="nav-link scrollto" href="#about">About</a></li>
-                  <li><a class="nav-link scrollto" href="#menu">Menu</a></li>
+                  <li><a class="nav-link scrollto " href="{{ url('/') }}">Home</a></li>
+                  @if (request()->routeIs('main'))
+                      <li><a class="nav-link scrollto" href="#menu">Restaurants</a></li>
+
+                      <li><a class="nav-link scrollto" href="#why-us">Why delivgo </a></li>
+                  @endif
+
+                  @auth
+                      @if (Auth::user()->type == 1)
+                          <li><a class="nav-link {{ request()->routeIs('main.orders') ? 'active' : '' }}"
+                                  href="{{ url('/orders') }}">My orders</a></li>
+                      @endif
 
 
-                  <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
-                      <ul>
-                          <li><a href="#">Drop Down 1</a></li>
-                          <li><a href="#">Drop Down 2</a></li>
-                          <li><a href="#">Drop Down 3</a></li>
-                          <li><a href="#">Drop Down 4</a></li>
-                      </ul>
-                  </li>
+                  @endauth
+
+
+
 
               </ul>
 
               <i class="bi bi-list mobile-nav-toggle"></i>
           </nav><!-- .navbar -->
+
           <a class="scrollto fs-5 mx-3" data-bs-toggle="offcanvas" href="#cart"><i
                   class="fas fa-shopping-cart"></i></a>
           @if (!Auth::check())
+
               <div class="dropdown">
                   <a href="#!" class="btn   shadow-none rounded-pill  bg-color-1 mx-2 ">Start</a>
                   <ul>
@@ -57,6 +67,29 @@
                   </ul>
               </div>
           @else
+              <li class="dropdown"><a href="#" class="fs-5"><i class="fas fa-bell"></i></a>
+                  <ul class="" style="width: 400px;right:-150px">
+                      <div>
+                          <h6 class="text-center fs-5">Notifications</h6>
+                          <hr>
+                      </div>
+
+                      <div class="" style="max-height: 200px;overflow: auto" id="notifCont">
+
+
+                      </div>
+
+                  </ul>
+              </li>
+              <script>
+                  function notifLoad() {
+                      $("#notifCont").load("/notif")
+                      setTimeout(() => {
+                          notifLoad()
+                      }, 5000);
+                  }
+                  notifLoad()
+              </script>
               <div class="dropdown">
                   <a href="#!" class="btn    mx-2 d-flex align-items-center justify-content-between">
                       <img src="{{ asset('uploads/logos/' . Auth::user()->avatar) }}" alt=""
@@ -236,6 +269,7 @@
                                   <option value="">You are ?</option>
                                   <option value="1">Client</option>
                                   <option value="2">Restaurant</option>
+                                  <option value="3">Deliverer</option>
 
                               </select>
                           </div>
@@ -695,3 +729,4 @@
           </div>
       </div>
   </div>
+

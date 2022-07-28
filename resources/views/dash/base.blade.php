@@ -2,6 +2,7 @@
 <html dir="ltr" lang="en">
 @php
 $user = Auth::user();
+use Illuminate\Support\Carbon;
 @endphp
 
 <head>
@@ -14,7 +15,7 @@ $user = Auth::user();
     <meta name="description"
         content="Flexy Admin Lite is powerful and clean admin dashboard template, inpired from Bootstrap Framework" />
     <meta name="robots" content="noindex,nofollow" />
-    <title>{{ env('APP_NAME') }} | @section('title')
+    <title>Delivgo | @section('title')
 
         @show
     </title>
@@ -75,6 +76,50 @@ $user = Auth::user();
         alertify.defaults.theme.ok = "btn btn-success"
         alertify.defaults.theme.cancel = "btn btn-light"
     </script>
+
+    <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+    <script src="{{ asset('/js/pusher.js') }}"></script>
+    @php
+        Carbon::setLocale('fr');
+        
+    @endphp
+    @if (Auth::check())
+        <script>
+            var audio = new Audio("{{ asset('notif.wav') }}");
+            var pusher = new Pusher("33ae8c9470ab8fad0744", {
+                cluster: "eu",
+            });
+
+            Pusher.logToConsole = true;
+
+            var channel = pusher.subscribe('notif-{{ Auth::user()->user_id }}');
+            channel.bind('notif', function(data) {
+                audio.play();
+
+                toastr.info(`
+        <strong>${data.notif.title}</strong><br>
+        ${data.notif.content}
+            
+
+        `)
+
+                let permission = Notification.requestPermission();
+                if (Notification.permission == "granted") {
+
+                    const notif = new Notification(data.notif.title, {
+                        body: data.notif.content,
+                        icon: "{{ asset('/images/logo/logoOrange.PNG') }}"
+                    });
+                }
+
+                // setTimeout(() => notif.close(), 5000);
+
+
+                console.log(data);
+            });
+        </script>
+    @endif
+
 
 </head>
 
@@ -165,34 +210,19 @@ $user = Auth::user();
                                     class="fas fa-bell fa-fw"></i></a>
 
                             <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
-                                <h6 class="dropdown-header">alerts center</h6><a
-                                    class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="me-3">
-                                        <div class="bg-primary icon-circle"><i class="fas fa-file-alt text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div><span class="small text-gray-500">December 12, 2019</span>
-                                        <p>A new monthly report is ready to download!</p>
-                                    </div>
-                                </a><a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="me-3">
-                                        <div class="bg-success icon-circle"><i class="fas fa-donate text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div><span class="small text-gray-500">December 7, 2019</span>
-                                        <p>$290.29 has been deposited into your account!</p>
-                                    </div>
-                                </a><a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="me-3">
-                                        <div class="bg-warning icon-circle"><i
-                                                class="fas fa-exclamation-triangle text-white"></i></div>
-                                    </div>
-                                    <div><span class="small text-gray-500">December 2, 2019</span>
-                                        <p>Spending Alert: We&#39;ve noticed unusually high spending for your
-                                            account.</p>
-                                    </div>
-                                </a><a class="dropdown-item text-center small text-gray-500" href="#">Show All
-                                    Alerts</a>
+                                <h6 class="dropdown-header">Notifications</h6>
+                                <div id="notifCont" style="height: 300px;max-height: 300px;overflow: auto"></div>
+                                <script>
+                                    function notifLoad() {
+                                        $("#notifCont").load("/notif")
+                                        setTimeout(() => {
+                                            notifLoad()
+                                        }, 15000);
+                                    }
+                                    notifLoad()
+                                </script>
+                                {{-- <a class="dropdown-item text-center small text-gray-500" href="#">Show All
+                                    Alerts</a> --}}
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -207,7 +237,7 @@ $user = Auth::user();
                                             echo 'Restaurant';
                                             break;
                                         case 3:
-                                            echo 'Deliverer';
+                                            echo 'Livreur';
                                             break;
                                         case 4:
                                             echo 'Admin';
@@ -255,9 +285,9 @@ $user = Auth::user();
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
                         <li class="sidebar-item {{ request()->routeIs('dash') ? 'selected' : '' }}">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link "
-                                href="{{ route('dash') }}" aria-expanded="false"><i
-                                    class="mdi mdi-view-dashboard"></i><span class="hide-menu">Dashboard</span></a>
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link " href="{{ route('dash') }}"
+                                aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span
+                                    class="hide-menu">Dashboard</span></a>
                         </li>
                         <li class="sidebar-item {{ request()->routeIs('dash.profile') ? 'selected' : '' }} ">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link"
@@ -272,7 +302,7 @@ $user = Auth::user();
                                     <i class="fal fa-burger-soda"></i>&nbsp;<span class="hide-menu">My Menu</span></a>
                             </li>
                         @endif
-                        <li class="sidebar-item">
+                        {{-- <li class="sidebar-item">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="table-basic.html"
                                 aria-expanded="false"><i class="mdi mdi-border-all"></i><span
                                     class="hide-menu">Table</span></a>
@@ -286,7 +316,7 @@ $user = Auth::user();
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="starter-kit.html"
                                 aria-expanded="false"><i class="mdi mdi-file"></i><span
                                     class="hide-menu">Blank</span></a>
-                        </li>
+                        </li> --}}
                         <li class="sidebar-item">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/"
                                 aria-expanded="false"><i class="fal fa-arrow-circle-left"></i><span
@@ -385,6 +415,9 @@ $user = Auth::user();
     <script src="{{ asset('dist/js/sidebarmenu.js') }}"></script>
     <!--Custom JavaScript -->
     <script src={{ asset('dist/js/custom.js') }}></script>
+
+    <script src="{{ asset('js/moment/moment.js') }}"></script>
+    <script src="{{ asset('js/moment/fr.js') }}"></script>
 
 
 </body>

@@ -12,7 +12,7 @@ class DrinkController extends Controller
         $label = $req->label;
         $price = $req->price;
         $resto_id = $req->resto_id;
-        $check = Drink::where("label", $label)->first();
+        $check = Drink::where("label", $label)->where("resto_id", $resto_id)->first();
         if (!$check) {
             $new = new Drink;
             $new->label = $label;

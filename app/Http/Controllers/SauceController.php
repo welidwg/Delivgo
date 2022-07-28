@@ -13,7 +13,7 @@ class SauceController extends Controller
         $label = $req->label;
         $price = $req->price;
         $resto_id = $req->resto_id;
-        $check = Sauce::where("label", $label)->first();
+        $check = Sauce::where("label", $label)->where("resto_id", $resto_id)->first();
         if (!$check) {
             $new = new Sauce;
             $new->label = $label;

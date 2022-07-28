@@ -19,6 +19,11 @@ class CreateCartsTable extends Migration
             $table->foreignId("user_id")->references("user_id")->on("users")->onDelete("cascade");
             $table->foreignId("product_id")->references("product_id")->on("products")->onDelete("cascade");
             $table->integer("quantity");
+            $table->json("toppings")->nullable();
+            $table->json("drinks")->nullable();
+            $table->json("sauces")->nullable();
+            $table->json("supplements")->nullable();
+            $table->float("UnitTotal");
             $table->float("total");
 
             $table->timestamps();

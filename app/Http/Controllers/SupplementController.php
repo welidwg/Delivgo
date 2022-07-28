@@ -12,7 +12,7 @@ class SupplementController extends Controller
         $label = $req->label;
         $price = $req->price;
         $resto_id = $req->resto_id;
-        $check = Supplement::where("label", $label)->first();
+        $check = Supplement::where("label", $label)->where("resto_id", $resto_id)->first();
         if (!$check) {
             $new = new Supplement;
             $new->label = $label;
@@ -25,7 +25,22 @@ class SupplementController extends Controller
             return \response(json_encode(["type" => "error", "message" => "This suppelment already exists "]), 500);
         }
     }
+    public function Update(Request $req, $id)
+    {
+        try {
+            $supp = Supplement::where("id", $id)->first();
+            $supp->label = $req->label;
+            $supp->price = $req->price;
 
+            if ($supp->save()) {
+                return \response(json_encode(["type" => "success", "message" => "Updated Successfully"]), 200);
+            } else {
+                return \response(json_encode(["type" => "error", "message" => "Something went wrong!"]), 500);
+            }
+        } catch (\Throwable $th) {
+            return \response(json_encode(["type" => "error", "message" => $th->getMessage()]), 500);
+        }
+    }
     public function Delete($id)
     {
         if (Supplement::where("id", $id)->first()->delete()) {

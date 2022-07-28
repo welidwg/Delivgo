@@ -24,8 +24,9 @@
                 <td>
                     <div class="">
 
-                        <a href="#!" id="editSupp{{ $supp->id }}" class="btn shadow-none text-danger"><i
-                                class="fas fa-trash"></i></a>
+                        <a data-bs-toggle="modal" data-bs-target="#editSuppModal{{ $supp->id }}"
+                            id="editSupp{{ $supp->id }}" class="btn shadow-none text-primary"><i
+                                class="fas fa-edit"></i></a>
                         <a href="#!" id="deleteSupp{{ $supp->id }}" class="btn shadow-none text-danger"><i
                                 class="fas fa-trash"></i></a>
 

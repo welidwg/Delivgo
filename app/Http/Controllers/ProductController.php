@@ -79,23 +79,64 @@ class ProductController extends Controller
             $validate = Validator::make($req->all(), [
                 'label' => "bail|required",
                 'price' => "bail|required",
+                'category' => "bail|required",
             ]);
             if ($validate->fails()) {
                 return response(json_encode($validate->errors()), 500);
             }
-            $label = $req->json("label");
-            $price = $req->json("price");
-            $statut = $req->json("statut");
             $product = Product::where("product_id", $id)->first();
+
+            $label = $req->label;
+            $price = $req->price;
+            $statut = $req->statut;
+            $category = $req->category;
+            $description = $req->description;
+            if ($req->topping == "") {
+                $product->have_toppings = 0;
+            } else {
+                $product->have_toppings = 1;
+            }
+
+            if ($req->supplement == "") {
+                $product->have_supplement = 0;
+            } else {
+                $product->have_supplement = 1;
+            }
+
+            if ($req->sauce == "") {
+                $product->have_sauces = 0;
+            } else {
+                $product->have_sauces = 1;
+            }
+
+            if ($req->drink == "") {
+                $product->have_drinks = 0;
+            } else {
+                $product->have_drinks = 1;
+            }
+
+            if ($req->hasFile("picture")) {
+                if ($product->picture != "") {
+                    unlink(base_path() . "/public/uploads/products/$product->picture");
+                }
+                $file = $req->file("picture");
+                $filename = time() . "." . $file->getClientOriginalExtension();
+                $product->picture = $filename;
+                $file->move("uploads/products", $filename);
+            }
+
             if ($product) {
                 $product->label = $label;
                 $product->price = $price;
+                $product->category_id = $category;
                 $product->statut = $statut;
+                $product->description = $description;
                 if ($product->save()) {
-                    return response(json_encode(["type" => "success", "message" => "Product updated successfully"]), 200);
+                    return response(json_encode(["type" => "success", "message" => "Updated"]), 200);
                 }
             }
-            return response(json_encode(["type" => "error", "message" => "Product not found"]), 500);
+
+            // return response(json_encode(["type" => "error", "message" => "Product not found"]), 500);
         } catch (\Throwable $th) {
             return response(json_encode(["type" => "error", "message" => $th->getMessage()]), 500);
         }

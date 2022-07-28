@@ -30,6 +30,6 @@ class EmailVerification extends Mailable
      */
     public function build()
     {
-        return $this->from("Delivgo.Stuff@outlook.fr")->view("emails.verification");
+        return $this->from("delivgo.stuff@gmail.com")->view("emails.verification");
     }
 }

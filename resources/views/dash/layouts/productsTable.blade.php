@@ -19,7 +19,7 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                 <td>
                     <div class="d-flex align-items-center">
                         <div class="m-r-10">
-                            <img src="{{ asset('uploads/products/' . $product->picture) }}" class="rounded img-fluid"
+                            <img src="{{ asset('uploads/products/' . $product->picture) }}" class="rounded"
                                 width="50px" alt="">
                         </div>
                         <div class="">
@@ -31,8 +31,9 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                 <td>{{ $product->Category->label }} </td>
 
                 <td>
-                    <a href="#!" id="EditProduct{{ $product->product_id }}" class="btn shadow-none text-info"><i
-                            class="fas fa-edit"></i></a>
+                    <a href="#!" data-bs-toggle="modal"
+                        data-bs-target="#editProductModal{{ $product->product_id }}"
+                        class="btn shadow-none text-info"><i class="fas fa-edit"></i></a>
 
                     <a href="#!" id="deleteProduct{{ $product->product_id }}"
                         class="btn shadow-none text-danger"><i class="fas fa-trash"></i></a>
@@ -66,6 +67,9 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                 </script>
 
             </tr>
+
+
+
         @empty
         @endforelse
 

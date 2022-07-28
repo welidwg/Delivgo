@@ -31,6 +31,6 @@ class PasswordRecovery extends Mailable
      */
     public function build()
     {
-        return $this->from("Delivgo.Stuff@outlook.fr")->view("emails.passwordrec");
+        return $this->from("delivgo.stuff@gmail.com")->view("emails.passwordrec");
     }
 }

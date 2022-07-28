@@ -14,7 +14,7 @@ class GarnitureController extends Controller
         $label = $req->label;
         $price = $req->price;
         $resto_id = $req->resto_id;
-        $check = Garniture::where("label", $label)->first();
+        $check = Garniture::where("label", $label)->where("resto_id", $resto_id)->first();
         if (!$check) {
             $new = new Garniture;
             $new->label = $label;
@@ -25,6 +25,22 @@ class GarnitureController extends Controller
             }
         } else {
             return \response(json_encode(["type" => "error", "message" => "This Topping already exists "]), 500);
+        }
+    }
+    public function Update(Request $req, $id)
+    {
+        try {
+            $supp = Garniture::where("id", $id)->first();
+            $supp->label = $req->label;
+            $supp->price = $req->price;
+
+            if ($supp->save()) {
+                return \response(json_encode(["type" => "success", "message" => "Updated Successfully"]), 200);
+            } else {
+                return \response(json_encode(["type" => "error", "message" => "Something went wrong!"]), 500);
+            }
+        } catch (\Throwable $th) {
+            return \response(json_encode(["type" => "error", "message" => $th->getMessage()]), 500);
         }
     }
 

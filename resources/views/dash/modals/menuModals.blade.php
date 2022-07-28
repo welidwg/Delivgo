@@ -100,7 +100,7 @@
                                 <label for="" class="px-2 color-3 fs-5"><i class="fal fa-coins"></i></label>
                                 <input type="number" min="1"
                                     class="form-control shadow-none border-0  bg-transparent"
-                                    placeholder="Product price" name="price" step="0.1">
+                                    placeholder="Product price (ex: type 5 for 5 dinars)" name="price" step="0.1">
                             </div>
                             <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                 <label for="" class="px-2 color-3 fs-5"><i class="fal fa-list"></i></label>

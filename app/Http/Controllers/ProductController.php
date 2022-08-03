@@ -15,13 +15,16 @@ class ProductController extends Controller
     {
 
         try {
+            $customMessages = [
+                'required' => 'Le :attribute est requis.',
+            ];
             $validate = Validator::make($req->all(), [
                 'label' => "bail|required",
                 'resto_id' => "bail|required",
                 'price' => "bail|required",
                 'category' => "bail|required",
                 'picture' => "bail|required",
-            ]);
+            ],$customMessages);
             if ($validate->fails()) {
                 return response(json_encode($validate->errors()), 500);
             }
@@ -66,7 +69,7 @@ class ProductController extends Controller
             $product->have_toppings = $topping;
             if ($product->save()) {
                 $file->move("uploads/products", $filename);
-                return response(json_encode(["type" => "success", "message" => "Product created successfully"]), 200);
+                return response(json_encode(["type" => "success", "message" => "Produit ajouté avec succès"]), 200);
             }
         } catch (\Throwable $th) {
             return response(json_encode(["type" => "error", "message" => $th->getMessage()]), 500);
@@ -74,13 +77,16 @@ class ProductController extends Controller
     }
     public function UpdateProduct(Request $req, $id)
     {
+        $customMessages = [
+            'required' => 'Le :attribute est requis.',
+        ];
 
         try {
             $validate = Validator::make($req->all(), [
                 'label' => "bail|required",
                 'price' => "bail|required",
                 'category' => "bail|required",
-            ]);
+            ], $customMessages);
             if ($validate->fails()) {
                 return response(json_encode($validate->errors()), 500);
             }
@@ -132,7 +138,7 @@ class ProductController extends Controller
                 $product->statut = $statut;
                 $product->description = $description;
                 if ($product->save()) {
-                    return response(json_encode(["type" => "success", "message" => "Updated"]), 200);
+                    return response(json_encode(["type" => "success", "message" => "Mis à jour"]), 200);
                 }
             }
 
@@ -177,10 +183,10 @@ class ProductController extends Controller
                     unlink(base_path() . "/public/uploads/products/$product->picture");
                 }
                 if ($product->delete()) {
-                    return response(json_encode(["type" => "success", "message" => "Product deleted successfully ! "]), 200);
+                    return response(json_encode(["type" => "success", "message" => "Produit supprimé! "]), 200);
                 }
             } else {
-                return response(json_encode(["type" => "error", "message" => "This product doesn't exist in our records"]), 500);
+                return response(json_encode(["type" => "error", "message" => "Produit inexistant"]), 500);
             }
         } catch (\Throwable $th) {
             return response(json_encode(["type" => "error", "message" => $th->getMessage()]), 500);

@@ -6,17 +6,21 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "cornford/googlmapper": "^3.4",
         "doctrine/dbal": "^3.3",
         "fruitcake/laravel-cors": "^2.0",
+        "geocodio/geocodio-library-php": "^1.5",
+        "gonoware/laravel-maps": "^1.4",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
+        "messagebird/php-rest-api": "^3.1",
         "nexmo/client": "^2.4",
         "pusher/pusher-php-server": "^7.0",
         "stevebauman/location": "^6.5",
-        "twilio/sdk": "^6.38"
+        "twilio/sdk": "^6.40"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

@@ -8,19 +8,19 @@
 <body>
 
     <p>
-        Hello dear {{ $details['name'] }}. <br>
-        You have requested to recover your password {{ date('Y-m-d') }} at {{ date('H:i:s') }} <br>
-        To continue , here is the code below that you need to copy it into his field. <br>
-        <span style="color: darkred">PS: This code will expire in 15 minutes !</span>
+        Bonjour chère {{ $details['name'] }}. <br>
+        Vous avez demandé de récupérer votre mot de paase le {{ date('Y-m-d H:i a') }} <br>
+        Pour continuez , ceci est le code que vous devez saisir au champs requis <br>
+        <span style="color: darkred">Nb: Ce code sera expiré apràs 15 minutes !</span>
     </p>
     <br>
 
 
     @if ($details['code'] != '')
-        <span> Code : <strong>{{ $details['code'] }}</strong> </span>
+        <span> Votre code : <strong>{{ $details['code'] }}</strong> </span>
     @endif
     <br>
-    <span>Delivero Stuff.</span>
+    <span>Equipe Delivgo.</span>
 </body>
 
 </html>

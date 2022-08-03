@@ -25,7 +25,7 @@ class CommandeController extends Controller
             foreach ($cart as $item) {
                 $checkref = commande_ref::where("user_id", $item->user_id)->where("resto_id", $item->resto_id)->with("user")->first();
                 if ($checkref && !$checkref->is_message) {
-                    if ($checkref->statut == 5) {
+                    if ($checkref->statut != 1) {
                         $newRefCmd = new commande_ref;
                         $newRefCmd->user_id = $item->user_id;
                         $newRefCmd->resto_id = $item->resto_id;

@@ -6,9 +6,12 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\CommandeMessageController;
 use App\Http\Controllers\commandesRefController;
+use App\Http\Controllers\ConfigsController;
+use App\Http\Controllers\DemandController;
 use App\Http\Controllers\DrinkController;
 use App\Http\Controllers\GarnitureController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RegionController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\SauceController;
 use App\Http\Controllers\SupplementController;
@@ -18,6 +21,7 @@ use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Commande;
 use App\Models\CommandeMessage;
+use App\Models\Config;
 use App\Models\Drink;
 use App\Models\Garniture;
 use App\Models\Notification;
@@ -26,8 +30,10 @@ use App\Models\RequestResto;
 use App\Models\Sauce;
 use App\Models\Supplement;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +55,10 @@ Route::post("/resend_code", [UserController::class, 'ResendCode']);
 Route::post("/verify_code_password", [UserController::class, 'VerifyCodePassword']);
 Route::post("/password_recovery", [UserController::class, 'PasswordRecovery']);
 Route::post("/password_update", [UserController::class, 'UpdatePassword']);
+
+
+//Demande managaer
+Route::post("/demande/add/deliverer", [DemandController::class, 'store']);
 
 
 Route::get("/check_codes", function () {
@@ -122,7 +132,13 @@ Route::group(["middleware" => "auth"], function () {
     Route::post("/request/cancel", [RequestController::class, "cancel"])->name("request.cancel");
 
 
+    //region_manager
+    Route::post("/region/add", [RegionController::class, "store"])->name("region.add");
+    Route::post("/region/update/{id}", [RegionController::class, "update"])->name("region.update");
+    Route::delete("/region/delete/{id}", [RegionController::class, "delete"])->name("region.delete");
 
+    //configs_manager
+    Route::post("/configs/add", [ConfigsController::class, "store"])->name("configs.add");
 
 
     Route::get("/dash/toppingsTable", function () {
@@ -156,7 +172,7 @@ Route::group(["middleware" => "auth"], function () {
     });
 
     Route::get("/layouts/profile", function () {
-        $user = User::where("user_id", Auth::user()->user_id)->with("configs")->first();
+        $user = User::where("user_id", Auth::user()->user_id)->with("configs")->with("region")->first();
         return view("dash/layouts/profile", ["user" => $user]);
     });
 
@@ -171,6 +187,12 @@ Route::group(["middleware" => "auth"], function () {
     Route::get('/dash/mainContent', function () {
         return view('dash/layouts/indexContent', ["user" => Auth::user()]);
     })->name("dash.mainContent");
+    Route::get('/dash/stats', function () {
+        return view('dash/pages/stats', ["user" => Auth::user()]);
+    })->name("stats");
+    Route::get('/dash/mainContent', function () {
+        return view('dash/layouts/indexContent', ["user" => Auth::user()]);
+    })->name("dash.mainContent");
 
     Route::get('/dash/profile', function () {
         return view('dash/pages/profile', ["user" => Auth::user()]);
@@ -182,6 +204,11 @@ Route::group(["middleware" => "auth"], function () {
     Route::get('/orders', function () {
         return view('main/pages/orders', ["user" => Auth::user()]);
     })->name("main.orders");
+    Route::get('/ordersTable', function () {
+        return view('main/layouts/ordersTable', ["user" => Auth::user()]);
+    })->name("main.ordersTable");
+
+
     Route::get('/notif', function () {
         return view('main/layouts/notif');
     })->name("main.notifs");
@@ -207,12 +234,12 @@ Route::get("/cartContent", function () {
     if ($cart->count() > 0) {
         return view("main/pages/cart", ["items" => $cart]);
     } else {
-        return view("main/layouts/notfound", ["message" => "Your cart is empty", "cart" => true]);
+        return view("main/layouts/notfound", ["message" => "Votre panier est vide", "cart" => true]);
     }
 });
 
 Route::get('/resto/{id}', function ($id) {
-    $user = User::where("user_id", $id)->with("products")->with("sauces")->with("toppings")->with("drinks")->with("supplements")->with('configs')
+    $user = User::where("user_id", $id)->with("region")->with("products")->with("sauces")->with("toppings")->with("drinks")->with("supplements")->with('configs')
         ->first();
     return view('main/pages/menu', ["resto" => $user]);
 });
@@ -223,8 +250,24 @@ Route::get('/cart', function () {
     return view('main/pages/cart');
 });
 
+Route::get("/test", function () {
+    $geocoder = new Geocodio();
+    $response = Geocodio::reverse('35.6777984,10.092544');
+    dump($response);
+});
 
-Route::get('/test', function () {
-    $notif = Notification::where("id", ">", 1)->first();
-    broadcast(new Notif($notif));
+
+
+Route::post("/location", function (Request $req) {
+    Mapper::map($req->lat, $req->long);
+    return Mapper::render();
+});
+
+Route::post("/frais/verif", function (Request $req) {
+    $night = $req->night;
+    if ($night == true) {
+        $frais = Config::latest();
+        return json_encode(["night" => true, "frais" => $frais]);
+    }
+    return "none";
 });

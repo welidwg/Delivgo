@@ -18,11 +18,11 @@ class CategoryController extends Controller
         $categ->resto_id = $id;
         $check = Category::where("label", $label)->where("resto_id", $id)->first();
         if ($check) {
-            return response(json_encode(["type" => "error", "message" => "This category is already exists"]), 500);
+            return response(json_encode(["type" => "error", "message" => "Cette catégorie est déjà existante"]), 500);
         }
 
         $categ->save();
-        return response(json_encode(["type" => "success", "message" => "Added Successfully !"]), 200);
+        return response(json_encode(["type" => "success", "message" => "Ajoutée avec succès !"]), 200);
     }
 
     public function DeleteCategory($id)
@@ -30,7 +30,7 @@ class CategoryController extends Controller
         $cat = Category::where("id", $id)->first();
         if ($cat) {
             $cat->delete();
-            return response(json_encode(["type" => "success", "message" => "Deleted Successfully !"]), 200);
+            return response(json_encode(["type" => "success", "message" => "Supprimée avec succès !"]), 200);
         }
     }
 }

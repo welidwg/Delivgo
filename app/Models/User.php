@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -76,11 +77,20 @@ class User extends Authenticatable
         # code...
         return $this->hasMany(RestoConfig::class, "resto_id");
     }
+
+    public function region(): BelongsTo
+    {
+        # code...
+        return $this->belongsTo(Region::class, "city");
+    }
+
     public function commandesPassed(): HasMany
     {
         # code...
         return $this->hasMany(commande_ref::class, "user_id");
     }
+
+
     public function commandesReceived(): HasMany
     {
         # code...

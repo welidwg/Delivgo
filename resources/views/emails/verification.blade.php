@@ -8,19 +8,19 @@
 <body>
 
     <p>
-        Hello dear {{ $details['name'] }}. <br>
-        We are very honored and happy that you joined us ! <br>
-        To Complete your inscription , we should verify your email , so all you have to do is just copy the code below
-        into its indicated place on our website.
+        Bonjour chère {{ $details['name'] }}. <br>
+        Nous sommes très honeureux que vous joignez nous. <br>
+        Pour completez votre inscription, On doit verifier votre email , donc vous devez saisissez le code au dessus
+        dans le champs requis.
     </p>
     <br>
 
 
     @if ($details['code'] != '')
-        <span> Your CODE : <strong>{{ $details['code'] }}</strong> </span>
+        <span> Votre code : <strong>{{ $details['code'] }}</strong> </span>
     @endif
     <br>
-    <span>Delivero Stuff.</span>
+    <span>Equipe delivgo.</span>
 </body>
 
 </html>

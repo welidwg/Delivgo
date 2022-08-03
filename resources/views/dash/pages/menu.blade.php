@@ -31,7 +31,7 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                     <!-- title -->
                     <div class="d-md-flex">
                         <div>
-                            <h4 class="card-title">Products&nbsp;
+                            <h4 class="card-title">Produits&nbsp;
 
                                 <a href="" class="btn " data-bs-target="#addProductModal" data-bs-toggle="modal"><i
                                         class="fas fa-plus"></i></a>
@@ -87,14 +87,14 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                                                                 class="fal fa-tag"></i></label>
                                                         <input type="text"
                                                             class="form-control shadow-none border-0  bg-transparent"
-                                                            placeholder="Product label" name="label"
+                                                            placeholder="Nom de produit" name="label"
                                                             value="{{ $product->label }}">
                                                     </div>
                                                     <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                                         <label for="" class="px-2 color-3 fs-5"><i
                                                                 class="fal fa-pen"></i></label>
                                                         <textarea class="form-control shadow-none border-0  bg-transparent" name="description"
-                                                            placeholder="Product Description (Optional )" cols="" rows="2" style="resize: none">{{ $product->description }}</textarea>
+                                                            placeholder=" Description (Optionel )" cols="" rows="2" style="resize: none">{{ $product->description }}</textarea>
 
                                                     </div>
                                                     <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
@@ -102,8 +102,8 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                                                                 class="fal fa-coins"></i></label>
                                                         <input type="number" min="1"
                                                             class="form-control shadow-none border-0  bg-transparent"
-                                                            placeholder="Product price" name="price"
-                                                            value="{{ $product->price }}" step="0.1">
+                                                            placeholder="prix" name="price" value="{{ $product->price }}"
+                                                            step="0.1">
                                                     </div>
 
                                                     <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
@@ -130,7 +130,7 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                                                         <div class="form-check form-switch">
                                                             <label style="width: auto" class="form-check-label"
                                                                 for="flexSwitchCheckDefault">
-                                                                Have Supplements ?</label>
+                                                                A des Suppléments ?</label>
                                                             <input class="form-check-input" type="checkbox" role="switch"
                                                                 id="flexSwitchCheckDefault" name="supplement"
                                                                 {{ $product->have_supplement ? 'checked' : '' }}>
@@ -143,7 +143,7 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                                                         <div class="form-check form-switch">
                                                             <label style="width: auto" class="form-check-label"
                                                                 for="flexSwitchCheckDefault">
-                                                                Have topping ?</label>
+                                                                A des garnitures ?</label>
                                                             <input class="form-check-input" type="checkbox"
                                                                 role="switch" id="flexSwitchCheckDefault" name="topping"
                                                                 {{ $product->have_toppings ? 'checked' : '' }}>
@@ -157,7 +157,7 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                                                         <div class="form-check form-switch">
                                                             <label style="width: auto" class="form-check-label"
                                                                 for="flexSwitchCheckDefault">
-                                                                Have sauces ?</label>
+                                                                A des sauces ?</label>
                                                             <input class="form-check-input" type="checkbox"
                                                                 role="switch" id="flexSwitchCheckDefault" name="sauce"
                                                                 {{ $product->have_sauces ? 'checked' : '' }}>
@@ -171,7 +171,7 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                                                         <div class="form-check form-switch">
                                                             <label style="width: auto" class="form-check-label"
                                                                 for="flexSwitchCheckDefault">
-                                                                Have drinks ?</label>
+                                                                A des boissons ?</label>
                                                             <input class="form-check-input" type="checkbox"
                                                                 role="switch" id="flexSwitchCheckDefault" name="drink"
                                                                 {{ $product->have_drinks ? 'checked' : '' }}>
@@ -186,9 +186,8 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                                                                 class="fal fa-camera"></i>
                                                         </label>
                                                         <label style="width: auto;text-align: left"
-                                                            for="picture{{ $product->product_id }}">&nbsp;&nbsp;Please
-                                                            select
-                                                            product image</label>
+                                                            for="picture{{ $product->product_id }}">&nbsp;&nbsp;Changer
+                                                            l'image de produit</label>
                                                         <input type="file" min="1" hidden
                                                             id="picture{{ $product->product_id }}"
                                                             class="form-control shadow-none border-0  bg-transparent"
@@ -199,7 +198,7 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                                                     <div class="mx-auto mt-3">
                                                         <button type="submit"
                                                             id="editProductBtnSubmit{{ $product->product_id }}"
-                                                            class="btn w-100">Update&nbsp;
+                                                            class="btn w-100">Mis à jour&nbsp;
                                                             <i class="fal fa-check"></i></button>
 
                                                     </div>
@@ -267,7 +266,7 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                     <!-- title -->
                     <div class="d-md-flex">
                         <div>
-                            <h4 class="card-title">Categories&nbsp;
+                            <h4 class="card-title">Catégories&nbsp;
 
                                 <a href="" class="btn" data-bs-target="#addCategoryModal"
                                     data-bs-toggle="modal"><i class="fas fa-plus"></i></a>
@@ -301,7 +300,7 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                     <!-- title -->
                     <div class="d-md-flex">
                         <div>
-                            <h4 class="card-title">Supplements&nbsp;
+                            <h4 class="card-title">Suppléments&nbsp;
 
                                 <a href="" class="btn" data-bs-target="#addSuppModal"
                                     data-bs-toggle="modal"><i class="fas fa-plus"></i></a>
@@ -345,8 +344,8 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                                             <div>
                                                 <form action="#" id="editSuppForm{{ $supplement->id }}"
                                                     class="formsModal">
-                                                    <h6 for="" class="mb-3 fs-3 color-3 text-center">Edit
-                                                        Supplement</h6>
+                                                    <h6 for="" class="mb-3 fs-3 color-3 text-center">Modifier
+                                                        Supplément</h6>
 
                                                     <div
                                                         class="input-group mb-2 rounded-pill bg-light  align-items-center">
@@ -354,7 +353,7 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                                                                 class="fal fa-tag"></i></label>
                                                         <input type="text" value="{{ $supplement->label }}"
                                                             class="form-control shadow-none border-0  bg-transparent"
-                                                            placeholder="Supplement label" name="label" required>
+                                                            placeholder="titre" name="label" required>
                                                     </div>
                                                     <div
                                                         class="input-group mb-2 rounded-pill bg-light  align-items-center">
@@ -363,14 +362,14 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                                                         <input type="number" step="0.1"
                                                             value="{{ $supplement->price }}"
                                                             class="form-control shadow-none border-0  bg-transparent"
-                                                            placeholder="Unit price" name="price" required>
+                                                            placeholder="prix unitaire" name="price" required>
                                                     </div>
 
 
                                                     <div class="mx-auto mt-3">
                                                         <button href="#!" type="submit"
                                                             id="editSuppBtn{{ $supplement->id }}"
-                                                            class="btn w-100">Update&nbsp;
+                                                            class="btn w-100">Modifier&nbsp;
                                                             <i class="fal fa-check"></i></button>
                                                     </div>
                                                     @csrf
@@ -436,7 +435,7 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                     <!-- title -->
                     <div class="d-md-flex">
                         <div>
-                            <h4 class="card-title">Toppings&nbsp;
+                            <h4 class="card-title">Garnitures&nbsp;
 
                                 <a href="" class="btn" data-bs-target="#addGarnitureModal"
                                     data-bs-toggle="modal"><i class="fas fa-plus"></i></a>
@@ -481,8 +480,8 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                                             <div>
                                                 <form action="#" id="editToppForm{{ $topping->id }}"
                                                     class="formsModal">
-                                                    <h6 for="" class="mb-3 fs-3 color-3 text-center">Edit
-                                                        Topping</h6>
+                                                    <h6 for="" class="mb-3 fs-3 color-3 text-center">Modifier
+                                                        garniture</h6>
 
                                                     <div
                                                         class="input-group mb-2 rounded-pill bg-light  align-items-center">
@@ -490,7 +489,7 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                                                                 class="fal fa-tag"></i></label>
                                                         <input type="text" value="{{ $topping->label }}"
                                                             class="form-control shadow-none border-0  bg-transparent"
-                                                            placeholder="Supplement label" name="label" required>
+                                                            placeholder="titre" name="label" required>
                                                     </div>
                                                     <div
                                                         class="input-group mb-2 rounded-pill bg-light  align-items-center">
@@ -499,14 +498,14 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                                                         <input type="number" step="0.1"
                                                             value="{{ $topping->price }}"
                                                             class="form-control shadow-none border-0  bg-transparent"
-                                                            placeholder="Unit price" name="price" required>
+                                                            placeholder="prix unitaire" name="price" required>
                                                     </div>
 
 
                                                     <div class="mx-auto mt-3">
                                                         <button href="#!" type="submit"
                                                             id="editToppBtn{{ $topping->id }}"
-                                                            class="btn w-100">Update&nbsp;
+                                                            class="btn w-100">Modifier&nbsp;
                                                             <i class="fal fa-check"></i></button>
                                                     </div>
                                                     @csrf
@@ -604,7 +603,7 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                     <!-- title -->
                     <div class="d-md-flex">
                         <div>
-                            <h4 class="card-title">Drinks&nbsp;
+                            <h4 class="card-title">Boissons&nbsp;
 
                                 <a href="" class="btn" data-bs-target="#addDrinksModal"
                                     data-bs-toggle="modal"><i class="fas fa-plus"></i></a>

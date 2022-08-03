@@ -1,8 +1,8 @@
    <table class="table mb-0 table-hover align-middle text-nowrap" id="saucesTable1">
        <thead>
            <tr>
-               <th class="border-top-0">Label</th>
-               <th class="border-top-0">Unit Price</th>
+                <th class="border-top-0">Nom</th>
+               <th class="border-top-0">Prix unitaire</th>
                <th class="border-top-0 mx-auto">Actions</th>
 
            </tr>
@@ -44,7 +44,7 @@
                                        })
                                        .catch(err => {
                                            console.error(err);
-                                           toastr.error("Something went wrong")
+                                           toastr.error("Erreur inconnue")
                                        })
 
                                }, () => {})
@@ -66,7 +66,7 @@
        $("#saucesTable1").DataTable({
            "language": {
                "decimal": ".",
-               "emptyTable": "There is no records yet",
+            "emptyTable": "Aucune sauce encore",
                "info": "",
                "infoFiltered": "",
                "infoEmpty": "",

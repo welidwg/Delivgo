@@ -22,9 +22,9 @@ class CreateUsersTable extends Migration
             $table->string("avatar", 500)->nullable();
             $table->integer("type")->default(1);
             $table->string("state")->nullable();
-            $table->string("city")->nullable();
             $table->string("address", 500)->nullable();
             $table->integer("phone")->unique();
+            $table->integer("phone2")->unique();
             $table->integer("statut")->default(1);
             $table->integer("onDuty")->nullable()->default(0);
             $table->integer("deliveryPrice")->nullable();

@@ -6,9 +6,9 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
 <table class="table mb-0 table-hover align-middle text-nowrap" id="productsTable1">
     <thead>
         <tr>
-            <th class="border-top-0">Product</th>
-            <th class="border-top-0">Price</th>
-            <th class="border-top-0">Category</th>
+            <th class="border-top-0">Produit</th>
+            <th class="border-top-0">Prix</th>
+            <th class="border-top-0">Catégorie</th>
             <th class="border-top-0">Actions</th>
 
         </tr>
@@ -83,7 +83,7 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
     $('#productsTable1').DataTable({
         "language": {
             "decimal": ".",
-            "emptyTable": "There is no products yet",
+            "emptyTable": "Aucun produit encore",
             "info": "",
             "infoFiltered": "",
             "infoEmpty": "",

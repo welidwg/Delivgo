@@ -76,7 +76,7 @@ class CartController extends Controller
                 $check->total = $total;
                 $check->UnitTotal = $unitTotal;
                 $check->save();
-                return response("Cart updated", 200);
+                return response("Panier modifiée", 200);
             }
             $new->resto_id = $resto_id;
             $new->product_id = $product_id;
@@ -87,7 +87,7 @@ class CartController extends Controller
 
             if ($new->save()) {
               
-                return response("Added to cart", 200);
+                return response("Ajouté au panier", 200);
             }
 
 

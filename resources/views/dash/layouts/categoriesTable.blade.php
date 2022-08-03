@@ -64,7 +64,7 @@
        $('#categoriesTable1').DataTable({
            "language": {
                "decimal": ".",
-               "emptyTable": "There is no categories yet",
+            "emptyTable": "Aucune catégorie encore",
                "info": "",
                "infoFiltered": "",
                "infoEmpty": "",

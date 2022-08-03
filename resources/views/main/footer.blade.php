@@ -1,12 +1,12 @@
-  <footer id="footer">
+  <footer id="footer" style="position: relative;">
       <div class="container">
           <div class="row align-items-center">
               <div class="col">
-                  <h3>
-                      <img src="images/logo/logoOrangeBack.png" class="img-fluid " width="85" alt="">
+                  <h3 style="color:#CB212E">
+                      <img src="{{ asset('images/logo/logo2.png') }}" class="img-fluid " width="85" alt="">
                       Delivgo
                   </h3>
-                  <p class="fw-bold">Delivering good vibes
+                  <p style="" class="fw-bold">Delivering good vibes
                   </p>
               </div>
               <div class="col">
@@ -27,7 +27,7 @@
               &copy; Copyright <strong><span>Delivgo</span></strong>. All Rights Reserved
           </div>
           <div class="credits">
-              Developed By <a href="http://welidwg.works">Wg Holdings</a>
+              Developed By <a target="_blank" href="http://welidwg.works">Wg Holdings</a>
           </div>
       </div>
   </footer>

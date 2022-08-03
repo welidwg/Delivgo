@@ -1,15 +1,17 @@
 :root {
-    --color-1: #ff8000;
-    --color-2: #ffb03b;
-
+    --color-1: #cb212f;
+    --color-2: #cb212fb6;
     --color-3: #07212e;
 }
+
 .color-1 {
     color: var(--color-1) !important;
 }
+
 .color-3 {
     color: var(--color-3) !important;
 }
+
 .modal .btn {
     background-color: #023047;
     color: white;
@@ -93,6 +95,7 @@
     color: #023047;
     border-radius: 50%;
 }
+
 .modal .warp-icon span {
     font-size: 40px;
     position: absolute;
@@ -117,8 +120,34 @@
 .formsModal label {
     width: 50px;
 }
+
 .formsModal input,
 .formsModal select,
 .formsModal textarea {
     text-align: left !important;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+
+/* Track */
+
+::-webkit-scrollbar-track {
+    background: gainsboro;
+}
+
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-1);
+}
+
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-2);
 }

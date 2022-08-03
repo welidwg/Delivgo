@@ -10,17 +10,13 @@ use Illuminate\Support\Carbon;
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="keywords"
-        content="wrappixel, admin dashboard, html css dashboard, web dashboard, bootstrap 5 admin, bootstrap 5, css3 dashboard, bootstrap 5 dashboard, Flexy lite admin bootstrap 5 dashboard, frontend, responsive bootstrap 5 admin template, Flexy admin lite design, Flexy admin lite dashboard bootstrap 5 dashboard template" />
-    <meta name="description"
-        content="Flexy Admin Lite is powerful and clean admin dashboard template, inpired from Bootstrap Framework" />
-    <meta name="robots" content="noindex,nofollow" />
+
     <title>Delivgo | @section('title')
 
         @show
     </title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href={{ asset('images/icons/favicon.ico') }} />
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/logo/logo1.jpg') }}" />
     <!-- Custom CSS -->
     <link href="{{ asset('dist/css/style.min.css') }}" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
@@ -79,6 +75,9 @@ use Illuminate\Support\Carbon;
 
     <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
     <script src="{{ asset('/js/pusher.js') }}"></script>
+    <style>
+
+    </style>
     @php
         Carbon::setLocale('fr');
         
@@ -158,7 +157,7 @@ use Illuminate\Support\Carbon;
                         <b class="logo-icon">
                             <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
                             <!-- Dark Logo icon -->
-                            <img src="{{ asset('images/logo/logoOrangeBack.png') }}" width="50" alt="homepage"
+                            <img src="{{ asset('/images/logo/logo2.png') }}" width="50" alt="homepage"
                                 class="dark-logo" />
                             <!-- Light Logo icon -->
                         </b>
@@ -173,8 +172,28 @@ use Illuminate\Support\Carbon;
                     <!-- End Logo -->
                     <!-- ============================================================== -->
                     <!-- This is for the sidebar toggle which is visible on mobile only -->
+
+                    <a class="dropdown-toggle nav-toggler waves-effect waves-light  d-block d-md-none"
+                        aria-expanded="false" data-bs-toggle="dropdown" href="#"><span
+                            class="badge bg-danger badge-counter">3+</span><i class="fas fa-bell fa-fw"></i></a>
                     <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i
                             class="ti-menu ti-close"></i></a>
+                    <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
+                        <h6 class="dropdown-header fw-bold">Notifications</h6>
+                        <div id="notifCont1" style="height: 300px;max-height: 300px;overflow: auto;">
+                        </div>
+                        <script>
+                            function notifLoad() {
+                                $("#notifCont1").load("/notif")
+                                setTimeout(() => {
+                                    notifLoad()
+                                }, 14 * 1000);
+                            }
+                            notifLoad()
+                        </script>
+                        {{-- <a class="dropdown-item text-center small text-gray-500" href="#">Show All
+                            Alerts</a> --}}
+                    </div>
                 </div>
                 <!-- ============================================================== -->
                 <!-- End Logo -->
@@ -211,13 +230,14 @@ use Illuminate\Support\Carbon;
 
                             <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
                                 <h6 class="dropdown-header">Notifications</h6>
-                                <div id="notifCont" style="height: 300px;max-height: 300px;overflow: auto"></div>
+                                <div id="notifCont" style="height: 300px;max-height: 300px;overflow: auto;width: 500px">
+                                </div>
                                 <script>
                                     function notifLoad() {
                                         $("#notifCont").load("/notif")
                                         setTimeout(() => {
                                             notifLoad()
-                                        }, 15000);
+                                        }, 10 * 1000);
                                     }
                                     notifLoad()
                                 </script>
@@ -253,16 +273,10 @@ use Illuminate\Support\Carbon;
 
                             <ul class="dropdown-menu dropdown-menu-end user-dd animated"
                                 aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="javascript:void(0)"><i
-                                        class="ti-user m-r-5 m-l-5"></i>
-                                    My
-                                    Profile</a>
-                                <a class="dropdown-item" href="javascript:void(0)"><i
-                                        class="ti-wallet m-r-5 m-l-5"></i>
-                                    My Balance</a>
+
                                 <a class="dropdown-item" href={{ url('/logout') }}><i
-                                        class="ti-email m-r-5 m-l-5"></i>
-                                    Logout</a>
+                                        class="fal fa-sign-out-alt"></i>
+                                    Déconnexion</a>
                             </ul>
                         </li>
                         <!-- ============================================================== -->
@@ -287,7 +301,12 @@ use Illuminate\Support\Carbon;
                         <li class="sidebar-item {{ request()->routeIs('dash') ? 'selected' : '' }}">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link " href="{{ route('dash') }}"
                                 aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span
-                                    class="hide-menu">Dashboard</span></a>
+                                    class="hide-menu">Tableau de board</span></a>
+                        </li>
+                        <li class="sidebar-item {{ request()->routeIs('stats') ? 'selected' : '' }}">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link " href="{{ route('stats') }}"
+                                aria-expanded="false"><i class="fal fa-chart-line"></i><span class="hide-menu">Mes
+                                    statistiques</span></a>
                         </li>
                         <li class="sidebar-item {{ request()->routeIs('dash.profile') ? 'selected' : '' }} ">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link"
@@ -299,7 +318,8 @@ use Illuminate\Support\Carbon;
                                 <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                     href="{{ route('dash.menu') }}" aria-expanded="false">
 
-                                    <i class="fal fa-burger-soda"></i>&nbsp;<span class="hide-menu">My Menu</span></a>
+                                    <i class="fal fa-burger-soda"></i>&nbsp;<span class="hide-menu">Mon
+                                        Menu</span></a>
                             </li>
                         @endif
                         {{-- <li class="sidebar-item">
@@ -320,7 +340,7 @@ use Illuminate\Support\Carbon;
                         <li class="sidebar-item">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/"
                                 aria-expanded="false"><i class="fal fa-arrow-circle-left"></i><span
-                                    class="hide-menu">Go to main</span></a>
+                                    class="hide-menu">Allez vers l'accueil</span></a>
                         </li>
 
                     </ul>
@@ -367,45 +387,54 @@ use Illuminate\Support\Carbon;
         </div>
 
     </div>
-    @if ($user->address == '' && Route::currentRouteName() != 'dash.profile')
-        <div class="modal fade in" id="Astuces" aria-labelledby="astuces" data-bs-backdrop="static"
-            data-bs-keyboard="false" aria-hidden="false">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content rounded-0">
-                    <div class="modal-body p-4 px-5 ">
-                        <div class="main-content text-center mb-3 py-auto">
-                            <label for="" class="mb-3 fs-1 color-3">Hello , {{ $user->name }}</label>
-                            <p class="fw-bold">We are very glad that you joined us .<br> But before starting, we ask
-                                you to
-                                complete your profile information quindly. <br>
-                            </p>
-                            <div class="mx-auto mt-3">
-                                <a href={{ url('/dash/profile') }} id="checkBtnSubmit" class="btn  w-100">Proceed
-                                    to
-                                    profile <i class="fad fa-angle-double-right"></i></a>
-                            </div>
-                            <div class="mx-auto mt-3">
-                                <a role="button" href="/logout" id="resendBtn" class="color-1 w-100">Logout</a>
-                                <br>
+    @if (Auth::user()->type != 4)
 
-                                <a role="button" href="/" id="resendBtn" class="color-1 w-100">Go to main</a>
+        @if ($user->address == '' && Route::currentRouteName() != 'dash.profile')
+            <div class="modal fade in" id="Astuces" aria-labelledby="astuces" data-bs-backdrop="static"
+                data-bs-keyboard="false" aria-hidden="false">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content rounded-0">
+                        <div class="modal-body p-4 px-5 ">
+                            <div class="main-content text-center mb-3 py-auto">
+                                <label for="" class="mb-3 fs-1 color-3">Bienvenue ,
+                                    {{ $user->name }}</label>
+                                <p class="fw-bold">Nous sommes très honoreux que vous joignez nous .<br>
+                                    Mais, avant de commencez votre experience avec notre plateforme,nous demandons de
+                                    vous
+                                    de completer quelques informations dans votre profile.
+                                    <br>
+                                </p>
+                                <div class="mx-auto mt-3">
+                                    <a href={{ url('/dash/profile') }} id="checkBtnSubmit" class="btn  w-100">Vers
+                                        votre
+                                        profile <i class="fad fa-angle-double-right"></i></a>
+                                </div>
+                                <div class="mx-auto mt-3">
+                                    <a role="button" href="/logout" id="resendBtn"
+                                        class="color-1 w-100">Déconnexion</a>
+                                    <br>
+
+                                    <a role="button" href="/" id="resendBtn" class="color-1 w-100">Retournez
+                                        vers
+                                        l'accueil</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <script>
-            $(window).on("load", function() {
-                $('#Astuces').modal('show');
-                // $("#launchAstuces").click()
+            <script>
+                $(window).on("load", function() {
+                    $('#Astuces').modal('show');
+                    // $("#launchAstuces").click()
 
-                // document.getElementById("launchAstuces").click();
+                    // document.getElementById("launchAstuces").click();
 
-            });
-        </script>
+                });
+            </script>
+        @endif
+
     @endif
-
 
 
     <script src={{ asset('dist/js/app-style-switcher.js') }}></script>
@@ -418,6 +447,9 @@ use Illuminate\Support\Carbon;
 
     <script src="{{ asset('js/moment/moment.js') }}"></script>
     <script src="{{ asset('js/moment/fr.js') }}"></script>
+    <script>
+        moment.locale('fr')
+    </script>
 
 
 </body>

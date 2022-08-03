@@ -1,3 +1,13 @@
+ @php
+     use App\Models\Region;
+ @endphp
+ <script type="text/javascript"
+     src="//maps.googleapis.com/maps/api/js?v=quarterly&region=GB&language=en-gb&key=AIzaSyB2F2iNc14AvTI9_I2zk9O4exeJ-eKxGGM&libraries=places">
+ </script>
+
+
+
+ <script type="text/javascript" src="//googlearchive.github.io/js-marker-clusterer/src/markerclusterer.js"></script>
  <div class="row" id="content">
      <!-- Column -->
      <div class="col-lg-4 col-xlg-3 col-md-5">
@@ -11,9 +21,10 @@
                                  src={{ $user->avatar == '' ? asset('images/users/1.jpg') : asset('uploads/logos/' . $user->avatar) }}
                                  class="rounded shadow" width="150" />
                              <br>
-                             <label for="avatar" class="btn text-dark position-relative fs-4 fw-bold"><i
+                             <label for="avatar1" class="btn text-dark position-relative fs-4 fw-bold"><i
                                      class="fas fa-edit"></i></label>
-                             <input type="file" id="avatar" accept="image/*" hidden name="avatar">
+                             <input type="file" id="avatar1" accept="image/*" hidden name="avatar">
+
                          </div>
                          @csrf
                          <button id="submitAvatar" style="display: none" type="submit"
@@ -37,7 +48,7 @@
                                  })
                                  .catch(err => {
                                      console.error(err.response.data);
-                                     toastr.error("Sorry, something went wrong !")
+                                     toastr.error("Erreur inconnue , réssayez plus tard !")
 
                                  }).finally(() => {
                                      $("#submitAvatar").html("save")
@@ -57,17 +68,17 @@
                         </div> --}}
                  </center>
                  <script>
-                     $('#avatar').change(function() {
+                     $('#avatar1').change(function() {
                          var i = $(this).prev('label').clone();
                          console.log("cheange");
-                         var file = $('#avatar')[0].files[0].name;
+                         var file = $('#avatar1')[0].files[0].name;
                          var reader = new FileReader();
                          reader.onload = function(e) {
                              $('#submitAvatar').fadeIn("slow")
                              $('#avatarContainer').attr('src', e.target.result)
                          };
-                         reader.readAsDataURL($('#avatar')[0].files[0]);
-                         console.log();
+                         reader.readAsDataURL($('#avatar1')[0].files[0]);
+                         console.log($('#avatar1')[0].files[0]);
 
 
                      });
@@ -80,11 +91,57 @@
                  <h6>{{ $user->email }}</h6> <small class="text-muted p-t-30 db">Téléphone</small>
                  <h6>+216 {{ $user->phone }}</h6> <small class="text-muted p-t-30 db">Adresse</small>
                  <h6>{{ $user->address != '' ? $user->address : 'inconnue' }}</h6>
-                 {{-- <div class="map-box">
-                     <iframe
+                 <div class="map-box">
+                     <div id="tets"></div>
+                     @php
+                         
+                     @endphp
+                     <script>
+                         var options = {
+                             enableHighAccuracy: true,
+                             timeout: 10000,
+                             maximumAge: 60000
+                         };
+
+                         function success(pos) {
+                             var crd = pos.coords;
+
+                             console.log('Votre position actuelle est :');
+                             console.log(`Latitude : ${crd.latitude}`);
+                             console.log(`Longitude : ${crd.longitude}`);
+                             console.log(`La précision est de ${crd.accuracy} mètres.`);
+                             $("#tets").html(`
+                             lat:${crd.latitude}
+                             len:${crd.longitude}
+                             `)
+                             axios.post("/location", {
+                                 lat: crd.latitude,
+                                 long: crd.longitude
+                             }).then((res) => {
+                                 console.log(res);
+                                 $("#mapp").html(res.data)
+                             }).catch((err) => {
+                                 console.log(err);
+                             })
+
+
+                         }
+
+                         function error(err) {
+                             console.warn(`ERREUR (${err.code}): ${err.message}`);
+                         }
+
+                         navigator.geolocation.getCurrentPosition(success, error, options);
+                     </script>
+                     <div style="width: 100%; height: 500px;" id="mapp">
+                         {{-- {!! Mapper::render() !!} --}}
+                     </div>
+
+                     {{-- <iframe
                          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d470029.1604841957!2d72.29955005258641!3d23.019996818380896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e848aba5bd449%3A0x4fcedd11614f6516!2sAhmedabad%2C+Gujarat!5e0!3m2!1sen!2sin!4v1493204785508"
-                         width="100%" height="150" frameborder="0" style="border:0" allowfullscreen></iframe>
-                 </div> <small class="text-muted p-t-30 db">Social Profile</small>
+                         width="100%" height="150" frameborder="0" style="border:0" allowfullscreen></iframe> --}}
+                 </div>
+                 {{-- <small class="text-muted p-t-30 db">Social Profile</small>
                  <br />
                  <button class="btn btn-circle btn-secondary"><i class="fab fa-facebook-f"></i></button>
                  <button class="btn btn-circle btn-secondary"><i class="fab fa-twitter"></i></button>
@@ -107,10 +164,10 @@
                          </div>
                      </div>
                      <div class="form-group">
-                         <label class="col-md-12">Nom d'utilisateur</label>
+                         <label class="col-md-12">Matricule</label>
                          <div class="col-md-12">
-                             <input type="text" name="username" placeholder="Johnathan_doe"
-                                 value="{{ $user->username }}" class="form-control form-control-line">
+                             <input type="text" name="username" placeholder="" disabled value="{{ $user->username }}"
+                                 class="form-control form-control-line">
                          </div>
                      </div>
                      <div class="form-group">
@@ -124,7 +181,7 @@
                      <div class="form-group">
                          <label class="col-md-12">Mot de passe</label>
                          <div class="col-md-12">
-                             <input type="password" name="password" placeholder="New Password (optional)"
+                             <input type="password" name="password" placeholder="Nouveau mot de passe (optionel)"
                                  name="password" class="form-control form-control-line">
                          </div>
                      </div>
@@ -132,7 +189,7 @@
                          <label class="col-md-12">N° Téléphone:</label>
                          <div class="col-md-12">
                              <input type="tel" name="phone" value="{{ $user->phone }}"
-                                 placeholder="123 456 7890" class="form-control form-control-line">
+                                 placeholder="votre numéro" class="form-control form-control-line">
                          </div>
                      </div>
                      @if ($user->type == 2)
@@ -188,12 +245,21 @@
                          <label class="col-sm-12">Selectionnez votre ville</label>
                          <div class="col-sm-12">
                              <select required class="form-select shadow-none form-control-line" name="city">
+                                 @php
+                                     $regions = Region::get();
+                                     
+                                     if ($user->city != '') {
+                                         $regions = Region::where('id', '!=', $user->city)->get();
+                                     }
+                                 @endphp
                                  @if ($user->city != '')
-                                     <option>{{ $user->city }}</option>
+                                     <option value="{{ $user->region->id }}">{{ $user->region->label }}</option>
                                  @endif
-                                 <option>Mahdia</option>
-                                 <option>Monastir</option>
-                                 <option>Sousse</option>
+                                 @foreach ($regions as $region)
+                                     <option value="{{ $region->id }}">{{ $region->label }}</option>
+                                 @endforeach
+
+
 
                              </select>
                          </div>

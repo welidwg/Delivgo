@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <!-- CSS only -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/icons/favicon.ico') }}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/logo/logo1.jpg') }}" />
 
 
     <link href="https://cdn.jsdelivr.ne
@@ -20,22 +20,24 @@
     <link href="{{ asset('assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/fa/css/all.min.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
-        integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 
     {{-- <style>
         a {
             text-decoration: none !important;
         }
     </style> --}}
+    <link href="{{ asset('dist/css/style.min.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+        integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js
-                                                                                                                                                                ">
+                                                                                                                                                                                                                                                                                                                                                                                                                    ">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"
         integrity="sha512-xIPqqrfvUAc/Cspuj7Bq0UtHNo/5qkdyngx6Vwt+tmbvTLDszzXM0G6c91LXmGrRx8KEPulT+AfOOez+TeVylg=="
@@ -51,12 +53,14 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script>
         alertify.defaults.theme.input = "form-control focus text-dark"
-        alertify.defaults.theme.ok = "btn btn-success"
+        alertify.defaults.theme.ok = "btn btn-danger text-white"
         alertify.defaults.theme.cancel = "btn btn-light"
     </script>
     <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
 
     <script src="{{ asset('/js/pusher.js') }}"></script>
+    <script src="{{ asset('js/moment/moment.js') }}"></script>
+    <script src="{{ asset('js/moment/fr.js') }}"></script>
     @if (Auth::check())
         <script>
             var audio = new Audio("{{ asset('notif.wav') }}");
@@ -99,8 +103,25 @@ use Illuminate\Support\Carbon;
 Carbon::setLocale('fr');
 
 @endphp
+@php
+$ip = request()->ip() == '127.0.0.1' ? '102.157.105.250' : request()->ip();
+if ($position = Location::get($ip)) {
+    // echo $position->regionName;
+} else {
+    // Failed retrieving position.
+}
+@endphp
+
 
 <body>
+    <div class="preloader">
+
+        <div class="lds-ripple">
+
+            <div class="lds-pos"></div>
+            <div class="lds-pos"></div>
+        </div>
+    </div>
     <div class="offcanvas offcanvas-end" tabindex="-1" id="cart" style="width: 700px !important"
         aria-labelledby="">
 
@@ -132,12 +153,12 @@ Carbon::setLocale('fr');
 <script src="{{ asset('assets/vendor/glightbox/js/glightbox.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/swiper/swiper-bundle.min.js') }}"></script>
-<script src="{{ asset('js/moment/moment.js') }}"></script>
-<script src="{{ asset('js/moment/fr.js') }}"></script>
+
 <script></script>
 
 <!-- Template Main JS File -->
 <script src="{{ asset('assets/js/main.js') }}"></script>
+<script src="{{ asset('dist/js/custom.js') }}"></script>
 <script></script>
 
 </html>

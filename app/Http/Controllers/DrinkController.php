@@ -19,19 +19,19 @@ class DrinkController extends Controller
             $new->price = $price;
             $new->resto_id = $resto_id;
             if ($new->save()) {
-                return \response(json_encode(["type" => "success", "message" => "Added Successfully"]), 200);
+                return response(json_encode(["type" => "success", "message" => "Ajoutée avec succès !"]), 200);
             }
         } else {
-            return \response(json_encode(["type" => "error", "message" => "This Drink already exists "]), 500);
+            return \response(json_encode(["type" => "error", "message" => "Ce boisson est déjà existant "]), 500);
         }
     }
 
     public function Delete($id)
     {
         if (Drink::where("id", $id)->first()->delete()) {
-            return \response(json_encode(["type" => "success", "message" => "Deleted Successfully"]), 200);
+            return \response(json_encode(["type" => "success", "message" => "Supprimé avec succès"]), 200);
         } else {
-            return \response(json_encode(["type" => "error", "message" => "Something went wrong!"]), 500);
+            return \response(json_encode(["type" => "error", "message" => "Erreur inconnue !"]), 500);
         }
     }
 }

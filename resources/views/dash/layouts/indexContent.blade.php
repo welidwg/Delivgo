@@ -11,61 +11,7 @@
      use App\Models\Supplement;
  @endphp
 
- {{-- <div class="row">
-        <div class="col-md-4 col-xl-3 mb-2">
-            <div class="card shadow border-start-primary py-2">
-                <div class="card-body">
-                    <div class="row align-items-center no-gutters">
-                        <div class="col me-2">
-                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Earnings (monthly)</span>
-                            </div>
-                            <div class="text-dark fw-bold h5 mb-0"><span>$40,000</span></div>
-                        </div>
-                        <div class="col-auto"><i class="fas fa-calendar fa-2x text-gray-300"></i></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 col-xl-3 mb-4">
-            <div class="card shadow border-start-success py-2">
-                <div class="card-body">
-                    <div class="row align-items-center no-gutters">
-                        <div class="col me-2">
-                            <div class="text-uppercase text-success fw-bold text-xs mb-1"><span>Earnings (annual)</span>
-                            </div>
-                            <div class="text-dark fw-bold h5 mb-0"><span>$215,000</span></div>
-                        </div>
-                        <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 col-xl-3 mb-4">
-            <div class="card shadow border-start-info py-2">
-                <div class="card-body">
-                    <div class="row align-items-center no-gutters">
-                        <div class="col me-2">
-                            <div class="text-uppercase text-info fw-bold text-xs mb-1"><span>Tasks</span></div>
-                            <div class="row g-0 align-items-center">
-                                <div class="col-auto">
-                                    <div class="text-dark fw-bold h5 mb-0 me-3"><span>50%</span></div>
-                                </div>
-                                <div class="col">
-                                    <div class="progress progress-sm">
-                                        <div class="progress-bar bg-info" aria-valuenow="50" aria-valuemin="0"
-                                            aria-valuemax="100" style="width: 50%;"><span class="visually-hidden">50%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-auto"><i class="fas fa-clipboard-list fa-2x text-gray-300"></i></div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-    </div> --}}
  @if (Auth::user()->type == 2)
      <div class="m-4">
          <button class="btn btn-primary  " id="request">Demande un livreur</button>
@@ -87,13 +33,13 @@
      </div>
      <div class="row">
          <!-- column -->
-         <div class="col-12" id="commandes">
-             <div class="card">
+         <div class="col-12 mb-3" id="commandes">
+             <div class="card ">
                  <div class="card-body">
                      <!-- title -->
-                     <div class="d-md-flex">
+                     <div class="d-md-flex p-0">
                          <div>
-                             <h4 class="card-title">Liste des commandes</h4>
+                             <h4 class="card-title">Liste des commandes non terminée</h4>
                              {{-- <h5 class="card-subtitle">Overview of Top Selling Items</h5> --}}
                          </div>
 
@@ -103,15 +49,16 @@
                          <table class="table mb-0 table-hover align-middle text-nowrap" id="ordersResto">
                              <thead>
                                  <tr>
-                                     <th class="border-top-0">Référence</th>
+                                     <th class="border-top-0 d-none d-lg-table-cell">Référence</th>
                                      <th class="border-top-0">Client</th>
-                                     <th class="border-top-0">Produits</th>
-                                     <th class="border-top-0">N° Client</th>
-                                     <th class="border-top-0">Date de passation</th>
-                                     <th class="border-top-0">Statut</th>
-                                     <th class="border-top-0">Total</th>
-                                     <th class="border-top-0">Livreur</th>
-                                     <th class="border-top-0">Actions</th>
+                                     <th class="border-top-0 d-none d-lg-table-cell">Produits</th>
+                                     <th class="border-top-0 d-none d-lg-table-cell">N° Client</th>
+                                     <th class="border-top-0 d-none d-lg-table-cell">Date de passation</th>
+                                     <th class="border-top-0 ">Statut</th>
+                                     <th class="border-top-0 d-none d-lg-table-cell">Total</th>
+                                     <th class="border-top-0 d-none d-lg-table-cell">Livreur</th>
+                                     <th class="border-top-0 ">Actions</th>
+                                     <th class="border-top-0 d-lg-none ">Details</th>
                                  </tr>
                              </thead>
                              <style>
@@ -124,15 +71,20 @@
                              </style>
                              <tbody>
                                  @php
+                                     $cmds = commande_ref::where('resto_id', Auth::user()->user_id)
+                                         ->where('statut', '!=', 5)
+                                         ->with('items')
+                                         ->orderBy('statut', 'asc')
+                                         ->get();
                                      
                                  @endphp
-                                 @forelse (Auth::user()->commandesReceived as $cmd)
+                                 @forelse ($cmds as $cmd)
                                      @if (!$cmd->is_message)
                                          @php
                                              $total = 0;
                                          @endphp
                                          <tr>
-                                             <td>
+                                             <td class="d-none d-lg-table-cell">
                                                  <strong>#{{ $cmd->reference }}</strong>
                                              </td>
                                              <td>
@@ -148,7 +100,7 @@
                                                      </div>
                                                  </div>
                                              </td>
-                                             <td>
+                                             <td class="d-none d-lg-table-cell">
 
 
                                                  @foreach ($cmd->items as $passed)
@@ -168,7 +120,8 @@
                                                                  </button>
                                                              </h2>
                                                              <div id="product{{ $passed->id }}"
-                                                                 class="accordion-collapse collapse " aria-labelledby=""
+                                                                 class="accordion-collapse collapse "
+                                                                 aria-labelledby=""
                                                                  data-bs-parent="#accordionExample{{ $passed->id }}"
                                                                  style="max-width: 200px !important;word-wrap: break-word">
                                                                  <div class="accordion-body h-100">
@@ -244,9 +197,14 @@
                                                      </div>
                                                  @endforeach
                                              </td>
-                                             <td><a href="tel:{{ $cmd->user->phone }}">{{ $cmd->user->phone }}</a>
+                                             <td class="d-none d-lg-table-cell"><a
+                                                     href="tel:{{ $cmd->user->phone }}">{{ $cmd->user->phone }}</a>
                                              </td>
-                                             <td>{{ date('l \t\h\e jS | H:i a', strtotime($cmd->created_at)) }}</td>
+                                             <td id="datepass{{ $cmd->id }}" class="d-none d-lg-table-cell">
+                                             </td>
+                                             <script>
+                                                 $('#datepass{{ $cmd->id }}').html(moment("{{ $cmd->created_at }}").format("LL | LT"))
+                                             </script>
                                              <td>
                                                  @switch($cmd->statut)
                                                      @case(1)
@@ -278,8 +236,10 @@
                                                      @default
                                                  @endswitch
                                              </td>
-                                             <td>{{ $total + Auth::user()->deliveryPrice }} Dt</td>
-                                             <td>{{ $cmd->deliverer_id == null ? '' : $cmd->deliverer->name }}</td>
+                                             <td class="d-none d-lg-table-cell">
+                                                 {{ $total + Auth::user()->deliveryPrice }} Dt</td>
+                                             <td class="d-none d-lg-table-cell">
+                                                 {{ $cmd->deliverer_id == null ? '' : $cmd->deliverer->name }}</td>
                                              <td>
                                                  @if ($cmd->statut != 5)
                                                      @switch($cmd->statut)
@@ -296,6 +256,7 @@
                                                                              "_token": "{{ csrf_token() }}",
                                                                              user_id: "{{ $cmd->user_id }}",
                                                                              resto_id: "{{ $cmd->resto_id }}",
+                                                                             ref: "{{ $cmd->reference }}",
                                                                              statut: 2
                                                                          })
                                                                          .then(res => {
@@ -324,6 +285,8 @@
                                                                              "_token": "{{ csrf_token() }}",
                                                                              user_id: "{{ $cmd->user_id }}",
                                                                              resto_id: "{{ $cmd->resto_id }}",
+                                                                             ref: "{{ $cmd->reference }}",
+
                                                                              statut: 3
                                                                          })
                                                                          .then(res => {
@@ -352,6 +315,11 @@
                                                      -
                                                  @endif
                                              </td>
+                                             <td>
+                                                 <a href="#!" id="details{{ $cmd->id }}"
+                                                     class="btn shadow-none text-danger"><i
+                                                         class="fas fa-eye"></i></a>
+                                             </td>
                                          </tr>
 
                                          @php
@@ -368,6 +336,7 @@
                              </table>
                              <script>
                                  $("#ordersResto").DataTable({
+                                     "order": [],
                                      "language": {
                                          "decimal": ".",
                                          "emptyTable": "Il n'ya aucun enregistrement encore",
@@ -382,13 +351,13 @@
                      </div>
                  </div>
              </div>
-             <div class="col-12" id="commandes">
-                 <div class="card">
+             <div class="col-12 mb-3" id="commandes">
+                 <div class="card ">
                      <div class="card-body">
                          <!-- title -->
                          <div class="d-md-flex">
                              <div>
-                                 <h4 class="card-title">Liste des commandes par message</h4>
+                                 <h4 class="card-title">Liste des commandes par message non terminée </h4>
                                  {{-- <h5 class="card-subtitle">Overview of Top Selling Items</h5> --}}
                              </div>
 
@@ -418,9 +387,15 @@
                                  </style>
                                  <tbody>
                                      @php
+                                         $cmdsMsg = commande_ref::where('resto_id', Auth::user()->user_id)
+                                             ->where('statut', '!=', 5)
+                                             ->where('is_message', 1)
+                                             ->with('items')
+                                             ->orderBy('statut', 'asc')
+                                             ->get();
                                          
                                      @endphp
-                                     @forelse (Auth::user()->commandesReceived as $cmd)
+                                     @forelse ($cmdsMsg as $cmd)
                                          @if ($cmd->is_message)
                                              @php
                                                  $total = 0;
@@ -449,7 +424,10 @@
                                                  </td>
                                                  <td><a href="tel:{{ $cmd->user->phone }}">{{ $cmd->user->phone }}</a>
                                                  </td>
-                                                 <td>{{ date('l \t\h\e jS | H:i a', strtotime($cmd->created_at)) }}</td>
+                                                 <td id="Demandedatepass{{ $cmd->id }}"></td>
+                                                 <script>
+                                                     $('#Demandedatepass{{ $cmd->id }}').html(moment("{{ $cmd->created_at }}").format("LL | LT"))
+                                                 </script>
                                                  <td>
                                                      @switch($cmd->statut)
                                                          @case(1)
@@ -498,6 +476,8 @@
                                                                                  "_token": "{{ csrf_token() }}",
                                                                                  user_id: "{{ $cmd->user_id }}",
                                                                                  resto_id: "{{ $cmd->resto_id }}",
+                                                                                 ref: "{{ $cmd->reference }}",
+
                                                                                  statut: 2
                                                                              })
                                                                              .then(res => {
@@ -526,6 +506,8 @@
                                                                                  "_token": "{{ csrf_token() }}",
                                                                                  user_id: "{{ $cmd->user_id }}",
                                                                                  resto_id: "{{ $cmd->resto_id }}",
+                                                                                 ref: "{{ $cmd->reference }}",
+
                                                                                  statut: 3
                                                                              })
                                                                              .then(res => {
@@ -590,7 +572,7 @@
                              <!-- title -->
                              <div class="d-md-flex">
                                  <div>
-                                     <h4 class="card-title"> Mes demandes de livreurs</h4>
+                                     <h4 class="card-title"> Vos demandes de livreurs</h4>
                                      {{-- <h5 class="card-subtitle">Overview of Top Selling Items</h5> --}}
                                  </div>
 
@@ -604,6 +586,7 @@
                                              <th class="border-top-0">Statut</th>
                                              <th class="border-top-0">Livreur</th>
                                              <th class="border-top-0">N° livreur</th>
+
                                              <th class="border-top-0">Actions</th>
                                          </tr>
                                      </thead>
@@ -616,8 +599,10 @@
                                          @endphp
                                          @forelse ($requests as $cmd)
                                              <tr>
-                                                 <td>{{ date('l \t\h\e jS | H:i a', strtotime($cmd->created_at)) }}</td>
-
+                                                 <td id="datePassDemande{{ $cmd->id }}"></td>
+                                                 <script>
+                                                     $('#datePassDemande{{ $cmd->id }}').html(moment("{{ $cmd->created_at }}").format("LL | LT"))
+                                                 </script>
 
                                                  <td>
                                                      @switch($cmd->statut)
@@ -651,6 +636,7 @@
                                                      @endif
                                                  </td>
 
+
                                                  <td>
                                                      <a href="#!" id="cancelreq{{ $cmd->id }}"
                                                          class="btn shadow-none text-danger"><i class="fas fa-times"></i></a>
@@ -662,6 +648,8 @@
                                                                          "_token": "{{ csrf_token() }}",
                                                                          resto_id: "{{ $cmd->resto_id }}",
                                                                          req_id: "{{ $cmd->id }}",
+                                                                         ref: "{{ $cmd->reference }}",
+
                                                                      })
                                                                      .then(res => {
                                                                          console.log(res)
@@ -705,7 +693,6 @@
                          </div>
                      </div>
                  </div>
-
              @endif
              @if (Auth::user()->type == 3)
                  <div class="row">
@@ -729,7 +716,6 @@
                                                  <th class="border-top-0">Référence</th>
                                                  <th class="border-top-0">Restaurant</th>
                                                  <th class="border-top-0">Client</th>
-                                                 <th class="border-top-0">Produits</th>
                                                  <th class="border-top-0">Date de passation</th>
                                                  <th class="border-top-0">Statut</th>
                                                  <th class="border-top-0">Total</th>
@@ -762,179 +748,201 @@
                                                      @php
                                                          $total += $passed->total;
                                                      @endphp
-                                                     @endforeach
-                                                     <tr>
-                                                         <td>
-                                                             <strong>#{{ $cmd->reference }} </strong>
+                                                 @endforeach
+                                                 <tr>
+                                                     <td>
+                                                         <strong>#{{ $cmd->reference }} </strong>
 
-                                                         </td>
-                                                         <td>
-                                                             <div class="d-flex align-items-center">
-                                                                 <div class="m-r-10"><a
-                                                                         class="btn btn-circle d-flex btn-info text-white">
-                                                                         <img src="{{ asset('uploads/logos/' . $cmd->resto->avatar) }}"
-                                                                             alt="" class="img-fluid " width="80px">
-                                                                     </a>
-                                                                 </div>
-                                                                 <div class="">
-                                                                     <h4 class="m-b-0 font-16">{{ $cmd->resto->name }}</h4>
-                                                                 </div>
+                                                     </td>
+                                                     <td>
+                                                         <div class="d-flex align-items-center">
+                                                             <div class="m-r-10"><a
+                                                                     class="btn btn-circle d-flex btn-info text-white">
+                                                                     <img src="{{ asset('uploads/logos/' . $cmd->resto->avatar) }}"
+                                                                         alt="" class="img-fluid " width="80px">
+                                                                 </a>
                                                              </div>
-
-                                                         </td>
-                                                         <td>
-                                                             <div class="d-flex align-items-center">
-                                                                 <div class="m-r-10"><a
-                                                                         class="btn btn-circle d-flex btn-info text-white">
-                                                                         <img src="{{ asset('uploads/logos/' . $cmd->user->avatar) }}"
-                                                                             alt="" class="img-fluid " width="80px">
-                                                                     </a>
-                                                                 </div>
-                                                                 <div class="">
-                                                                     <h4 class="m-b-0 font-16">{{ $cmd->user->name }}</h4>
-                                                                 </div>
+                                                             <div class="">
+                                                                 <h4 class="m-b-0 font-16">{{ $cmd->resto->name }}</h4>
+                                                                 <small>Tel : <a
+                                                                         href="tel:{{ $cmd->resto->phone }}">{{ $cmd->resto->phone }}</a>
+                                                                 </small>
+                                                                 <br>
+                                                                 <small>Adresse :
+                                                                     {{ $cmd->resto->address == '' ? 'N\A' : $cmd->resto->address }}
+                                                                 </small>
                                                              </div>
-                                                         </td>
+                                                         </div>
 
-                                                         <td><a href="tel:{{ $cmd->resto->phone }}">{{ $cmd->user->phone }}</a>
-                                                         </td>
-                                                         <td>{{ date('l \t\h\e jS | H:i a', strtotime($cmd->created_at)) }}</td>
-                                                         <td>
-                                                             @switch($cmd->statut)
-                                                                 @case(1)
-                                                                     <label class="badge bg-warning">En attente</label>
-                                                                 @break
+                                                     </td>
+                                                     <td>
+                                                         <div class="d-flex align-items-center">
+                                                             <div class="m-r-10"><a
+                                                                     class="btn btn-circle d-flex btn-info text-white">
+                                                                     <img src="{{ asset('uploads/logos/' . $cmd->user->avatar) }}"
+                                                                         alt="" class="img-fluid " width="80px">
+                                                                 </a>
+                                                             </div>
+                                                             <div class="">
+                                                                 <h4 class="m-b-0 font-16">{{ $cmd->user->name }}</h4>
+                                                                 <small>Tel : <a
+                                                                         href="tel:{{ $cmd->user->phone }}">{{ $cmd->user->phone }}</a>
+                                                                 </small>
+                                                                 <br>
+                                                                 <small>Adresse :
+                                                                     {{ $cmd->user->address == '' ? 'N\A' : $cmd->user->address }}
+                                                                 </small>
 
-                                                                 @case(2)
-                                                                     <label class="badge bg-info">Traitement</label>
-                                                                 @break
+                                                             </div>
+                                                         </div>
+                                                     </td>
 
-                                                                 @case(3)
-                                                                     <label class="badge bg-primary">Prêt</label>
-                                                                 @break
 
-                                                                 @case(4)
-                                                                     <label class="badge bg-warning">En livraison</label>
-                                                                 @break
+                                                     <td id="datepass{{ $cmd->id }}">
+                                                     </td>
+                                                     <script>
+                                                         $('#datepass{{ $cmd->id }}').html(moment("{{ $cmd->created_at }}").format("LL | LT"))
+                                                     </script>
+                                                     <td>
+                                                         @switch($cmd->statut)
+                                                             @case(1)
+                                                                 <label class="badge bg-warning">En attente</label>
+                                                             @break
 
-                                                                 @case(5)
-                                                                     <label class="badge bg-success">Livrée</label>
-                                                                 @break
+                                                             @case(2)
+                                                                 <label class="badge bg-info">Traitement</label>
+                                                             @break
 
-                                                                 @case(6)
-                                                                     <label class="badge bg-danger">Annulée</label>
-                                                                 @break
+                                                             @case(3)
+                                                                 <label class="badge bg-primary">Prêt</label>
+                                                             @break
 
-                                                                 @default
-                                                             @endswitch
-                                                         </td>
-                                                         <td>{{ $total + $cmd->resto->deliveryPrice }} Dt</td>
-                                                         <td>
-                                                             @if (!Auth::user()->onDuty)
-                                                                 Vous êtes hors service
+                                                             @case(4)
+                                                                 <label class="badge bg-warning">En livraison</label>
+                                                             @break
+
+                                                             @case(5)
+                                                                 <label class="badge bg-success">Livrée</label>
+                                                             @break
+
+                                                             @case(6)
+                                                                 <label class="badge bg-danger">Annulée</label>
+                                                             @break
+
+                                                             @default
+                                                         @endswitch
+                                                     </td>
+                                                     <td>{{ $total + $cmd->resto->deliveryPrice }} Dt</td>
+
+                                                     <td>
+                                                         @if (!Auth::user()->onDuty)
+                                                             Vous êtes hors service
+                                                         @else
+                                                             @if (!$cmd->taken)
+                                                                 <a href="#!" id="startCmd{{ $cmd->id }}"
+                                                                     class="btn shadow-none text-success"><i
+                                                                         class="fas fa-play"></i></a>
+                                                                 <script>
+                                                                     $("#startCmd{{ $cmd->id }}").on("click", (e) => {
+                                                                         e.preventDefault()
+                                                                         let arr = []
+
+                                                                         axios.post("/commande/statut", {
+                                                                                 "_token": "{{ csrf_token() }}",
+                                                                                 req_id: "{{ $cmd->id }}",
+                                                                                 user_id: "{{ $cmd->user_id }}",
+                                                                                 resto_id: "{{ $cmd->resto_id }}",
+                                                                                 statut: 4
+                                                                             })
+                                                                             .then(res => {
+                                                                                 console.log(res)
+                                                                                 toastr.info("Commande acceptée")
+                                                                                 LoadContentMain()
+
+                                                                             })
+                                                                             .catch(err => {
+                                                                                 console.error(err);
+                                                                                 toastr.error("Quelque chose s'est mal passé")
+
+                                                                             })
+                                                                     })
+                                                                 </script>
                                                              @else
-                                                                 @if (!$cmd->taken)
-                                                                     <a href="#!" id="startCmd{{ $cmd->id }}"
-                                                                         class="btn shadow-none text-success"><i
-                                                                             class="fas fa-play"></i></a>
+                                                                 @if ($cmd->taken && $cmd->deliverer_id == Auth::user()->user_id)
+                                                                     @if ($cmd->statut == 4)
+                                                                         <a href="#!" id="completeCmd{{ $cmd->id }}"
+                                                                             class="btn shadow-none text-success"><i
+                                                                                 class="fas fa-check"></i></a>
+                                                                         <script>
+                                                                             $("#completeCmd{{ $cmd->id }}").on("click", (e) => {
+                                                                                 e.preventDefault()
+                                                                                 axios.post("/commande/statut", {
+                                                                                         "_token": "{{ csrf_token() }}",
+                                                                                         user_id: "{{ $cmd->user_id }}",
+                                                                                         resto_id: "{{ $cmd->resto_id }}",
+                                                                                         ref: "{{ $cmd->reference }}",
+
+                                                                                         statut: 5
+                                                                                     })
+                                                                                     .then(res => {
+                                                                                         console.log(res)
+                                                                                         toastr.success("Commande livrée avec succées")
+                                                                                         LoadContentMain()
+
+                                                                                     })
+                                                                                     .catch(err => {
+                                                                                         console.error(err);
+                                                                                         toastr.error("Quelque chose s'est mal passé")
+
+                                                                                     })
+                                                                             })
+                                                                         </script>
+                                                                     @endif
+
+
+
+                                                                     <a href="#!" id="cancelCmd{{ $cmd->id }}"
+                                                                         class="btn shadow-none text-danger"><i
+                                                                             class="fas fa-times"></i></a>
                                                                      <script>
-                                                                         $("#startCmd{{ $cmd->id }}").on("click", (e) => {
+                                                                         $("#cancelCmd{{ $cmd->id }}").on("click", (e) => {
                                                                              e.preventDefault()
-                                                                             let arr = []
+                                                                             alertify.confirm("Confirmation", "Ae you sure that you want to cancel your delivery  ?", () => {
+                                                                                 axios.post("/commande/statut", {
+                                                                                         "_token": "{{ csrf_token() }}",
+                                                                                         user_id: "{{ $cmd->user_id }}",
+                                                                                         resto_id: "{{ $cmd->resto_id }}",
+                                                                                         ref: "{{ $cmd->reference }}",
 
-                                                                             axios.post("/commande/statut", {
-                                                                                     "_token": "{{ csrf_token() }}",
-                                                                                     req_id: "{{ $cmd->id }}",
-                                                                                     user_id: "{{ $cmd->user_id }}",
-                                                                                     resto_id: "{{ $cmd->resto_id }}",
-                                                                                     statut: 4
-                                                                                 })
-                                                                                 .then(res => {
-                                                                                     console.log(res)
-                                                                                     toastr.info("Commande acceptée")
-                                                                                     LoadContentMain()
+                                                                                         statut: 6
+                                                                                     })
+                                                                                     .then(res => {
+                                                                                         console.log(res)
+                                                                                         toastr.info("La livraison du commande est annulée")
+                                                                                         LoadContentMain()
 
-                                                                                 })
-                                                                                 .catch(err => {
-                                                                                     console.error(err);
-                                                                                     toastr.error("Quelque chose s'est mal passé")
+                                                                                     })
+                                                                                     .catch(err => {
+                                                                                         console.error(err);
+                                                                                         toastr.error("Quelque chose s'est mal passé")
 
-                                                                                 })
+                                                                                     })
+
+                                                                             }, () => {})
                                                                          })
                                                                      </script>
                                                                  @else
-                                                                     @if ($cmd->taken && $cmd->deliverer_id == Auth::user()->user_id)
-                                                                         @if ($cmd->statut == 4)
-                                                                             <a href="#!"
-                                                                                 id="completeCmd{{ $cmd->id }}"
-                                                                                 class="btn shadow-none text-success"><i
-                                                                                     class="fas fa-check"></i></a>
-                                                                             <script>
-                                                                                 $("#completeCmd{{ $cmd->id }}").on("click", (e) => {
-                                                                                     e.preventDefault()
-                                                                                     axios.post("/commande/statut", {
-                                                                                             "_token": "{{ csrf_token() }}",
-                                                                                             user_id: "{{ $cmd->user_id }}",
-                                                                                             resto_id: "{{ $cmd->resto_id }}",
-                                                                                             statut: 5
-                                                                                         })
-                                                                                         .then(res => {
-                                                                                             console.log(res)
-                                                                                             toastr.success("Commande delivrée avec succées")
-                                                                                             LoadContentMain()
-
-                                                                                         })
-                                                                                         .catch(err => {
-                                                                                             console.error(err);
-                                                                                             toastr.error("Quelque chose s'est mal passé")
-
-                                                                                         })
-                                                                                 })
-                                                                             </script>
-                                                                         @endif
-
-
-
-                                                                         <a href="#!" id="cancelCmd{{ $cmd->id }}"
-                                                                             class="btn shadow-none text-danger"><i
-                                                                                 class="fas fa-times"></i></a>
-                                                                         <script>
-                                                                             $("#cancelCmd{{ $cmd->id }}").on("click", (e) => {
-                                                                                 e.preventDefault()
-                                                                                 alertify.confirm("Confirmation", "Ae you sure that you want to cancel your delivery  ?", () => {
-                                                                                     axios.post("/commande/statut", {
-                                                                                             "_token": "{{ csrf_token() }}",
-                                                                                             user_id: "{{ $cmd->user_id }}",
-                                                                                             resto_id: "{{ $cmd->resto_id }}",
-                                                                                             statut: 6
-                                                                                         })
-                                                                                         .then(res => {
-                                                                                             console.log(res)
-                                                                                             toastr.info("La livraison du commande est annulée")
-                                                                                             LoadContentMain()
-
-                                                                                         })
-                                                                                         .catch(err => {
-                                                                                             console.error(err);
-                                                                                             toastr.error("Quelque chose s'est mal passé")
-
-                                                                                         })
-
-                                                                                 }, () => {})
-                                                                             })
-                                                                         </script>
-                                                                     @else
-                                                                         -
-                                                                     @endif
+                                                                     -
                                                                  @endif
                                                              @endif
-                                                         </td>
-                                                     </tr>
-                                                     @php
-                                                         $total = 0;
-                                                     @endphp
-                                                     @empty
-                                                     @endforelse
+                                                         @endif
+                                                     </td>
+                                                 </tr>
+                                                 @php
+                                                     $total = 0;
+                                                 @endphp
+                                                 @empty
+                                                 @endforelse
 
 
 
@@ -1039,6 +1047,8 @@
                                                                                      "_token": "{{ csrf_token() }}",
                                                                                      resto_id: "{{ $cmd->resto_id }}",
                                                                                      req_id: "{{ $cmd->id }}",
+                                                                                     ref: "{{ $cmd->reference }}",
+
                                                                                  })
                                                                                  .then(res => {
                                                                                      console.log(res)
@@ -1066,6 +1076,8 @@
                                                                                              "_token": "{{ csrf_token() }}",
                                                                                              resto_id: "{{ $cmd->resto_id }}",
                                                                                              req_id: "{{ $cmd->id }}",
+                                                                                             ref: "{{ $cmd->reference }}",
+
                                                                                          })
                                                                                          .then(res => {
                                                                                              console.log(res)
@@ -1115,100 +1127,3 @@
                              </div>
                          </div>
                      @endif
-                     <div class="row">
-                         <div class="col-lg-8">
-                             <div class="card">
-                                 <div class="card-body">
-                                     <div class="d-md-flex align-items-center">
-                                         <div>
-                                             <h4 class="card-title">Sales Summary</h4>
-                                             <h6 class="card-subtitle">Ample admin Vs Pixel admin</h6>
-                                         </div>
-                                         <div class="ms-auto d-flex no-block align-items-center">
-                                             <ul class="list-inline dl d-flex align-items-center m-r-15 m-b-0">
-                                                 <li class="list-inline-item d-flex align-items-center text-info"><i
-                                                         class="fa fa-circle font-10 me-1"></i> Ample
-                                                 </li>
-                                                 <li class="list-inline-item d-flex align-items-center text-primary"><i
-                                                         class="fa fa-circle font-10 me-1"></i> Pixel
-                                                 </li>
-                                             </ul>
-                                         </div>
-                                     </div>
-                                     <div class="amp-pxl mt-4" style="height: 350px;">
-                                         <div class="chartist-tooltip"></div>
-                                     </div>
-                                 </div>
-                             </div>
-                         </div>
-
-                         <div class="col-lg-4">
-                             <div class="card">
-                                 <div class="card-body">
-                                     <h4 class="card-title">Weekly Stats</h4>
-                                     <h6 class="card-subtitle">Average sales</h6>
-                                     <div class="mt-5 pb-3 d-flex align-items-center">
-                                         <span class="btn btn-primary btn-circle d-flex align-items-center">
-                                             <i class="mdi mdi-cart-outline fs-4"></i>
-                                         </span>
-                                         <div class="ms-3">
-                                             <h5 class="mb-0 fw-bold">Top Sales</h5>
-                                             <span class="text-muted fs-6">Johnathan Doe</span>
-                                         </div>
-                                         <div class="ms-auto">
-                                             <span class="badge bg-light text-muted">+68%</span>
-                                         </div>
-                                     </div>
-                                     <div class="py-3 d-flex align-items-center">
-                                         <span class="btn btn-warning btn-circle d-flex align-items-center">
-                                             <i class="mdi mdi-star-circle fs-4"></i>
-                                         </span>
-                                         <div class="ms-3">
-                                             <h5 class="mb-0 fw-bold">Best Seller</h5>
-                                             <span class="text-muted fs-6">MaterialPro Admin</span>
-                                         </div>
-                                         <div class="ms-auto">
-                                             <span class="badge bg-light text-muted">+68%</span>
-                                         </div>
-                                     </div>
-                                     <div class="py-3 d-flex align-items-center">
-                                         <span class="btn btn-success btn-circle d-flex align-items-center">
-                                             <i class="mdi mdi-comment-multiple-outline text-white fs-4"></i>
-                                         </span>
-                                         <div class="ms-3">
-                                             <h5 class="mb-0 fw-bold">Most Commented</h5>
-                                             <span class="text-muted fs-6">Ample Admin</span>
-                                         </div>
-                                         <div class="ms-auto">
-                                             <span class="badge bg-light text-muted">+68%</span>
-                                         </div>
-                                     </div>
-                                     <div class="py-3 d-flex align-items-center">
-                                         <span class="btn btn-info btn-circle d-flex align-items-center">
-                                             <i class="mdi mdi-diamond fs-4 text-white"></i>
-                                         </span>
-                                         <div class="ms-3">
-                                             <h5 class="mb-0 fw-bold">Top Budgets</h5>
-                                             <span class="text-muted fs-6">Sunil Joshi</span>
-                                         </div>
-                                         <div class="ms-auto">
-                                             <span class="badge bg-light text-muted">+15%</span>
-                                         </div>
-                                     </div>
-
-                                     <div class="pt-3 d-flex align-items-center">
-                                         <span class="btn btn-danger btn-circle d-flex align-items-center">
-                                             <i class="mdi mdi-content-duplicate fs-4 text-white"></i>
-                                         </span>
-                                         <div class="ms-3">
-                                             <h5 class="mb-0 fw-bold">Best Designer</h5>
-                                             <span class="text-muted fs-6">Nirav Joshi</span>
-                                         </div>
-                                         <div class="ms-auto">
-                                             <span class="badge bg-light text-muted">+90%</span>
-                                         </div>
-                                     </div>
-                                 </div>
-                             </div>
-                         </div>
-                     </div>

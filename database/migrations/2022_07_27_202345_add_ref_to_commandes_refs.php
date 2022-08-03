@@ -15,7 +15,7 @@ class AddRefToCommandesRefs extends Migration
     {
         Schema::table('commandes_refs', function (Blueprint $table) {
             //
-            $table->string("reference")->unique()->change();
+            $table->string("reference")->unique();
         });
     }
 

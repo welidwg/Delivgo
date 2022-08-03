@@ -14,12 +14,12 @@
 
 
                         <form action="#" id="AddCategoryForm" class="formsModal">
-                            <h6 for="" class="mb-3 fs-3 color-3 text-center">Add Category</h6>
+                            <h6 for="" class="mb-3 fs-3 color-3 text-center">Ajouter une catégorie</h6>
 
                             <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                 <label for="" class="px-2 color-3 fs-5"><i class="fal fa-tag"></i></label>
                                 <input type="text" class="form-control shadow-none border-0  bg-transparent"
-                                    placeholder="Category label" name="label" required>
+                                    placeholder="Nom" name="label" required>
                             </div>
                             <input type="hidden" name="resto_id" value="{{ Auth::user()->user_id }}">
 
@@ -83,31 +83,31 @@
 
                         <form action="#" method="POST" id="AddProductForm" class="formsModal"
                             enctype="multipart/form-data">
-                            <h6 for="" class="mb-3 fs-3 color-3 text-center">Add product</h6>
+                            <h6 for="" class="mb-3 fs-3 color-3 text-center">Ajouter un produit</h6>
 
                             <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                 <label for="" class="px-2 color-3 fs-5"><i class="fal fa-tag"></i></label>
                                 <input type="text" class="form-control shadow-none border-0  bg-transparent"
-                                    placeholder="Product label" name="label">
+                                    placeholder="Titre" name="label">
                             </div>
                             <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                 <label for="" class="px-2 color-3 fs-5"><i class="fal fa-pen"></i></label>
                                 <textarea class="form-control shadow-none border-0  bg-transparent" name="description"
-                                    placeholder="Product Description (Optional )" cols="" rows="2" style="resize: none"></textarea>
+                                    placeholder=" Description (Optionel )" cols="" rows="2" style="resize: none"></textarea>
 
                             </div>
                             <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                 <label for="" class="px-2 color-3 fs-5"><i class="fal fa-coins"></i></label>
                                 <input type="number" min="1"
                                     class="form-control shadow-none border-0  bg-transparent"
-                                    placeholder="Product price (ex: type 5 for 5 dinars)" name="price" step="0.1">
+                                    placeholder="Prix (5 équivalant à  5 dinars)" name="price" step="0.1">
                             </div>
                             <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                 <label for="" class="px-2 color-3 fs-5"><i class="fal fa-list"></i></label>
 
                                 <select id="category" name="category"
                                     class="form-control shadow-none border-0  bg-transparent">
-                                    <option value="">Please select the category</option>
+                                    <option value="">Choisissez une catégorie</option>
 
                                     @foreach ($categs as $cat)
                                         <option value={{ $cat->id }}>{{ $cat->label }}</option>
@@ -120,7 +120,7 @@
                                         class="fal fa-utensils-alt"></i></label>
                                 <div class="form-check form-switch">
                                     <label style="width: auto" class="form-check-label" for="flexSwitchCheckDefault">
-                                        Have Supplements ?</label>
+                                        A des supplémnets ?</label>
                                     <input class="form-check-input" type="checkbox" role="switch"
                                         id="flexSwitchCheckDefault" name="supplement">
 
@@ -130,8 +130,8 @@
                                 <label for="" class="px-2 color-3 fs-5"><i
                                         class="fal fa-utensils-alt"></i></label>
                                 <div class="form-check form-switch">
-                                    <label style="width: auto" class="form-check-label" for="flexSwitchCheckDefault">
-                                        Have topping ?</label>
+                                    <label des  style="width: auto" class="form-check-label" for="flexSwitchCheckDefault">
+                                        A des  garnitures ?</label>
                                     <input class="form-check-input" type="checkbox" role="switch"
                                         id="flexSwitchCheckDefault" name="topping">
 
@@ -142,7 +142,7 @@
                                         class="fal fa-utensils-alt"></i></label>
                                 <div class="form-check form-switch">
                                     <label style="width: auto" class="form-check-label" for="flexSwitchCheckDefault">
-                                        Have sauces ?</label>
+                                        A des  sauces ?</label>
                                     <input class="form-check-input" type="checkbox" role="switch"
                                         id="flexSwitchCheckDefault" name="sauce">
 
@@ -153,7 +153,7 @@
                                         class="fal fa-utensils-alt"></i></label>
                                 <div class="form-check form-switch">
                                     <label style="width: auto" class="form-check-label" for="flexSwitchCheckDefault">
-                                        Have drinks ?</label>
+                                        A des  boissons ?</label>
                                     <input class="form-check-input" type="checkbox" role="switch"
                                         id="flexSwitchCheckDefault" name="drink">
 
@@ -162,8 +162,7 @@
                             <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                 <label for="picture" class="px-2 color-3 fs-5"><i class="fal fa-camera"></i>
                                 </label>
-                                <label style="width: auto;text-align: left" for="picture">&nbsp;&nbsp;Please select
-                                    product image</label>
+                                <label style="width: auto;text-align: left" for="picture">&nbsp;&nbsp;Choisissez une photo pour le produit</label>
                                 <input type="file" min="1" hidden id="picture"
                                     class="form-control shadow-none border-0  bg-transparent"
                                     placeholder="Product pic" name="picture" accept="image/*">
@@ -171,7 +170,7 @@
                             <input type="hidden" name="resto_id" value="{{ Auth::user()->user_id }}">
                             <div class="mx-auto mt-3">
                                 <button href="#!" type="submit" id="addProductBtnSubmit"
-                                    class="btn w-100">Add&nbsp;
+                                    class="btn w-100">Ajouter&nbsp;
                                     <i class="fal fa-plus"></i></button>
                             </div>
                     </div>
@@ -183,7 +182,7 @@
                             e.preventDefault()
 
                             if ($("#category").val() == "") {
-                                toastr.error("Please select product category")
+                                toastr.error("Séléctionnez une catégorie")
                             } else {
                                 btn.html(spinner)
                                 let form = $("#AddProductForm")[0]
@@ -242,17 +241,17 @@
 
 
                         <form action="#" id="AddToppingForm" class="formsModal">
-                            <h6 for="" class="mb-3 fs-3 color-3 text-center">Add Topping</h6>
+                            <h6 for="" class="mb-3 fs-3 color-3 text-center">Ajoutez garniture</h6>
 
                             <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                 <label for="" class="px-2 color-3 fs-5"><i class="fal fa-tag"></i></label>
                                 <input type="text" class="form-control shadow-none border-0  bg-transparent"
-                                    placeholder="Topping label" name="label" required>
+                                    placeholder="Nom" name="label" required>
                             </div>
                             <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                 <label for="" class="px-2 color-3 fs-5"><i class="fal fa-coins"></i></label>
                                 <input type="number" step="0.1"
-                                    class="form-control shadow-none border-0  bg-transparent" placeholder="Unit price"
+                                    class="form-control shadow-none border-0  bg-transparent" placeholder="Prix unitaire (0 équivalent à gratuit)"
                                     name="price" required>
                             </div>
                             <input type="hidden" name="resto_id" value="{{ Auth::user()->user_id }}">
@@ -260,7 +259,7 @@
 
                             <div class="mx-auto mt-3">
                                 <button href="#!" type="submit" id="addToppinggBtn"
-                                    class="btn w-100">Add&nbsp;
+                                    class="btn w-100">Ajouter&nbsp;
                                     <i class="fal fa-plus"></i></button>
                             </div>
                             @csrf
@@ -319,24 +318,24 @@
 
 
                         <form action="#" id="AddSauceForm" class="formsModal">
-                            <h6 for="" class="mb-3 fs-3 color-3 text-center">Add Sauce</h6>
+                            <h6 for="" class="mb-3 fs-3 color-3 text-center">Ajoutez une sauce</h6>
 
                             <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                 <label for="" class="px-2 color-3 fs-5"><i class="fal fa-tag"></i></label>
                                 <input type="text" class="form-control shadow-none border-0  bg-transparent"
-                                    placeholder="Sauce label" name="label" required>
+                                    placeholder="Nom" name="label" required>
                             </div>
                             <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                 <label for="" class="px-2 color-3 fs-5"><i class="fal fa-coins"></i></label>
                                 <input type="number" step="0.1"
-                                    class="form-control shadow-none border-0  bg-transparent" placeholder="Unit price"
+                                    class="form-control shadow-none border-0  bg-transparent" placeholder="Prix unitaire (0 équivalent à gratuit)"
                                     name="price" required>
                             </div>
                             <input type="hidden" name="resto_id" value="{{ Auth::user()->user_id }}">
 
 
                             <div class="mx-auto mt-3">
-                                <button href="#!" type="submit" id="addSauceBtn" class="btn w-100">Add&nbsp;
+                                <button href="#!" type="submit" id="addSauceBtn" class="btn w-100">Ajoutez&nbsp;
                                     <i class="fal fa-plus"></i></button>
                             </div>
                             @csrf
@@ -397,17 +396,17 @@
 
 
                         <form action="#" id="AddDrinkForm" class="formsModal">
-                            <h6 for="" class="mb-3 fs-3 color-3 text-center">Add Drink</h6>
+                            <h6 for="" class="mb-3 fs-3 color-3 text-center">Ajouter un boisson</h6>
 
                             <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                 <label for="" class="px-2 color-3 fs-5"><i class="fal fa-tag"></i></label>
                                 <input type="text" class="form-control shadow-none border-0  bg-transparent"
-                                    placeholder="Drink label" name="label" required>
+                                    placeholder="Nom" name="label" required>
                             </div>
                             <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                 <label for="" class="px-2 color-3 fs-5"><i class="fal fa-coins"></i></label>
                                 <input type="number" step="0.1"
-                                    class="form-control shadow-none border-0  bg-transparent" placeholder="Unit price"
+                                    class="form-control shadow-none border-0  bg-transparent" placeholder="Prix unitaire (0 équivalent à gratuit)"
                                     name="price" required>
                             </div>
                             <input type="hidden" name="resto_id" value="{{ Auth::user()->user_id }}">
@@ -473,17 +472,17 @@
 
 
                         <form action="#" id="AddSuppForm" class="formsModal">
-                            <h6 for="" class="mb-3 fs-3 color-3 text-center">Add Supplement</h6>
+                            <h6 for="" class="mb-3 fs-3 color-3 text-center">Ajouter un supplément</h6>
 
                             <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                 <label for="" class="px-2 color-3 fs-5"><i class="fal fa-tag"></i></label>
                                 <input type="text" class="form-control shadow-none border-0  bg-transparent"
-                                    placeholder="Supplement label" name="label" required>
+                                    placeholder="Nom" name="label" required>
                             </div>
                             <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                 <label for="" class="px-2 color-3 fs-5"><i class="fal fa-coins"></i></label>
                                 <input type="number" step="0.1"
-                                    class="form-control shadow-none border-0  bg-transparent" placeholder="Unit price"
+                                    class="form-control shadow-none border-0  bg-transparent" placeholder="Prix unitaire (0 équivalent à gratuit)"
                                     name="price" required>
                             </div>
                             <input type="hidden" name="resto_id" value="{{ Auth::user()->user_id }}">

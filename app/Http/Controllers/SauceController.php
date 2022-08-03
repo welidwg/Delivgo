@@ -23,16 +23,16 @@ class SauceController extends Controller
                 return \response(json_encode(["type" => "success", "message" => "Added Successfully"]), 200);
             }
         } else {
-            return \response(json_encode(["type" => "error", "message" => "This Sauce already exists "]), 500);
+            return \response(json_encode(["type" => "error", "message" => "Ce sauce est déjà existant"]), 500);
         }
     }
 
     public function Delete($id)
     {
         if (Sauce::where("id", $id)->first()->delete()) {
-            return \response(json_encode(["type" => "success", "message" => "Deleted Successfully"]), 200);
+            return \response(json_encode(["type" => "success", "message" => "Supprimé avec succès"]), 200);
         } else {
-            return \response(json_encode(["type" => "error", "message" => "Something went wrong!"]), 500);
+            return \response(json_encode(["type" => "error", "message" => "Erreur inconnue"]), 500);
         }
     }
 }

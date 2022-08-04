@@ -5,9 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Demande;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class DemandController extends Controller
 {
+    public $notif;
+    function __construct()
+    {
+        $this->notif = new notifController();
+    }
+
     //
     public function store(Request $req)
     {
@@ -22,15 +29,37 @@ class DemandController extends Controller
             }
             $check = User::where("email", $email)->first();
             if ($check) {
-                return response(json_encode(["type" => "error", "message" => "Tu as déjà un compte avec cet email !"]), 500);
+                return response(json_encode(["type" => "error", "message" => "Vous avez déjà un compte avec cet email !"]), 500);
             }
-
+            $checkDemand = Demande::where("email", $email)->orWhere("phone", $phone)->orWhere("name", "like", "%$nom%")->first();
+            if ($checkDemand) {
+                return response(json_encode(["type" => "error", "message" => "Il semble que vous avez déjà demandé de nous rejoindre en utilisant ces données!"]), 500);
+            }
             $new = new Demande;
             $new->type = $type;
             $new->email = $email;
             $new->name = $nom;
             $new->phone = $phone;
+            $message = "Mr/Mme $nom veut rejoigner delivgo";
+            if ($type == 2) {
+                $message = "L'entreprise $nom veut rejoigner delivgo";
+            }
             if ($new->save()) {
+                $this->notif->storeNotif("Nouvelle demande", $message, 1, 1);
+
+                return response(json_encode(["type" => "success", "message" => "Opération réussite!"]), 200);
+            }
+        } catch (\Throwable $th) {
+            return response(json_encode(["type" => "error", "message" => $th->getMessage()]), 500);
+        }
+    }
+
+
+    public function Delete($id)
+    {
+        try {
+            $demande = Demande::where("id", $id)->first();
+            if ($demande->delete()) {
                 return response(json_encode(["type" => "success", "message" => "Opération réussite!"]), 200);
             }
         } catch (\Throwable $th) {

@@ -58,7 +58,8 @@ Route::post("/password_update", [UserController::class, 'UpdatePassword']);
 
 
 //Demande managaer
-Route::post("/demande/add/deliverer", [DemandController::class, 'store']);
+Route::post("/demande/add", [DemandController::class, 'store']);
+Route::post("/demande/delete/{id}", [DemandController::class, 'Delete']);
 
 
 Route::get("/check_codes", function () {
@@ -184,12 +185,27 @@ Route::group(["middleware" => "auth"], function () {
     Route::get('/dash', function () {
         return view('dash/pages/main', ["user" => Auth::user()]);
     })->name("dash");
+
+
+    Route::get(
+        '/dash/users',
+        function () {
+            return view('dash/pages/users', ["users" => User::where("user_id", "!=", Auth::user()->user_id)->get()]);
+        }
+    )->name("dash.users");
+
+
+
     Route::get('/dash/mainContent', function () {
         return view('dash/layouts/indexContent', ["user" => Auth::user()]);
     })->name("dash.mainContent");
+
+
     Route::get('/dash/stats', function () {
         return view('dash/pages/stats', ["user" => Auth::user()]);
     })->name("stats");
+
+
     Route::get('/dash/mainContent', function () {
         return view('dash/layouts/indexContent', ["user" => Auth::user()]);
     })->name("dash.mainContent");
@@ -197,6 +213,8 @@ Route::group(["middleware" => "auth"], function () {
     Route::get('/dash/profile', function () {
         return view('dash/pages/profile', ["user" => Auth::user()]);
     })->name("dash.profile");;
+
+
     Route::get('/dash/menu', function () {
         return view('dash/pages/menu', ["user" => Auth::user()]);
     })->name("dash.menu");;
@@ -204,6 +222,8 @@ Route::group(["middleware" => "auth"], function () {
     Route::get('/orders', function () {
         return view('main/pages/orders', ["user" => Auth::user()]);
     })->name("main.orders");
+
+
     Route::get('/ordersTable', function () {
         return view('main/layouts/ordersTable', ["user" => Auth::user()]);
     })->name("main.ordersTable");
@@ -220,7 +240,7 @@ Route::get('/getToken', function () {
 
 
 Route::get('/', function () {
-    $restos = User::where("type", 2)->where("city", "!=", "")->get();
+    $restos = User::where("type", 2)->where("city", "!=", "")->with("region")->get();
     return view('main/pages/index', ["restos" => $restos]);
 })->name("main");
 

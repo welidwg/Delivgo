@@ -33,6 +33,8 @@
 
                       <li><a class="nav-link scrollto" href="#why-us">Pourquoi delivgo ? </a></li>
                       <li><a class="nav-link scrollto" href="#join-us">Rejoignez-nous </a></li>
+                  @else
+                      <li><a class="nav-link scrollto" href="{{ url('/#menu') }}">Restaurants</a></li>
                   @endif
 
                   @auth
@@ -97,7 +99,7 @@
                   <a href="#!" class="btn    mx-2 d-flex align-items-center justify-content-between">
                       <img src="{{ asset('uploads/logos/' . Auth::user()->avatar) }}" alt=""
                           class="rounded-circle shadow mx-2" width="30px">
-                      <span class="text-white d-none d-lg-flex"> {{ Auth::user()->username }}</span></a>
+                      <span class="text-white d-none d-lg-flex"> {{ Auth::user()->name }}</span></a>
                   <ul>
                       @if (Auth::user()->type != 1)
                           <li><a href={{ url('/dash') }}> <i class="fal fa-tachometer"></i> Tableau de bord</a></li>
@@ -248,7 +250,7 @@
                           <form action="# " class="formsModal" id="registerForm" enctype="multipart/form-data">
                               @csrf
 
-                              <h6 for="" class="mb-3 fs-3 color-3">Rejoignez Delivgo </h6>
+                              <h6 for="" class="mb-3 fs-3 color-3">Inscription </h6>
 
                               <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                   <label for="" class="px-2 color-3 fs-5"><i class="fal fa-user"></i></label>
@@ -326,40 +328,13 @@
                               }
                               console.log(e.target.value);
                           })
-                          //   $("#btnSubmitRegister").on("click", () => {
 
-
-
-                          //       axios.post('/first_register', {
-                          //           email: $("#email").val(),
-                          //           name: $("€name").val()
-                          //       }, {
-                          //           headers: {
-                          //               'Content-Type': 'application/json',
-
-                          //           }
-                          //       }).then(function(response) {
-                          //           //response
-                          //           console.log(response);
-                          //           $('#confirmModal').modal('show');
-                          //           $('#registerModal').modal('hide');
-
-                          //       }).catch((err) => {
-                          //           console.log(err.response.data);
-
-                          //       });
-
-                          //   })
                           $("#registerForm").on("submit", (e) => {
                               e.preventDefault()
                               let form = $("#registerForm")[0]
                               let formData = new FormData(form)
                               formData.append("type", 1)
-                              //   let avatar = document.getElementById("avatar").files[0]
 
-                              //   formData.append('avatar', avatar, avatar.name)
-
-                              //   console.log(formData);
 
                               $("#btnSubmitRegister").html(spinner)
                               if ($("#phone2").val() !== $("#phone").val()) {
@@ -382,6 +357,8 @@
                                   }).then(function(response) {
                                       toastr.success(response.data.message)
                                       $("#registerForm").trigger("reset");
+                                      $("#registerModal").modal("hide");
+                                      $("#loginModal1").modal("show");
 
                                   }).catch((err) => {
                                       if (err.response.data.message != undefined) {

@@ -76,7 +76,7 @@
 
             <div class="section-title">
                 <h2>Nos <span>Restaurants</span></h2>
-                <p class="fw-bold" style="letter-spacing: 3px">Ceci nos collaborateurs</p>
+                <p class="fw-bold" style="letter-spacing: 3px">Ceci nos partenaires</p>
             </div>
 
             <div class="row restoCard" style="zoom: 0.97">
@@ -95,7 +95,7 @@
                                     <div class="row mb-0 p-3 align-items-center" style="flex-wrap: nowrap">
                                         <div class="col-8 ">
                                             <span> <i class="fas fa-map-marker-alt"></i>
-                                                <?php echo e($resto->address); ?> , <?php echo e($resto->city); ?></span>
+                                                <?php echo e($resto->address); ?> , <?php echo e($resto->region->label); ?></span>
                                             
                                         </div>
                                         <div class="col d-flex align-items-center justify-content-end"
@@ -164,151 +164,227 @@
 
         </div>
     </section>
-    <section id="join-us" class="why-us">
-        <div class="container">
+    <?php if(!Auth::check()): ?>
+        <section id="join-us" class="why-us">
+            <div class="container">
 
-            <div class="section-title">
-                <h2>Rejoignez <span>Delivgo </span></h2>
-                
+                <div class="section-title">
+                    <h2>Rejoignez <span>Delivgo </span></h2>
+                    
+                </div>
+                <div class="row text-center d-flex align-items-center justify-content-center ">
+                    <div class="col-md-4 mb-5 mb-lg-0 d-flex align-items-center">
+                        <div class="card testimonial-card">
+                            <div class="card-up" style="background-color: #9d789b;"></div>
+                            <div class="avatar mx-auto bg-white p-3">
+                                <img src="<?php echo e(asset('images/livreur.webp')); ?>" class="rounded-circle img-fluid "
+                                    style="width: 200px;height: 200px" />
+                            </div>
+                            <div class="card-body">
+                                <h4 class="mb-2 fs-3 fw-bolder">Devenir livreur</h4>
+                                <hr>
+                                <p class="dark-grey-text mt-4 " style="height: 70px">
+                                    Livrez avec Delivgo pour gagner des revenus
+                                    compétitifs.
+                                </p>
+                                <button data-bs-toggle="modal" data-bs-target="#delivererModal"
+                                    class="btn  text-white rounded-pill bg-color-1">Rejoignez-nous
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-5 mb-lg-0 d-flex align-items-center">
+                        <div class="card testimonial-card">
+                            <div class="card-up" style="background-color: #9d789b;"></div>
+                            <div class="avatar mx-auto bg-white p-3">
+                                <img src="<?php echo e(asset('images/restaurant.jpg')); ?>" class="rounded-circle img-fluid "
+                                    style="width: 200px;height: 200px" />
+                            </div>
+                            <div class="card-body">
+                                <h4 class="mb-2 fs-3 fw-bolder">Devenir partenaire</h4>
+                                <hr>
+                                <p class="dark-grey-text mt-4" style="height: 70px">
+                                    Boostez vos ventes grâce à notre technologie.
+                                    <br>
+                                </p>
+                                <button data-bs-toggle="modal" data-bs-target="#restoDemandModal"
+                                    class="btn  text-white rounded-pill bg-color-1">Rejoignez-nous
+                                </button>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+
             </div>
-            <div class="row text-center d-flex align-items-center justify-content-center ">
-                <div class="col-md-4 mb-5 mb-lg-0 d-flex align-items-center">
-                    <div class="card testimonial-card">
-                        <div class="card-up" style="background-color: #9d789b;"></div>
-                        <div class="avatar mx-auto bg-white p-3">
-                            <img src="<?php echo e(asset('images/livreur.webp')); ?>" class="rounded-circle img-fluid "
-                                style="width: 200px;height: 200px" />
+        </section>
+        <div class="modal fade" id="delivererModal" tabindex="-1" role="dialog" aria-labelledby="delivererModal"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content rounded-0">
+                    <div class="modal-body p-4 px-5 ">
+
+
+                        <div class="main-content text-center mb-3 py-auto">
+
+                            <a href="#" style="" class="close-btn" data-bs-dismiss="modal"
+                                aria-label="Close">
+                                <span aria-hidden="true"><span class="fal fa-times"></span></span>
+                            </a>
+
+
+                            <form action="#" class="formsModal" id="DelivererForm">
+                                <h6 for="" class="mb-3 fs-3 color-3">Devenir un livreur</h6>
+                                <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
+                                    <label for="" class="px-2 color-3 fs-5"><i class="fal fa-user"></i></label>
+                                    <input type="text"
+                                        class="form-control shadow-none border-0 text-center bg-transparent"
+                                        placeholder="Votre Nom" name="name" required>
+                                </div>
+                                <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
+                                    <label for="" class="px-2 color-3 fs-5"><i class="fal fa-phone"></i></label>
+                                    <input type="tel"
+                                        class="form-control shadow-none border-0 text-center bg-transparent"
+                                        placeholder="Votre numéro" name="phone" required>
+                                </div>
+                                <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
+                                    <label for="" class="px-2 color-3 fs-5"><i class="fal fa-at"></i></label>
+                                    <input type="email" name="email"
+                                        class="form-control shadow-none border-0 text-center bg-transparent"
+                                        placeholder="Votre email" required>
+                                </div>
+                                <input type="hidden" name="type" value="3">
+                                <div class="mx-auto mt-3">
+                                    <button type="submit" class="btn w-100" id="btnLivreur">Envoyez la demande &nbsp;<i
+                                            class="fal fa-check"></i></button>
+                                </div>
+
                         </div>
-                        <div class="card-body">
-                            <h4 class="mb-2 fs-3 fw-bolder">Devenir livreur</h4>
-                            <hr>
-                            <p class="dark-grey-text mt-4 " style="height: 70px">
-                                Livrez avec Delivgo pour gagner des revenus
-                                compétitifs.
-                            </p>
-                            <button data-bs-toggle="modal" data-bs-target="#delivererModal"
-                                class="btn  text-white rounded-pill bg-color-1">Rejoignez-nous
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-5 mb-lg-0 d-flex align-items-center">
-                    <div class="card testimonial-card">
-                        <div class="card-up" style="background-color: #9d789b;"></div>
-                        <div class="avatar mx-auto bg-white p-3">
-                            <img src="<?php echo e(asset('images/restaurant.jpg')); ?>" class="rounded-circle img-fluid "
-                                style="width: 200px;height: 200px" />
-                        </div>
-                        <div class="card-body">
-                            <h4 class="mb-2 fs-3 fw-bolder">Devenir partenaire</h4>
-                            <hr>
-                            <p class="dark-grey-text mt-4" style="height: 70px">
-                                Boostez vos ventes grâce à notre technologie.
-                                <br>
-                            </p>
-                            <button class="btn  text-white rounded-pill bg-color-1">Rejoignez-nous
-                            </button>
-                        </div>
 
 
-                    </div>
-                </div>
-
-
-            </div>
-
-        </div>
-    </section>
-    <div class="modal fade" id="delivererModal" tabindex="-1" role="dialog" aria-labelledby="delivererModal"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content rounded-0">
-                <div class="modal-body p-4 px-5 ">
-
-
-                    <div class="main-content text-center mb-3 py-auto">
-
-                        <a href="#" style="" class="close-btn" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true"><span class="fal fa-times"></span></span>
-                        </a>
-
-
-                        <form action="#" class="formsModal" id="DelivererForm">
-                            <h6 for="" class="mb-3 fs-3 color-3">Devenir un livreur</h6>
-                            <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
-                                <label for="" class="px-2 color-3 fs-5"><i class="fal fa-user"></i></label>
-                                <input type="text" class="form-control shadow-none border-0 text-center bg-transparent"
-                                    placeholder="Votre Nom" name="name" required>
-                            </div>
-                            <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
-                                <label for="" class="px-2 color-3 fs-5"><i class="fal fa-phone"></i></label>
-                                <input type="tel" class="form-control shadow-none border-0 text-center bg-transparent"
-                                    placeholder="Votre numéro" name="phone" required>
-                            </div>
-                            <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
-                                <label for="" class="px-2 color-3 fs-5"><i class="fal fa-at"></i></label>
-                                <input type="email" name="email"
-                                    class="form-control shadow-none border-0 text-center bg-transparent"
-                                    placeholder="Votre email" required>
-                            </div>
-                            <input type="hidden" name="type" value="3">
-                            <div class="mx-auto mt-3">
-                                <button type="submit" class="btn w-100" id="btnLivreur">Envoyez la demande &nbsp;<i
-                                        class="fal fa-check"></i></button>
-                            </div>
+                        </form>
 
                     </div>
+                    <script>
+                        $("#DelivererForm").on("submit", (e) => {
+                            e.preventDefault();
+                            $('#btnLivreur').html(spinner);
+                            axios.post("/demande/add", $('#DelivererForm').serialize()).then((res) => {
+                                toastr.success("Demande envoyée ! ")
+                                $("#DelivererForm").trigger("reset")
+
+                                setTimeout(() => {
+                                    $(".modal").modal("hide");
+
+                                }, 700);
+
+                            }).catch((err) => {
+                                console.log(err.response.data);
+                                if (err.response.data.type != undefined) {
+                                    toastr.error(err.response.data.message)
+                                    return false;
 
 
-                    </form>
-
-                </div>
-                <script>
-                    $("#DelivererForm").on("submit", (e) => {
-                        e.preventDefault();
-                        $('#btnLivreur').html(spinner);
-                        axios.post("/demande/add/deliverer", $('#DelivererForm').serialize()).then((res) => {
-                            toastr.success("Dzmande envoyée ! ")
-                            $("#DelivererForm").trigger("reset")
-
-                            setTimeout(() => {
-                                $(".modal").modal("hide");
-
-                            }, 700);
-
-                        }).catch((err) => {
-                            console.log(err.response.data);
-                            if (err.response.data.email != undefined) {
-                                localStorage.setItem("email", err.response.data.email);
-                                toastr.error(err.response.data.message)
-                                $('#confirmModal').modal('show');
-                                return false;
-
-                            }
-                            if (err.response.data.type != undefined) {
-                                toastr.error(err.response.data.message)
-                                return false;
-
-
-                            } else {
-                                for (let k in err.response.data) {
-                                    toastr.error(err.response.data[k])
                                 }
-                                return false;
-
-                            }
-                            //   toastr.error(err.response.data)
-                        }).finally(() => {
-                            $('#btnLivreur').html(`Envoyez la demande &nbsp;<i
+                                //   toastr.error(err.response.data)
+                            }).finally(() => {
+                                $('#btnLivreur').html(`Envoyez la demande &nbsp;<i
                                         class="fal fa-check"></i>`);
 
+                            })
                         })
-                    })
-                </script>
+                    </script>
 
+                </div>
             </div>
         </div>
-    </div>
+        <div class="modal fade" id="restoDemandModal" tabindex="-1" role="dialog" aria-labelledby="delivererModal"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content rounded-0">
+                    <div class="modal-body p-4 px-5 ">
+
+
+                        <div class="main-content text-center mb-3 py-auto">
+
+                            <a href="#" style="" class="close-btn" data-bs-dismiss="modal"
+                                aria-label="Close">
+                                <span aria-hidden="true"><span class="fal fa-times"></span></span>
+                            </a>
+
+
+                            <form action="#" class="formsModal" id="restoForm">
+                                <h6 for="" class="mb-3 fs-3 color-3">Devenir un partenaire</h6>
+                                <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
+                                    <label for="" class="px-2 color-3 fs-5"><i class="fal fa-user"></i></label>
+                                    <input type="text"
+                                        class="form-control shadow-none border-0 text-center bg-transparent"
+                                        placeholder="Nom de l'entreprise" name="name" required>
+                                </div>
+                                <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
+                                    <label for="" class="px-2 color-3 fs-5"><i class="fal fa-phone"></i></label>
+                                    <input type="tel"
+                                        class="form-control shadow-none border-0 text-center bg-transparent"
+                                        placeholder="Votre numéro" name="phone" required>
+                                </div>
+                                <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
+                                    <label for="" class="px-2 color-3 fs-5"><i class="fal fa-at"></i></label>
+                                    <input type="email" name="email"
+                                        class="form-control shadow-none border-0 text-center bg-transparent"
+                                        placeholder="Votre email" required>
+                                </div>
+                                <input type="hidden" name="type" value="2">
+                                <div class="mx-auto mt-3">
+                                    <button type="submit" class="btn w-100" id="btnResto">Envoyez la demande &nbsp;<i
+                                            class="fal fa-check"></i></button>
+                                </div>
+
+                        </div>
+
+
+                        </form>
+
+                    </div>
+                    <script>
+                        $("#restoForm").on("submit", (e) => {
+                            e.preventDefault();
+                            $('#btnResto').html(spinner);
+                            axios.post("/demande/add", $('#restoForm').serialize()).then((res) => {
+                                toastr.success("Demande envoyée ! ")
+                                $("#restoForm").trigger("reset")
+
+                                setTimeout(() => {
+                                    $(".modal").modal("hide");
+
+                                }, 700);
+
+                            }).catch((err) => {
+                                console.log(err.response.data);
+                                if (err.response.data.type != undefined) {
+                                    toastr.error(err.response.data.message)
+                                    return false;
+
+
+                                } else {
+                                    toastr.error("Erreur inconnue, veuillez réssayer plus tard!");
+
+                                }
+                                //   toastr.error(err.response.data)
+                            }).finally(() => {
+                                $('#btnResto').html(`Envoyez la demande &nbsp;<i
+                                        class="fal fa-check"></i>`);
+
+                            })
+                        })
+                    </script>
+
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('main/base', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\wamp64\www\Delivgo\resources\views/main/pages/index.blade.php ENDPATH**/ ?>

@@ -33,7 +33,7 @@
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js
-                                                                                                                                                                                                                                                                                                                                                                                                                    ">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"
         integrity="sha512-xIPqqrfvUAc/Cspuj7Bq0UtHNo/5qkdyngx6Vwt+tmbvTLDszzXM0G6c91LXmGrRx8KEPulT+AfOOez+TeVylg=="
@@ -100,7 +100,7 @@ Carbon::setLocale('fr');
 
 ?>
 <?php
-$ip = request()->ip() == '127.0.0.1' ? '102.157.105.250' : request()->ip();
+$ip = request()->ip() == '127.0.0.1' ? '102.154.237.218' : request()->ip();
 if ($position = Location::get($ip)) {
     // echo $position->regionName;
 } else {
@@ -132,6 +132,11 @@ if ($position = Location::get($ip)) {
 
         <?php echo $__env->yieldSection(); ?>
     </main>
+    <?php if($position = Location::get($ip)): ?>
+        <script>
+            alertify.alert("location", "Ceci est votre localidation : <?php echo e($position->regionName); ?>")
+        </script>
+    <?php endif; ?>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
 

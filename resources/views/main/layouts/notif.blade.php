@@ -1,10 +1,12 @@
  @php
      
      use App\Models\Notification;
+     
      $notifs = Notification::where('to', Auth::user()->user_id)
          ->with('sender')
          ->orderBy('created_at', 'desc')
          ->get();
+     
  @endphp
 
 

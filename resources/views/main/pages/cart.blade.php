@@ -144,7 +144,8 @@
                                               @endforeach
                                               <br>
                                           @endif
-                                          <span class="text-muted">Prix de livraison: {{ $item->resto->deliveryPrice }}
+                                          <span class="text-muted">Prix de livraison:
+                                              {{ $item->resto->region->deliveryPrice }}
                                               Dt
                                           </span>
 
@@ -236,7 +237,7 @@
                           $totalDelivery = 0;
                           
                           foreach ($cart as $cr) {
-                              $totalDelivery += $cr->resto->deliveryPrice;
+                              $totalDelivery += $cr->resto->region->deliveryPrice;
                           }
                           $total = 0;
                           foreach ($items as $item) {

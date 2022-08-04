@@ -194,7 +194,7 @@
                      </div>
                      @if ($user->type == 2)
                          <div class="form-group">
-                             <label class="col-md-12">Prix de livraison (DT)</label>
+                             <label class="col-md-12">Frais de livraison (DT)</label>
                              <small class="fw-bold text-info">NB:écrire 0 si vous livrez sans frais.
                              </small>
 
@@ -242,7 +242,7 @@
 
                      @endif
                      <div class="form-group">
-                         <label class="col-sm-12">Selectionnez votre ville</label>
+                         <label class="col-sm-12">Selectionnez votre ville/région</label>
                          <div class="col-sm-12">
                              <select required class="form-select shadow-none form-control-line" name="city">
                                  @php

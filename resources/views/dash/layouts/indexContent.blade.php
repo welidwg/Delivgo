@@ -9,8 +9,412 @@
      use App\Models\Sauce;
      use App\Models\Drink;
      use App\Models\Supplement;
+     use App\Models\Demande;
  @endphp
+ @if (Auth::user()->type == 4)
+     <div class="row">
+         <div class="col-md-6" id="demandes" style="zoom: 0.8">
+             <div class="card">
+                 <div class="card-body">
+                     <!-- title -->
+                     <div class="d-md-flex">
+                         <div>
+                             <h4 class="card-title">Demandes de partenariat </h4>
+                             {{-- <h5 class="card-subtitle">Overview of Top Selling Items</h5> --}}
+                         </div>
 
+                     </div>
+                     <!-- title -->
+                     <div class="table-responsive">
+                         <table class="table mb-0 table-hover align-middle text-nowrap" id="partn">
+                             <thead>
+                                 <tr>
+                                     <th class="border-top-0">Nom d'entreprise</th>
+                                     <th class="border-top-0 d-none d-lg-table-cell">N° Téléphone</th>
+                                     <th class="border-top-0 d-none d-lg-table-cell">Email</th>
+                                     <th class="border-top-0 d-none d-lg-table-cell">Actions</th>
+                                     <th class="border-top-0 d-lg-none">Détails</th>
+                                 </tr>
+                             </thead>
+
+                             <tbody>
+                                 @php
+                                     
+                                     $requests = Demande::where('type', 2)->get();
+                                     
+                                 @endphp
+                                 @forelse ($requests as $demande)
+                                     <tr>
+                                         <td>
+                                             {{ $demande->name }}
+                                         </td>
+                                         <td class="d-none d-lg-table-cell">
+                                             {{ $demande->phone }}
+                                         </td>
+                                         <td class="d-none d-lg-table-cell">
+                                             {{ $demande->email }}
+                                         </td>
+
+
+
+
+
+                                         <td class="d-none d-lg-table-cell">
+
+                                             <a href="#!" id="cancelreq{{ $demande->id }}"
+                                                 class="btn shadow-none text-danger"><i class="fas fa-trash"></i></a>
+                                             <script>
+                                                 $("#cancelreq{{ $demande->id }}").on("click", (e) => {
+                                                     e.preventDefault()
+                                                     alertify.confirm("Confirmation", "Vous êtes sûr de supprimer cette demande  ?", () => {
+                                                         axios.post("/demande/delete/{{ $demande->id }}", {
+                                                                 "_token": "{{ csrf_token() }}",
+                                                                 id: "{{ $demande->id }}"
+
+
+                                                             })
+                                                             .then(res => {
+                                                                 console.log(res)
+                                                                 toastr.info(res.data.message)
+                                                                 LoadContentMain()
+
+                                                             })
+                                                             .catch(err => {
+                                                                 console.error(err);
+                                                                 toastr.error("Quelque chose s'est mal passé")
+
+                                                             })
+
+                                                     }, () => {})
+                                                 })
+                                             </script>
+                                         </td>
+                                         <td class="d-lg-none">
+                                             <a href="#!" id="" data-bs-toggle="modal"
+                                                 data-bs-target="#DetailsModal{{ $demande->id }}"
+                                                 class="btn shadow-none text-danger"><i class="fas fa-eye"></i></a>
+                                         </td>
+                                     </tr>
+                                     <div class="modal fade" id="DetailsModal{{ $demande->id }}"
+                                         aria-labelledby="DetailsModal" tabindex="-1" aria-hidden="true">
+                                         <div class="modal-dialog modal-dialog-centered" role="document">
+                                             <div class="modal-content rounded-0">
+                                                 <div class="modal-body p-4 px-0 ">
+
+
+                                                     <div class="main-content text-center mb-3 py-auto">
+
+                                                         <a href="#" style="" class="close-btn"
+                                                             id="closeModalConfirm" data-bs-toggle="Close">
+                                                             <span aria-hidden="true"><span
+                                                                     class="fal fa-times"></span></span>
+                                                         </a>
+                                                         <h6 class="text-center">Nom :
+                                                             <strong>{{ $demande->name }}</strong>
+                                                         </h6>
+                                                         <div
+                                                             class="row flex-column justify-content-start align-items-center">
+                                                             <div class="col mb">
+                                                                 <label class="">N° Téléphone:</label>
+                                                                 <strong>
+                                                                     <a href="tel:{{ $demande->phone }}">
+                                                                         {{ $demande->phone }}
+                                                                     </a>
+
+                                                                 </strong>
+
+
+
+                                                             </div>
+                                                             <div class="col mb-2">
+                                                                 <span>Email: <strong>
+                                                                         <a href="mailto:{{ $demande->email }}">
+                                                                             {{ $demande->email }}
+
+                                                                         </a>
+
+                                                                     </strong></span>
+
+
+
+                                                             </div>
+                                                             <div class="col mb-2">
+                                                                 <span>Date : <strong id="dateTel{{ $demande->id }}">
+
+
+                                                                     </strong></span>
+                                                                 <script>
+                                                                     $('#dateTel{{ $demande->id }}').html(moment("{{ $demande->created_at }}").format('LL | LT'))
+                                                                 </script>
+
+
+                                                             </div>
+
+
+
+                                                             <a class="btn btn-danger w-75"
+                                                                 id="canceldemande{{ $demande->id }}">Supprimer</a>
+                                                             <script>
+                                                                 $("#canceldemande{{ $demande->id }}").on("click", (e) => {
+                                                                     e.preventDefault()
+                                                                     alertify.confirm("Confirmation", "Vous êtes sûr de supprimer cette demande ?", () => {
+                                                                         axios.post("/demande/delete/{{ $demande->id }}", {
+                                                                                 "_token": "{{ csrf_token() }}",
+                                                                                 id: "{{ $demande->id }}"
+                                                                             })
+                                                                             .then(res => {
+                                                                                 console.log(res)
+                                                                                 toastr.info("Demande supprimée")
+                                                                             })
+                                                                             .catch(err => {
+                                                                                 console.error(err);
+                                                                                 toastr.error("Erreur inconnue,réssayez plus tard")
+
+                                                                             })
+
+                                                                     }, () => {})
+                                                                 })
+                                                             </script>
+
+
+                                                         </div>
+
+
+
+                                                     </div>
+
+                                                 </div>
+                                             </div>
+
+                                         </div>
+                                     </div>
+                                 @empty
+                                 @endforelse
+
+
+
+                             </tbody>
+                         </table>
+                         <script>
+                             $("#partn").DataTable({
+                                 "language": {
+                                     "decimal": ".",
+                                     "emptyTable": "Il n'ya aucun enregistrement encore",
+                                     "info": "",
+                                     "infoFiltered": "",
+                                     "infoEmpty": "",
+                                     "lengthMenu": "",
+                                 }
+                             })
+                         </script>
+                     </div>
+                 </div>
+             </div>
+         </div>
+
+         <div class="col-md-6" id="demandes" style="zoom: 0.8">
+             <div class="card">
+                 <div class="card-body">
+                     <!-- title -->
+                     <div class="d-md-flex">
+                         <div>
+                             <h4 class="card-title">Demandes des livreurs </h4>
+                             {{-- <h5 class="card-subtitle">Overview of Top Selling Items</h5> --}}
+                         </div>
+
+                     </div>
+                     <!-- title -->
+                     <div class="table-responsive">
+                         <table class="table mb-0 table-hover align-middle text-nowrap" id="deliv">
+                             <thead>
+                                 <tr>
+                                     <th class="border-top-0">Nom </th>
+                                     <th class="border-top-0 d-none d-lg-table-cell">N° Téléphone</th>
+                                     <th class="border-top-0 d-none d-lg-table-cell">Email</th>
+
+                                     <th class="border-top-0 d-none d-lg-table-cell">Actions</th>
+                                     <th class="border-top-0 d-lg-none">Détails</th>
+
+                                 </tr>
+                             </thead>
+
+                             <tbody>
+                                 @php
+                                     
+                                     $requests = Demande::where('type', 3)->get();
+                                     
+                                 @endphp
+                                 @forelse ($requests as $demande)
+                                     <tr>
+                                         <td>
+                                             {{ $demande->name }}
+                                         </td>
+                                         <td class="d-none d-lg-table-cell">
+                                             {{ $demande->phone }}
+                                         </td>
+                                         <td class="d-none d-lg-table-cell">
+                                             {{ $demande->email }}
+                                         </td>
+
+
+
+
+                                         <td class="d-none d-lg-table-cell">
+
+                                             <a href="#!" id="cancelreqDeliv{{ $demande->id }}"
+                                                 class="btn shadow-none text-danger"><i class="fas fa-trash"></i></a>
+                                             <script>
+                                                 $("#cancelreqDeliv{{ $demande->id }}").on("click", (e) => {
+                                                     e.preventDefault()
+                                                     alertify.confirm("Confirmation", "Vous êtes sûr de supprimer cette demande  ?", () => {
+                                                         axios.post("/demande/delete/{{ $demande->id }}", {
+                                                                 "_token": "{{ csrf_token() }}",
+                                                                 id: "{{ $demande->id }}"
+
+
+                                                             })
+                                                             .then(res => {
+                                                                 console.log(res)
+                                                                 toastr.info(res.data.message)
+                                                                 LoadContentMain()
+
+                                                             })
+                                                             .catch(err => {
+                                                                 console.error(err);
+                                                                 toastr.error("Quelque chose s'est mal passé")
+
+                                                             })
+
+                                                     }, () => {})
+                                                 })
+                                             </script>
+                                         </td>
+                                         <td class="d-lg-none">
+                                             <a href="#!" data-bs-target="#DetailsModal{{ $demande->id }}"
+                                                 data-bs-toggle="modal" class="btn shadow-none text-danger"><i
+                                                     class="fas fa-eye"></i></a>
+                                         </td>
+                                     </tr>
+                                     <div class="modal fade" id="DetailsModal{{ $demande->id }}"
+                                         aria-labelledby="DetailsModal" tabindex="-1" aria-hidden="true">
+                                         <div class="modal-dialog modal-dialog-centered" role="document">
+                                             <div class="modal-content rounded-0">
+                                                 <div class="modal-body p-4 px-0 ">
+
+
+                                                     <div class="main-content text-center mb-3 py-auto">
+
+                                                         <a href="#" style="" class="close-btn"
+                                                             id="closeModalConfirm" data-bs-toggle="Close">
+                                                             <span aria-hidden="true"><span
+                                                                     class="fal fa-times"></span></span>
+                                                         </a>
+                                                         <h6 class="text-center">Nom :
+                                                             <strong>{{ $demande->name }}</strong>
+                                                         </h6>
+                                                         <div
+                                                             class="row flex-column justify-content-start align-items-center">
+                                                             <div class="col mb">
+                                                                 <label class="">N° Téléphone:</label>
+                                                                 <strong>
+                                                                     <a href="tel:{{ $demande->phone }}">
+                                                                         {{ $demande->phone }}
+                                                                     </a>
+
+                                                                 </strong>
+
+
+
+                                                             </div>
+                                                             <div class="col mb-2">
+                                                                 <span>Email: <strong>
+                                                                         <a href="mailto:{{ $demande->email }}">
+                                                                             {{ $demande->email }}
+
+                                                                         </a>
+
+                                                                     </strong></span>
+
+
+
+                                                             </div>
+                                                             <div class="col mb-2">
+                                                                 <span>Date : <strong id="dateTel{{ $demande->id }}">
+
+
+                                                                     </strong></span>
+                                                                 <script>
+                                                                     $('#dateTel{{ $demande->id }}').html(moment("{{ $demande->created_at }}").format('LL | LT'))
+                                                                 </script>
+
+
+                                                             </div>
+
+
+
+                                                             <a class="btn btn-danger w-75"
+                                                                 id="canceldemande{{ $demande->id }}">Supprimer</a>
+                                                             <script>
+                                                                 $("#canceldemande{{ $demande->id }}").on("click", (e) => {
+                                                                     e.preventDefault()
+                                                                     alertify.confirm("Confirmation", "Vous êtes sûr de supprimer cette demande ?", () => {
+                                                                         axios.post("/demande/delete/{{ $demande->id }}", {
+                                                                                 "_token": "{{ csrf_token() }}",
+                                                                                 id: "{{ $demande->id }}"
+                                                                             })
+                                                                             .then(res => {
+                                                                                 console.log(res)
+                                                                                 toastr.info("Demande supprimée")
+                                                                             })
+                                                                             .catch(err => {
+                                                                                 console.error(err);
+                                                                                 toastr.error("Erreur inconnue,réssayez plus tard")
+
+                                                                             })
+
+                                                                     }, () => {})
+                                                                 })
+                                                             </script>
+
+
+                                                         </div>
+
+
+
+                                                     </div>
+
+                                                 </div>
+                                             </div>
+
+                                         </div>
+                                     </div>
+
+                                 @empty
+                                 @endforelse
+
+
+
+                             </tbody>
+                         </table>
+                         <script>
+                             $("#deliv").DataTable({
+                                 "language": {
+                                     "decimal": ".",
+                                     "emptyTable": "Il n'ya aucun enregistrement encore",
+                                     "info": "",
+                                     "infoFiltered": "",
+                                     "infoEmpty": "",
+                                     "lengthMenu": "",
+                                 }
+                             })
+                         </script>
+
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ @endif
 
  @if (Auth::user()->type == 2)
      <div class="m-4">
@@ -1127,3 +1531,6 @@
                              </div>
                          </div>
                      @endif
+                     <script>
+                         $(".modal").appendTo('body')
+                     </script>

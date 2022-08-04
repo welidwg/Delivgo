@@ -182,7 +182,6 @@ class UserController extends Controller
                 return response(json_encode($validate->errors()->all()), 500);
             }
             $email = $req->email;
-            $username = $req->username;
             $name = $req->name;
             $password = Hash::make($req->password);
             $phone = $req->phone;
@@ -215,6 +214,12 @@ class UserController extends Controller
 
 
             if ($user->save()) {
+                if (Auth::check()) {
+                    if (Auth::user()->type == 4) {
+                        $mail = new MailController();
+                        $mail->NewAccount($email, $req->password);
+                    }
+                }
                 return response(json_encode(["type" => "success", "message" => "Compte crée avec succès"]), 200);
             }
         } catch (\Throwable $th) {

@@ -517,10 +517,12 @@
                          </div>
 
                      </div>
-                     <script>
-                         $('#DetailsModal{{ $cmd->id }}').appendTo("body")
-                     </script>
-                     @empty
+                 </div>
+
+                 <script>
+                     $('#DetailsModal{{ $cmd->id }}').appendTo("body")
+                 </script>
+                 @empty
                  @endforelse
 
 

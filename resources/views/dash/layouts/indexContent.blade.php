@@ -3,6 +3,7 @@
      use App\models\Commande;
      use App\models\commande_ref;
      use App\models\RequestResto;
+     use App\models\Region;
  @endphp
  @php
      use App\Models\Garniture;
@@ -409,6 +410,170 @@
                              })
                          </script>
 
+                     </div>
+                 </div>
+             </div>
+         </div>
+         <div class="col-md-6" id="listeregion" style="zoom: 0.8">
+             <div class="card">
+                 <div class="card-body">
+                     <!-- title -->
+                     <div class="d-md-flex">
+                         <div>
+                             <h4 class="card-title">Régions/Ville supportées </h4>
+                             {{-- <h5 class="card-subtitle">Overview of Top Selling Items</h5> --}}
+                         </div>
+
+                     </div>
+                     <!-- title -->
+                     <div class="table-responsive">
+                         <table class="table mb-0 table-hover align-middle text-nowrap" id="reg">
+                             <thead>
+                                 <tr>
+                                     <th class="border-top-0">Nom de ville/région</th>
+                                     <th class="border-top-0">Frais de livraison</th>
+                                     <th class="border-top-0 d-none d-lg-table-cell">Actions</th>
+
+                                 </tr>
+                             </thead>
+
+                             <tbody>
+                                 @php
+                                     
+                                     $requests = Region::get();
+                                     
+                                 @endphp
+                                 @forelse ($requests as $demande)
+                                     <tr>
+                                         <td>
+                                             {{ $demande->label }}
+                                         </td>
+                                         <td class="">
+                                             {{ $demande->deliveryPrice }}
+                                         </td>
+
+
+
+
+
+
+                                         <td class="d-none d-lg-table-cell">
+
+                                             <a href="#!" id="editReg{{ $demande->id }}"
+                                                 class="btn shadow-none text-primary" data-bs-toggle="modal"
+                                                 data-bs-target="#EditRegModal{{ $demande->id }}"><i
+                                                     class="fas fa-edit"></i></a>
+                                             <a href="#!" id="deleteReg{{ $demande->id }}"
+                                                 class="btn shadow-none text-danger"><i class="fas fa-trash"></i></a>
+                                             <script>
+                                                 $("#deleteReg{{ $demande->id }}").on("click", (e) => {
+                                                     e.preventDefault()
+                                                     alertify.confirm("Confirmation", "Vous êtes sûr de supprimer cette région/ville  ?", () => {
+                                                         axios.post("/demande/delete/{{ $demande->id }}", {
+                                                                 "_token": "{{ csrf_token() }}",
+                                                                 id: "{{ $demande->id }}"
+
+
+                                                             })
+                                                             .then(res => {
+                                                                 console.log(res)
+                                                                 toastr.info(res.data.message)
+                                                                 LoadContentMain()
+
+                                                             })
+                                                             .catch(err => {
+                                                                 console.error(err);
+                                                                 toastr.error("Quelque chose s'est mal passé")
+
+                                                             })
+
+                                                     }, () => {})
+                                                 })
+                                             </script>
+                                         </td>
+
+                                     </tr>
+                                     <div class="modal fade" id="EditRegModal{{ $demande->id }}"
+                                         aria-labelledby="DetailsModal" tabindex="-1" aria-hidden="true">
+                                         <div class="modal-dialog modal-dialog-centered" role="document">
+                                             <div class="modal-content rounded-0">
+                                                 <div class="modal-body p-4 px-0 ">
+
+
+                                                     <div class="main-content text-center mb-3 p-3 py-auto">
+
+                                                         <a href="#" style="" class="close-btn"
+                                                             id="" data-bs-dismiss="modal">
+                                                             <span aria-hidden="true"><span
+                                                                     class="fal fa-times"></span></span>
+                                                         </a>
+
+                                                         <form action="#" id="ediregform" class="formsModal">
+                                                             <h6 for="" class="mb-3 fs-3 color-3 text-center">
+                                                                 Modifier région/ville</h6>
+
+                                                             <div
+                                                                 class="input-group mb-2 rounded-pill bg-light  align-items-center">
+                                                                 <label for="" class="px-2 color-3 fs-5"><i
+                                                                         class="fal fa-tag"></i></label>
+                                                                 <input type="text"
+                                                                     class="form-control shadow-none border-0  bg-transparent"
+                                                                     placeholder="Nom" value="{{ $demande->label }}"
+                                                                     name="label" required>
+
+                                                             </div>
+
+                                                             <div
+                                                                 class="input-group mb-2  rounded-pill bg-light  align-items-center">
+                                                                 <label for="" class="px-2 color-3 fs-5"><i
+                                                                         class="fal fa-coins"></i></label>
+                                                                 <input type="number" step="0.1"
+                                                                     class="form-control shadow-none border-0  bg-transparent"
+                                                                     placeholder="frais de livraison" name="prix"
+                                                                     value="{{ $demande->deliveryPrice }}" required>
+                                                             </div>
+
+
+                                                             <div class="mx-auto mt-3">
+                                                                 <button href="#!" type="submit" id="ediregbtn"
+                                                                     class="btn w-100">Modifier&nbsp;
+                                                                     <i class="fal fa-check"></i></button>
+                                                             </div>
+                                                             @csrf
+                                                         </form>
+
+
+
+
+                                                     </div>
+
+
+
+                                                 </div>
+
+                                             </div>
+                                         </div>
+
+                                     </div>
+                                 @empty
+                                 @endforelse
+
+
+
+                             </tbody>
+                         </table>
+                         <script>
+                             $("#reg").DataTable({
+                                 "language": {
+                                     "decimal": ".",
+                                     "emptyTable": "Il n'ya aucun enregistrement encore",
+                                     "info": "",
+                                     "infoFiltered": "",
+                                     "infoEmpty": "",
+                                     "lengthMenu": "",
+                                 }
+                             })
+                         </script>
                      </div>
                  </div>
              </div>

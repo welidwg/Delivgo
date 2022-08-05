@@ -37,7 +37,7 @@
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"
         integrity="sha512-xIPqqrfvUAc/Cspuj7Bq0UtHNo/5qkdyngx6Vwt+tmbvTLDszzXM0G6c91LXmGrRx8KEPulT+AfOOez+TeVylg=="
@@ -96,7 +96,22 @@
 
     <script type="text/javascript"
         src="https://cdn.datatables.net/v/bs5/dt-1.11.5/fh-3.2.2/sc-2.0.5/sb-1.3.2/sp-2.0.0/datatables.min.js"></script>
+    <script>
+        $.extend(true, $.fn.dataTable.defaults, {
 
+            "language": {
+                "search": "Rechercher:",
+
+                "paginate": {
+                    "first": "Premier",
+                    "last": "Dernier",
+                    "next": "Suivant",
+                    "previous": "Précédent"
+                },
+            },
+
+        });
+    </script>
 </head>
 @php
 use Illuminate\Support\Carbon;
@@ -135,10 +150,106 @@ if ($position = Location::get($ip)) {
         @section('content')
 
         @show
+        <div class="modal fade" id="modalRegion" aria-labelledby="modalRegion" data-bs-backdrop="static"
+            data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content rounded-0">
+                    <div class="modal-body p-4 px-5 ">
+
+
+                        <div class="main-content text-center mb-3 py-auto">
+
+                            <a href="#" style="" class="close-btn" id="closeModalConfirm">
+                                <span aria-hidden="true"><span class="fal fa-times"></span></span>
+                            </a>
+
+
+                            <h6 for="" class="mb-3 fs-3 color-3">Ajoutez votre emplacement</h6>
+                            {{-- <p class="fw-bold">Nous avons envoyer un code sur votre email.<br>Vous devez
+                                        vérifier
+                                        votre boite de récéption ou spam<br>
+                                        <span class="text-danger fw-bold">NB: Ce code sera expiré dans 15 minutes</span>
+
+                                    </p> --}}
+                            <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
+                                <label for="" class="px-2 color-3 fs-5"><i
+                                        class="fal fa-map-marker-alt"></i></label>
+                                {{-- <input type="text"
+                                            class="form-control shadow-none border-0 text-center bg-transparent"
+                                            placeholder="" id="region"> --}}
+                                <input list="browsers"
+                                    class="form-control shadow-none border-0 text-center bg-transparent" name="browser"
+                                    id="browser">
+                                <script>
+                                    let regs = []
+                                </script>
+                                <datalist id="browsers">
+                                    @php
+                                        use App\Models\Region;
+                                        $regionMain = Region::where('label', '!=', 'Autre')->get();
+                                    @endphp
+                                    @foreach ($regionMain as $region)
+                                        <script>
+                                            regs.push("{{ $region->label }}")
+                                        </script>
+                                        <option value="{{ $region->label }}">
+                                    @endforeach
+                                    <script>
+                                        console.log("reg", regs);
+                                    </script>
+
+                                </datalist>
+                            </div>
+                            <div class="mx-auto mt-3">
+                                <a href="#!" id="btnRegion" class="btn w-100">Confirmer
+                                    <i class="fal fa-sign-in-alt"></i></a>
+                            </div>
+                            <div class="mx-auto mt-3">
+                                <a role="button" id="resendBtn" class=" w-100 fs-5">Annuler</a>
+                            </div>
+                            <script>
+                                $("#btnRegion").on("click", () => {
+                                    let value = $("#browser").val();
+                                    if (regs.includes(value)) {
+                                        toastr.success("all is good")
+                                        $("#modalRegion").modal("hide")
+                                        localStorage.setItem("region", value)
+                                    } else {
+                                        toastr.error("Désolé on ne délivre pas encore dans cette région/ville")
+
+                                    }
+                                })
+                            </script>
+                        </div>
+
+
+
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
     </main>
     @if ($position = Location::get($ip))
         <script>
-            alertify.alert("location", "Ceci est votre localidation : {{ $position->regionName }}")
+            if (localStorage.getItem("region") == undefined) {
+                alertify.confirm("Votre localization",
+                    "Basant sur votre adresse IP , ceci est votre région/ville : <br><strong>{{ $position->cityName . ' | ' . $position->regionName }}</strong>  <br>Confirmez-vous que cette région est votre région actuelle ?",
+                    () => {
+                        toastr.info("Région confimée")
+                        localStorage.setItem("region", "{{ $position->cityName }}")
+                    }, () => {
+                        toastr.warning("Région non confirmée")
+                        $("#modalRegion").modal("show")
+                    }).set({
+                    labels: {
+                        ok: "Oui, je confirme",
+                        cancel: "Non"
+                    }
+                })
+            }
         </script>
     @endif
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
@@ -158,6 +269,7 @@ if ($position = Location::get($ip)) {
 <script src="{{ asset('assets/vendor/glightbox/js/glightbox.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/swiper/swiper-bundle.min.js') }}"></script>
+
 
 <script></script>
 

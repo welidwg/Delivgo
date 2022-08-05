@@ -35,27 +35,24 @@
                                             class="input-group rounded-pill w-100 border-0 shadow sm bg-light justify-content-between align-items-center">
                                             <button class="btn fs-5 w-25 bg-transparent d-lg-none border-none color-1 ">
                                                 <i class="fas fa-flag"></i> </button>
-                                            <input type="text" placeholder="Quel est votre adresse" id=""
+                                            <input type="text" placeholder="Quel est votre ville ? " id="inputLocation"
                                                 class="rounded-pill mx-3 color-dark   bg-transparent form-control border-0 fs-5 shadow-none" />
-                                            <button type="submit " onclick="getLocation()"
+                                            <a id="triggerLocation"
                                                 class="btn d-none d-lg-flex color-1  align-items-center justify-content-around  fw-bold mx-2 bg-transparent border-none color-primary ">
                                                 <i class="fas fa-map-marker-alt mx-2"></i>
                                                 Utiliser ma position
 
-                                            </button>
+                                            </a>
                                             <span id="tete"></span>
                                         </div>
-                                        <a class=" mt-2 text-white fw-bold fs-4 d-block d-lg-none">
+                                        <a class=" mt-2 text-white fw-bold fs-4 d-block d-lg-none" id="triggerLocation2">
                                             Utiliser ma position
                                             <i class="fas fa-map-marker-alt"></i>
 
                                         </a>
                                     </form>
-                                    <script>
-                                        $("#searchLoc").on("submit", (e) => {
-                                            e.preventDefault()
-                                        })
-                                    </script>
+
+
                                 </div>
 
                             </div>
@@ -81,52 +78,55 @@
                 <p class="fw-bold" style="letter-spacing: 3px">Ceci nos partenaires</p>
             </div>
 
-            <div class="row restoCard" style="zoom: 0.97">
-                @forelse ($restos as $resto)
-                    <div class="col col-md-4 col-sm-12 mb-3">
-                        <a href="{{ url('/resto/' . $resto->user_id) }}">
-                            <div class="card shadow " style="border-radius: 20px">
-                                <div class="d-flex align-items-center justify-content-center w-100 text-center headerResto"
-                                    style="background-image: url(uploads/logos/{{ $resto->avatar }});background-size: contain; background-repeat: no-repeat;height: 200px;background-position: center">
-                                    <div class="w-100 h-100 d-flex justify-content-center  align-items-center titleResto ">
-                                        <h6 class="display-3 text-white fw-bold">{{ $resto->name }}</h6>
-
-                                    </div>
-                                </div>
-                                <div class="card-body p-1  px-0 ">
-                                    <div class="row mb-0 p-3 align-items-center" style="flex-wrap: nowrap">
-                                        <div class="col-8 ">
-                                            <span> <i class="fas fa-map-marker-alt"></i>
-                                                {{ $resto->address }} , {{ $resto->region->label }}</span>
-                                            {{-- <i class="fal fa-thumbs-up"></i> 55% --}}
-                                        </div>
-                                        <div class="col d-flex align-items-center justify-content-end"
-                                            style="flex-wrap: nowrap;white-space: nowrap;">
-                                            <div><i class="fal fa-biking-mountain"></i> {{ $resto->deliveryPrice }}.000 DT
-                                            </div>
-                                            {{-- &nbsp;|&nbsp; --}}
-                                            {{-- <div><i class="fas fa-dot"></i> 45-55 min</div> --}}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-
-                    </div>
-
-                @empty
-                    @include('main/layouts/notfound')
-                    <span class="text-center fs-4 fw-bold">Désolé<br>Il n'y a pas des restaurants pour le moment !</span>
-                @endforelse
-
-
-
-
-
-            </div>
+            <div id="restoContainer"></div>
+            <script>
+                $("#restoContainer").load("/restosContent/0")
+            </script>
 
         </div>
     </section>
+    <script>
+        $("#searchLoc").on("submit", (e) => {
+            e.preventDefault()
+        })
+        $("#inputLocation").on("keyup", (e) => {
+            let loc = $("#inputLocation").val();
+            if (loc == "") {
+                $("#restoContainer").load(`/restosContent/0`)
+
+
+            }
+            if (e.keyCode === 13) {
+                $("#restoContainer").load(`/restosContent/${loc}`)
+                setTimeout(() => {
+                    window.location.href = "#menu"
+                }, 500);
+
+            }
+        })
+        $("#triggerLocation,#triggerLocation2").on("click", (e) => {
+            console.log("test");
+            let location = localStorage.getItem("region")
+            if (location != undefined) {
+                $("#inputLocation").val(location)
+                if (regs.includes(location)) {
+                    toastr.success("all is good")
+                    $("#restoContainer").load(`/restosContent/${location}`)
+                    setTimeout(() => {
+                        window.location.href = "#menu"
+                    }, 500);
+                } else {
+                    $("#restoContainer").load(`/restosContent/${location}`)
+                    setTimeout(() => {
+                        window.location.href = "#menu"
+                    }, 500);
+
+                    toastr.error("Désolé on ne délivre pas encore dans cette région/ville")
+                }
+            }
+        })
+    </script>
+
     <section id="why-us" class="why-us">
         <div class="container">
 

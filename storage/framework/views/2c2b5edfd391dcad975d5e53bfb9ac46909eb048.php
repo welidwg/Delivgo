@@ -77,6 +77,22 @@ use Illuminate\Support\Carbon;
         <style>
 
         </style>
+        <script>
+            $.extend(true, $.fn.dataTable.defaults, {
+
+                "language": {
+                    "search": "Rechercher:",
+
+                    "paginate": {
+                        "first": "Premier",
+                        "last": "Dernier",
+                        "next": "Suivant",
+                        "previous": "Précédent"
+                    },
+                },
+
+            });
+        </script>
         <?php
             Carbon::setLocale('fr');
             

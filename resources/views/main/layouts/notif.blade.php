@@ -29,8 +29,9 @@
      </a>
      <hr>
  @empty
-     <div style="zoom: 0.95">
+     <div style="zoom: 0.9">
+         <p class="text-center">Aucune notification</p>
+
          @include('main/layouts/notfound')
-         <p class="text-center">No notifications yet</p>
      </div>
  @endforelse

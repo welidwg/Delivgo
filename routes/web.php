@@ -26,6 +26,7 @@ use App\Models\Drink;
 use App\Models\Garniture;
 use App\Models\Notification;
 use App\Models\Product;
+use App\Models\Region;
 use App\Models\RequestResto;
 use App\Models\Sauce;
 use App\Models\Supplement;
@@ -256,6 +257,26 @@ Route::get("/cartContent", function () {
     } else {
         return view("main/layouts/notfound", ["message" => "Votre panier est vide", "cart" => true]);
     }
+});
+
+Route::get("/restosContent/{params}", function (Request $req, $params) {
+
+    $city = Region::get();
+    $arr = [];
+    foreach ($city as $ct) {
+        array_push($arr, $ct->label);
+    }
+    if ($params == "0" || $params == "") {
+        $restos = User::where("type", 2)->where("city", "!=", "")->with("region")->get();
+    } else {
+        if (in_array($params, $arr)) {
+            $restos = User::where("type", 2)->where("city", "!=", "")->with("region")->get();
+        } else {
+            $restos = [];
+        }
+    }
+
+    return view("main/layouts/restoCard", ["restos" => $restos]);
 });
 
 Route::get('/resto/{id}', function ($id) {

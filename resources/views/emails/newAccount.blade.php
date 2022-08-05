@@ -18,7 +18,7 @@ use App\Models\User;
     <p>
         Bonjour {{ $user->name }}. <br>
         L'équipe de Delivgo vous félicite pour votre approbation chez eux ! <br>
-        Voila les détails de votre compte : <br>
+        Voici les détails de votre compte : <br>
         <strong>Nom :</strong>{{ $user->name }}.<br>
         <strong>Type :</strong>{{ $user->type == 2 ? 'Restaurant' : 'Livreur' }}.<br>
         <strong>Téléphone :</strong>{{ $user->phone }}.<br>

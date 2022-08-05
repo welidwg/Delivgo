@@ -29,9 +29,10 @@
      </a>
      <hr>
  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-     <div style="zoom: 0.95">
+     <div style="zoom: 0.9">
+         <p class="text-center">Aucune notification</p>
+
          <?php echo $__env->make('main/layouts/notfound', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-         <p class="text-center">No notifications yet</p>
      </div>
  <?php endif; ?>
 <?php /**PATH C:\wamp64\www\Delivgo\resources\views/main/layouts/notif.blade.php ENDPATH**/ ?>

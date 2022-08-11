@@ -75,12 +75,20 @@
 
             <div class="section-title">
                 <h2>Nos <span>Restaurants</span></h2>
-                <p class="fw-bold" style="letter-spacing: 3px">Ceci nos partenaires</p>
+                <p class="fw-bold" style="letter-spacing: 3px">Ceci sont nos partenaires</p>
             </div>
 
             <div id="restoContainer"></div>
             <script>
-                $("#restoContainer").load("/restosContent/0")
+                if (localStorage.region != undefined) {
+                    console.log(localStorage.region);
+                    let current = localStorage.region;
+                    $("#restoContainer").load(`/restosContent/${current.replaceAll(' ', '%20')}`)
+
+                } else {
+                    $("#restoContainer").load("/restosContent/0")
+
+                }
             </script>
 
         </div>
@@ -107,10 +115,14 @@
         $("#triggerLocation,#triggerLocation2").on("click", (e) => {
             console.log("test");
             let location = localStorage.getItem("region")
-            if (location != undefined) {
+            @if (Auth::check() && Auth::user()->city != '')
+                location = "{{ Auth::user()->region->label }}"
+            @endif
+
+            if (location != undefined && location != "undefined") {
                 $("#inputLocation").val(location)
                 if (regs.includes(location)) {
-                    toastr.success("all is good")
+                    // toastr.success("all is good")
                     $("#restoContainer").load(`/restosContent/${location}`)
                     setTimeout(() => {
                         window.location.href = "#menu"
@@ -123,6 +135,10 @@
 
                     toastr.error("Désolé on ne délivre pas encore dans cette région/ville")
                 }
+            } else {
+
+                Position()
+
             }
         })
     </script>

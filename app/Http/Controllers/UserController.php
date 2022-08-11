@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\MailController;
 use App\Jobs\TestJob;
 use App\Models\Code;
+use App\Models\Region;
 use App\Models\RestoConfig;
 use Nette\Utils\Random;
 use Twilio\Rest\Client;
@@ -282,12 +283,12 @@ class UserController extends Controller
                 // }
                 $cred = ["phone" => $req->phone, "password" => $req->password];
                 if (Auth::attempt($cred)) {
-                    return response(json_encode(["type" => "success", "message" => "Bien connecté", "user" => $user->type]), 200);
+                    return response(json_encode(["type" => "success", "message" => "Bien connecté", "user" => $user->type, "id" => $user->user_id]), 200);
                 } else {
                     return response(json_encode(["type" => "error", "message" => "Numéro ou mot de passe non valide"]), 500);
                 }
             }
-            return response(json_encode(["type" => "error", "message" => "Email ou mot de passe non valide"]), 500);
+            return response(json_encode(["type" => "error", "message" => "Téléphone ou mot de passe non valide"]), 500);
         } catch (\Throwable $th) {
             return response(json_encode(["type" => "error", "message" => $th->getMessage()]), 500);
         }
@@ -478,6 +479,18 @@ class UserController extends Controller
             return response(json_encode(["type" => "success", "message" => "Disponibilité modifiée"]), 200);
         } catch (\Throwable $th) {
             return response(json_encode(["type" => "error", "message" => $th->getMessage()]), 500);
+        }
+    }
+    public function UpdateAddress(Request $req, $id)
+    {
+        $user = User::where("user_id", $id)->first();
+        $check = Region::where("label", "like", "%$req->address%")->first();
+        if ($check) {
+            $user->city = $check->id;
+            $user->save();
+            return response(json_encode(["type" => "success", "message" => "Ville à jour", "ville" => $req->address]), 200);
+        } else {
+            return response(json_encode(["type" => "error", "message" => "Ville n'est pas supportée"]), 500);
         }
     }
 }

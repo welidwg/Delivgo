@@ -130,8 +130,9 @@
                                 <label for="" class="px-2 color-3 fs-5"><i
                                         class="fal fa-utensils-alt"></i></label>
                                 <div class="form-check form-switch">
-                                    <label des  style="width: auto" class="form-check-label" for="flexSwitchCheckDefault">
-                                        A des  garnitures ?</label>
+                                    <label des style="width: auto" class="form-check-label"
+                                        for="flexSwitchCheckDefault">
+                                        A des garnitures ?</label>
                                     <input class="form-check-input" type="checkbox" role="switch"
                                         id="flexSwitchCheckDefault" name="topping">
 
@@ -142,7 +143,7 @@
                                         class="fal fa-utensils-alt"></i></label>
                                 <div class="form-check form-switch">
                                     <label style="width: auto" class="form-check-label" for="flexSwitchCheckDefault">
-                                        A des  sauces ?</label>
+                                        A des sauces ?</label>
                                     <input class="form-check-input" type="checkbox" role="switch"
                                         id="flexSwitchCheckDefault" name="sauce">
 
@@ -153,7 +154,7 @@
                                         class="fal fa-utensils-alt"></i></label>
                                 <div class="form-check form-switch">
                                     <label style="width: auto" class="form-check-label" for="flexSwitchCheckDefault">
-                                        A des  boissons ?</label>
+                                        A des boissons ?</label>
                                     <input class="form-check-input" type="checkbox" role="switch"
                                         id="flexSwitchCheckDefault" name="drink">
 
@@ -162,7 +163,8 @@
                             <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                 <label for="picture" class="px-2 color-3 fs-5"><i class="fal fa-camera"></i>
                                 </label>
-                                <label style="width: auto;text-align: left" for="picture">&nbsp;&nbsp;Choisissez une photo pour le produit</label>
+                                <label style="width: auto;text-align: left" for="picture">&nbsp;&nbsp;Choisissez une
+                                    photo pour le produit</label>
                                 <input type="file" min="1" hidden id="picture"
                                     class="form-control shadow-none border-0  bg-transparent"
                                     placeholder="Product pic" name="picture" accept="image/*">
@@ -251,8 +253,8 @@
                             <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                 <label for="" class="px-2 color-3 fs-5"><i class="fal fa-coins"></i></label>
                                 <input type="number" step="0.1"
-                                    class="form-control shadow-none border-0  bg-transparent" placeholder="Prix unitaire (0 équivalent à gratuit)"
-                                    name="price" required>
+                                    class="form-control shadow-none border-0  bg-transparent"
+                                    placeholder="Prix unitaire (0 équivalent à gratuit)" name="price" required>
                             </div>
                             <input type="hidden" name="resto_id" value="{{ Auth::user()->user_id }}">
 
@@ -328,14 +330,15 @@
                             <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                 <label for="" class="px-2 color-3 fs-5"><i class="fal fa-coins"></i></label>
                                 <input type="number" step="0.1"
-                                    class="form-control shadow-none border-0  bg-transparent" placeholder="Prix unitaire (0 équivalent à gratuit)"
-                                    name="price" required>
+                                    class="form-control shadow-none border-0  bg-transparent"
+                                    placeholder="Prix unitaire (0 équivalent à gratuit)" name="price" required>
                             </div>
                             <input type="hidden" name="resto_id" value="{{ Auth::user()->user_id }}">
 
 
                             <div class="mx-auto mt-3">
-                                <button href="#!" type="submit" id="addSauceBtn" class="btn w-100">Ajoutez&nbsp;
+                                <button href="#!" type="submit" id="addSauceBtn"
+                                    class="btn w-100">Ajoutez&nbsp;
                                     <i class="fal fa-plus"></i></button>
                             </div>
                             @csrf
@@ -354,8 +357,7 @@
                                         $("#AddSauceForm").trigger("reset")
                                         $(".modal").modal("hide")
                                         setTimeout(() => {
-                                            $("#saucesTable").load("/dash/saucesTable");
-
+                                            $("#saucesTable").load("/dash/saucesTable")
                                         }, 700);
                                     })
                                     .catch(err => {
@@ -406,8 +408,8 @@
                             <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                 <label for="" class="px-2 color-3 fs-5"><i class="fal fa-coins"></i></label>
                                 <input type="number" step="0.1"
-                                    class="form-control shadow-none border-0  bg-transparent" placeholder="Prix unitaire (0 équivalent à gratuit)"
-                                    name="price" required>
+                                    class="form-control shadow-none border-0  bg-transparent"
+                                    placeholder="Prix unitaire (0 équivalent à gratuit)" name="price" required>
                             </div>
                             <input type="hidden" name="resto_id" value="{{ Auth::user()->user_id }}">
 
@@ -482,8 +484,8 @@
                             <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                 <label for="" class="px-2 color-3 fs-5"><i class="fal fa-coins"></i></label>
                                 <input type="number" step="0.1"
-                                    class="form-control shadow-none border-0  bg-transparent" placeholder="Prix unitaire (0 équivalent à gratuit)"
-                                    name="price" required>
+                                    class="form-control shadow-none border-0  bg-transparent"
+                                    placeholder="Prix unitaire (0 équivalent à gratuit)" name="price" required>
                             </div>
                             <input type="hidden" name="resto_id" value="{{ Auth::user()->user_id }}">
 

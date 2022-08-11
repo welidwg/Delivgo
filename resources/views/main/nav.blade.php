@@ -73,9 +73,13 @@
               <div class="dropdown"><a href="#" class="fs-5"><i class="fas fa-bell"></i></a>
                   <ul class="" style="width: 400px;right:-190px">
                       <div>
-                          <h6 class="text-center fs-5">Notifications</h6>
+                          <h6 class="text-center fs-5">Notifications
+
+                              <a href="#" class="text-danger EmptyNotif"><i class="fas fa-trash"></i></a>
+                          </h6>
                           <hr>
                       </div>
+                      <script></script>
 
                       <div class=""
                           style="max-height: 200px;height:200px;max-width: 100%;width:100%;overflow: auto;"
@@ -94,6 +98,28 @@
                       }, 10 * 1000);
                   }
                   notifLoad()
+                  $('.EmptyNotif').on("click", (e) => {
+                      alertify.confirm("Confirmation", "Vous êtes sûr d'effacer vos notifications ?", () => {
+                              axios.post("/notif/empty", {
+                                      _token: "{{ csrf_token() }}"
+                                  })
+                                  .then(res => {
+                                      console.log(res)
+                                      toastr.info("Toutes vos notifications sont supprimées")
+                                      notifLoad()
+                                  })
+                                  .catch(err => {
+                                      console.error(err);
+                                      toastr.error("Erreur inconnue,ressayer plus tard")
+                                  })
+                          }, () => {})
+                          .set({
+                              labels: {
+                                  ok: "Oui",
+                                  cancel: "Annuler"
+                              }
+                          })
+                  })
               </script>
               <div class="dropdown">
                   <a href="#!" class="btn    mx-2 d-flex align-items-center justify-content-between">
@@ -102,10 +128,11 @@
                       <span class="text-white d-none d-lg-flex"> {{ Auth::user()->name }}</span></a>
                   <ul>
                       @if (Auth::user()->type != 1)
-                          <li><a href={{ url('/dash') }}> <i class="fal fa-tachometer"></i> Tableau de bord</a></li>
+                          <li><a href={{ url('/dash') }}> <i class="fal fa-tachometer"></i>&nbsp;Mon espace</a></li>
                       @endif
-                      <li><a href={{ Auth::user()->type == 1 ? url('/profile') : url('/dash/profile') }}> <i
-                                  class="fal fa-user"></i> Mon profile</a></li>
+                      <li><a
+                              href={{ Auth::user()->type == 1 ? url('/profile/' . Auth::user()->user_id) : url('/dash/profile/' . Auth::user()->user_id) }}>
+                              <i class="fal fa-user"></i> Mon profile</a></li>
 
 
                       <li><a href={{ url('/logout') }}><i class="fal fa-sign-out-alt"></i> Déconnexion</a></li>
@@ -194,6 +221,17 @@
                                       window.location.href = "/dash"
 
                                   }
+                                  if (localStorage.region != undefined) {
+                                      axios.post("/user/updateAddress/" + res.data.id, {
+                                          address: localStorage.region
+                                      }).then((res) => {
+                                          console.log(res);
+
+                                      }).catch((err) => {
+                                          console.log(err.response.data);
+                                      })
+                                  }
+
                               }, 700);
                               $("#loginForm").trigger("reset")
 

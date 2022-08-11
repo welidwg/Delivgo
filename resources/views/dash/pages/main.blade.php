@@ -36,6 +36,7 @@
                             .then(res => {
                                 console.log(res)
                                 toastr.info(res.data.message)
+                                LoadContentMain()
                             })
                             .catch(err => {
                                 console.error(err);
@@ -289,7 +290,7 @@
                             <div class="col me-2">
                                 <div class="text-uppercase text-primary fw-bold text-xs mb-1">
                                     <a id="addRegBtn" data-bs-toggle="modal" data-bs-target="#addReg">
-                                        Region</a>
+                                        Région/Ville</a>
                                     <div class="modal fade" id="addReg" tabindex="-1" role="dialog"
                                         aria-labelledby="" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -311,9 +312,9 @@
                                                         <div>
                                                             <form action="#" id="AddRegForm" class="formsModal">
                                                                 <h6 for="" class="mb-3 fs-3 color-3 text-center">
-                                                                    Ajouter région</h6>
+                                                                    Ajouter région/ville</h6>
                                                                 <small class="text-muted text-center mb-2"
-                                                                    style="font-size: 9px">*
+                                                                    style="font-size: 12px">*
                                                                     Séparez les noms par des
                                                                     virgules ' <strong style="font-size: 11px">,</strong> '
                                                                     si vous
@@ -423,21 +424,27 @@
         </div>
     @endif
     <ul class="nav justify-content-end flex-column">
-        @if (Auth::user()->type == 2 || Auth::user()->type == 3)
-            <li class="nav-item" style="">
-                <a class="nav-link  text-primary" href="#commandes"><i
-                        class="fal fa-angle-double-right"></i>&nbsp;Commandes</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-primary" href="#demandes"><i class="fal fa-angle-double-right"></i>&nbsp;Demandes
-                    de
-                    livreurs</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-primary" href="#"><i class="fal fa-angle-double-right"></i>&nbsp;Commande
-                    par
-                    message</a>
-            </li>
+        @if (Auth::user()->type != 4)
+            @if (Auth::user()->type == 2)
+                <li class="nav-item" style="">
+                    <a class="nav-link  text-primary" href="#commandes"><i
+                            class="fal fa-angle-double-right"></i>&nbsp;Commandes non terminées</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="#ordersRestoMessage"><i
+                            class="fal fa-angle-double-right"></i>&nbsp;Commande
+                        par
+                        message</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="#demandes"><i
+                            class="fal fa-angle-double-right"></i>&nbsp;Demandes
+                        de
+                        livreurs</a>
+                </li>
+            @endif
+            @if (Auth::user()->type == 3)
+            @endif
         @endif
 
         {{-- <li class="nav-item">
@@ -470,10 +477,14 @@
                                     use App\Models\Config;
                                     $check = Config::where('id', '!=', null)->first();
                                     $frais = null;
+                                    $du = null;
+                                    $to = null;
                                     $old = false;
                                     
                                     if ($check) {
                                         $frais = $check->frais_nuit;
+                                        $du = $check->du;
+                                        $to = $check->to;
                                         $old = true;
                                     }
                                     
@@ -485,6 +496,19 @@
                                         placeholder="Frais" name="frais_nuit" required value="{{ $frais }}">
 
                                 </div>
+                                <div class="input-group mb-2  rounded-pill bg-light  align-items-center">
+                                    <label for="" class="px-2 color-3 fs-5">Du
+                                    </label>
+                                    <input type="time" class="form-control shadow-none border-0  bg-transparent"
+                                        placeholder="Du" name="du" required value="{{ $du }}">
+                                </div>
+                                <div class="input-group mb-2  rounded-pill bg-light  align-items-center">
+                                    <label for="" class="px-2 color-3 fs-5">
+                                        Jusqu'à</label>&nbsp;
+                                    <input type="time" class="form-control shadow-none border-0  bg-transparent"
+                                        placeholder="Jusqu'à" name="to" required value="{{ $to }}">
+                                </div>
+
                                 @csrf
 
 
@@ -546,11 +570,20 @@
     <script>
         function LoadContentMain() {
             $("#mainContent").load("/dash/mainContent")
-            setTimeout(() => {
-                LoadContentMain()
-            }, 14000);
-
         }
+        timer = setInterval(LoadContentMain(), 100 * 5000);
+
+
+
+        $('#mainContent').hover(function() {
+            clearInterval(timer);
+        }, function() {
+
+            timer = setInterval(LoadContentMain, 100 * 5000);
+        });
+
+
+
         LoadContentMain()
     </script>
 @endsection

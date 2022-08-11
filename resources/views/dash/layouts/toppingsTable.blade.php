@@ -2,7 +2,7 @@
     <thead>
         <tr>
             <th class="border-top-0">Nom</th>
-               <th class="border-top-0">Prix unitaire</th>
+            <th class="border-top-0">Prix unitaire</th>
             <th class="border-top-0 mx-auto">Actions</th>
 
         </tr>
@@ -26,7 +26,7 @@
                     <div class="">
 
                         <a href="#!" id="editGarn{{ $garn->id }}" class="btn shadow-none text-primary"
-                            data-bs-toggle="modal" data-bs-target="editToppingModal{{ $garn->id }}">
+                            data-bs-toggle="modal" data-bs-target="#editToppingModal{{ $garn->id }}">
                             <i class="fas fa-edit"></i>
                         </a>
                         <a href="#!" id="deleteGarn{{ $garn->id }}" class="btn shadow-none text-danger">
@@ -36,7 +36,7 @@
                     </div>
                     <script>
                         $("#deleteGarn{{ $garn->id }}").on("click", (e) => {
-                            alertify.confirm("Confirmation", "Are you sure that you want to delete this ?", () => {
+                            alertify.confirm("Confirmation", "Vous êtes sûr de supprimer cette garniture?", () => {
                                 axios.delete("/topping/delete/{{ $garn->id }}")
                                     .then(res => {
                                         console.log(res)

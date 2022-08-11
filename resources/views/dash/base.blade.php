@@ -81,6 +81,9 @@ use Illuminate\Support\Carbon;
         <style>
 
         </style>
+
+        <script src="{{ asset('js/moment/moment.js') }}"></script>
+        <script src="{{ asset('js/moment/fr.js') }}"></script>
         <script>
             $.extend(true, $.fn.dataTable.defaults, {
 
@@ -198,7 +201,8 @@ use Illuminate\Support\Carbon;
                         <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i
                                 class="ti-menu ti-close"></i></a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
-                            <h6 class="dropdown-header fw-bold">Notifications</h6>
+                            <h6 class="dropdown-header fw-bold">Notifications <a href="#"
+                                    class="text-danger EmptyNotif"><i class="fas fa-trash"></i></a></h6>
                             <div id="notifCont1" style="height: 300px;max-height: 300px;overflow: auto;">
                             </div>
                             <script>
@@ -248,7 +252,8 @@ use Illuminate\Support\Carbon;
                                         class="fas fa-bell fa-fw"></i></a>
 
                                 <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
-                                    <h6 class="dropdown-header">Notifications</h6>
+                                    <h6 class="dropdown-header">Notifications <a href="#"
+                                            class="text-danger EmptyNotif"><i class="fas fa-trash"></i></a></h6>
                                     <div id="notifCont"
                                         style="height: 300px;max-height: 300px;overflow: auto;width: 500px">
                                     </div>
@@ -265,6 +270,30 @@ use Illuminate\Support\Carbon;
                                     Alerts</a> --}}
                                 </div>
                             </li>
+                            <script>
+                                $('.EmptyNotif').on("click", (e) => {
+                                    alertify.confirm("Confirmation", "Vous êtes sûr d'effacer vos notifications ?", () => {
+                                            axios.post("/notif/empty", {
+                                                    _token: "{{ csrf_token() }}"
+                                                })
+                                                .then(res => {
+                                                    console.log(res)
+                                                    toastr.info("Toutes vos notifications sont supprimées")
+                                                    notifLoad()
+                                                })
+                                                .catch(err => {
+                                                    console.error(err);
+                                                    toastr.error("Erreur inconnue,ressayer plus tard")
+                                                })
+                                        }, () => {})
+                                        .set({
+                                            labels: {
+                                                ok: "Oui",
+                                                cancel: "Annuler"
+                                            }
+                                        })
+                                })
+                            </script>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic"
                                     href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
@@ -325,6 +354,23 @@ use Illuminate\Support\Carbon;
                                         class="mdi mdi-view-dashboard"></i><span class="hide-menu">Tableau de
                                         board</span></a>
                             </li>
+                            @if (Auth::user()->type == 2)
+                                <li class="sidebar-item {{ request()->routeIs('dash.menu') ? 'selected' : '' }} ">
+                                    <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                        href="{{ route('dash.menu') }}" aria-expanded="false">
+
+                                        <i class="fal fa-burger-soda"></i>&nbsp;<span class="hide-menu">Mon
+                                            Menu</span></a>
+                                </li>
+                                <li
+                                    class="sidebar-item {{ request()->routeIs('dash.historique') ? 'selected' : '' }} ">
+                                    <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                        href="{{ route('dash.historique') }}" aria-expanded="false">
+
+                                        <i class="fal fa-history"></i>&nbsp;<span
+                                            class="hide-menu">Historique</span></a>
+                                </li>
+                            @endif
                             @if (Auth::user()->type == 4)
                                 <li class="sidebar-item {{ request()->routeIs('dash.users') ? 'selected' : '' }} ">
                                     <a class="sidebar-link waves-effect waves-dark sidebar-link"
@@ -342,18 +388,10 @@ use Illuminate\Support\Carbon;
                             </li>
                             <li class="sidebar-item {{ request()->routeIs('dash.profile') ? 'selected' : '' }} ">
                                 <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                    href="{{ route('dash.profile') }}" aria-expanded="false"><i
+                                    href="{{ url('/dash/profile/' . Auth::user()->user_id) }}" aria-expanded="false"><i
                                         class="mdi mdi-account-network"></i><span class="hide-menu">Profile</span></a>
                             </li>
-                            @if (Auth::user()->type == 2)
-                                <li class="sidebar-item {{ request()->routeIs('dash.menu') ? 'selected' : '' }} ">
-                                    <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                        href="{{ route('dash.menu') }}" aria-expanded="false">
 
-                                        <i class="fal fa-burger-soda"></i>&nbsp;<span class="hide-menu">Mon
-                                            Menu</span></a>
-                                </li>
-                            @endif
                             {{-- <li class="sidebar-item">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="table-basic.html"
                                 aria-expanded="false"><i class="mdi mdi-border-all"></i><span
@@ -407,7 +445,7 @@ use Illuminate\Support\Carbon;
 
                     </div>
                 </div>
-                <div class="container-fluid">
+                <div class="container-fluid" style="zoom: 0.85">
 
                     @section('content')
 
@@ -439,8 +477,8 @@ use Illuminate\Support\Carbon;
                                         <br>
                                     </p>
                                     <div class="mx-auto mt-3">
-                                        <a href={{ url('/dash/profile') }} id="checkBtnSubmit"
-                                            class="btn  w-100">Vers
+                                        <a href={{ url('/dash/profile/' . Auth::user()->user_id) }}
+                                            id="checkBtnSubmit" class="btn  w-100">Vers
                                             votre
                                             profile <i class="fad fa-angle-double-right"></i></a>
                                     </div>
@@ -481,8 +519,6 @@ use Illuminate\Support\Carbon;
         <!--Custom JavaScript -->
         <script src={{ asset('dist/js/custom.js') }}></script>
 
-        <script src="{{ asset('js/moment/moment.js') }}"></script>
-        <script src="{{ asset('js/moment/fr.js') }}"></script>
         <script>
             moment.locale('fr')
         </script>

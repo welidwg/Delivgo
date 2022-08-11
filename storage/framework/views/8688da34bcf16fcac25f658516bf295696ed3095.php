@@ -33,7 +33,7 @@
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"
         integrity="sha512-xIPqqrfvUAc/Cspuj7Bq0UtHNo/5qkdyngx6Vwt+tmbvTLDszzXM0G6c91LXmGrRx8KEPulT+AfOOez+TeVylg=="
@@ -116,11 +116,7 @@ Carbon::setLocale('fr');
 ?>
 <?php
 $ip = request()->ip() == '127.0.0.1' ? '102.154.237.218' : request()->ip();
-if ($position = Location::get($ip)) {
-    // echo $position->regionName;
-} else {
-    // Failed retrieving position.
-}
+
 ?>
 
 
@@ -133,8 +129,8 @@ if ($position = Location::get($ip)) {
             <div class="lds-pos"></div>
         </div>
     </div>
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="cart" style="width: 700px !important"
-        aria-labelledby="">
+    <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="true" tabindex="-1" id="cart"
+        style="width: 700px !important" aria-labelledby="">
 
     </div>
     <script>
@@ -143,6 +139,104 @@ if ($position = Location::get($ip)) {
 
     <?php echo $__env->make('main/nav', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <main id="main" style="min-height: 100vh">
+        <?php if(Auth::check()): ?>
+            <a data-bs-target="#demandeLIvr" data-bs-toggle="modal"
+                class="floatBtn bg-primary d-flex align-items-center justify-content-center"
+                title="Demandez un livreur ">
+                <i class="fal fa-biking-mountain"></i> </a>
+            <div class="modal fade in" id="demandeLIvr" aria-labelledby="demandeLIvr" aria-hidden="false">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content rounded-0">
+                        <div class="modal-body p-4 px-5 ">
+
+
+
+                            <div class="main-content text-center mb-3 py-auto">
+                                <a href="#" style="" class="close-btn" data-bs-dismiss="modal"
+                                    aria-label="Close">
+                                    <span aria-hidden="true"><span class="fal fa-times"></span></span>
+                                </a>
+
+
+                                <form action="#" class="formsModal" id="messageForm3">
+                                    <h6 for="" class="mb-3 fs-3 color-3">Demandez un livreur</h6>
+                                    <small>*Ici vous pouvez demandez d'un livreur de vous livrer vos
+                                        achats,médicaments,etc...</small>
+
+                                    <div class="input-group mb-2 rounded bg-light  align-items-center">
+
+                                        <textarea style="resize: none" rows="5" class="form-control shadow-none border-0  bg-transparent"
+                                            placeholder="Votre commande par details" name="message"></textarea>
+                                    </div>
+
+                                    <div class="input-group mb-2 rounded-pill bg-light  align-items-center justify-content-center"
+                                        id="avatarContainer">
+
+                                        <label for="picture" class="test-center" style="width: auto"> <i
+                                                class="fal fa-camera"></i> Ajoutez une image (optionel)</label>
+
+                                        <input type="file"
+                                            class="form-control shadow-none border-0 text-center bg-transparent"
+                                            accept="image/*" id="picture" name="picture" hidden>
+
+                                        <img id="imageCont" src="#" alt="" width="35px"
+                                            class="img-fluid rounded" style="display: none">
+                                    </div>
+                                    <script>
+                                        $('#picture').change(function() {
+                                            var i = $(this).prev('label').clone();
+                                            var file = $('#picture')[0].files[0].name;
+                                            $(this).prev('label').text("Cliquez pour changer");
+                                            var reader = new FileReader();
+                                            reader.onload = function(e) {
+                                                $('#imageCont').fadeIn("slow")
+                                                $('#imageCont').attr('src', e.target.result)
+                                            };
+                                            reader.readAsDataURL($('#picture')[0].files[0]);
+
+
+                                        });
+                                    </script>
+                                    <input type="hidden" name="user_id" value="<?php echo e(Auth::user()->user_id); ?>">
+                                    <input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>">
+                                    <div class="mx-auto mt-3">
+                                        <button type="submit" class="btn w-100" id="btnLogin">Passez la commande <i
+                                                class="fal fa-check"></i></button>
+                                    </div>
+                                    <?php echo csrf_field(); ?>
+                                </form>
+                                <script>
+                                    $("#messageForm3").on("submit", (e) => {
+                                        e.preventDefault()
+                                        let formData = new FormData($("#messageForm3")[0]);
+                                        axios.post("/otherCommande/add", formData)
+                                            .then(res => {
+                                                toastr.success(res.data.message)
+                                                $("#messageForm3").trigger("reset")
+                                                $(".modal").modal("hide")
+                                                $('#imageCont').fadeOut("slow")
+                                                $('#imageCont').attr('src', "")
+                                            })
+                                            .catch(err => {
+                                                console.error(err);
+                                                toastr.error("Quelque chose s'est mal passé")
+
+                                            })
+
+                                    })
+                                </script>
+
+                            </div>
+
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
         <?php $__env->startSection('content'); ?>
 
         <?php echo $__env->yieldSection(); ?>
@@ -166,9 +260,9 @@ if ($position = Location::get($ip)) {
                                 <label for="" class="px-2 color-3 fs-5"><i
                                         class="fal fa-map-marker-alt"></i></label>
                                 
-                                <input list="browsers"
-                                    class="form-control shadow-none border-0 text-center bg-transparent" name="browser"
-                                    id="browser">
+                                <input list="browsers" placeholder="exp(Khnisse,Sahline,Monastir,..)"
+                                    class="form-control shadow-none border-0 text-center bg-transparent"
+                                    name="browser" id="browser">
                                 <script>
                                     let regs = []
                                 </script>
@@ -194,21 +288,42 @@ if ($position = Location::get($ip)) {
                                     <i class="fal fa-sign-in-alt"></i></a>
                             </div>
                             <div class="mx-auto mt-3">
-                                <a role="button" id="resendBtn" class=" w-100 fs-5">Annuler</a>
+                                <a role="button" id="resendBtn" data-bs-dismiss="modal"
+                                    class=" w-100 fs-5">Annuler</a>
                             </div>
                             <script>
                                 $("#btnRegion").on("click", () => {
                                     let value = $("#browser").val();
-                                    if (regs.includes(value)) {
-                                        toastr.success("all is good")
-                                        $("#modalRegion").modal("hide")
-                                        localStorage.setItem("region", value)
+                                    localStorage.setItem("region", value)
+                                    $("#modalRegion").modal("hide")
+
+                                    if (!regs.includes(value)) {
+                                        toastr.warning(
+                                            "<span style='color:black'>Cette région/ville n'est pas encore dans nos zones de livraison</span>"
+                                        )
+
                                     } else {
-                                        toastr.error("Désolé on ne délivre pas encore dans cette région/ville")
+                                        <?php if(Auth::check()): ?>
+                                            axios.post("/user/updateAddress/<?php echo e(Auth::user()->user_id); ?>", {
+                                                adresse: value
+                                            }).then((res) => {
+                                                console.log(res);
+                                                window.location.reload();
+
+
+                                            }).catch((err) => {
+                                                console.log(err.response.data);
+                                            })
+                                        <?php endif; ?>
 
                                     }
                                 })
+                                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+                                var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                                    return new bootstrap.Tooltip(tooltipTriggerEl)
+                                })
                             </script>
+
                         </div>
 
 
@@ -221,26 +336,7 @@ if ($position = Location::get($ip)) {
 
         </div>
     </main>
-    <?php if($position = Location::get($ip)): ?>
-        <script>
-            if (localStorage.getItem("region") == undefined) {
-                alertify.confirm("Votre localization",
-                    "Basant sur votre adresse IP , ceci est votre région/ville : <br><strong><?php echo e($position->cityName . ' | ' . $position->regionName); ?></strong>  <br>Confirmez-vous que cette région est votre région actuelle ?",
-                    () => {
-                        toastr.info("Région confimée")
-                        localStorage.setItem("region", "<?php echo e($position->cityName); ?>")
-                    }, () => {
-                        toastr.warning("Région non confirmée")
-                        $("#modalRegion").modal("show")
-                    }).set({
-                    labels: {
-                        ok: "Oui, je confirme",
-                        cancel: "Non"
-                    }
-                })
-            }
-        </script>
-    <?php endif; ?>
+  
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
 
@@ -266,6 +362,41 @@ if ($position = Location::get($ip)) {
 <script src="<?php echo e(asset('assets/js/main.js')); ?>"></script>
 <script src="<?php echo e(asset('dist/js/custom.js')); ?>"></script>
 <script></script>
+<?php if($position = Location::get($ip)): ?>
+    <script>
+        function Position(cond) {
+            alertify.confirm("Votre emplacement",
+                "Basant sur votre adresse IP , ceci est votre région/ville : <br><strong><?php echo e($position->cityName . ' | ' . $position->regionName); ?></strong>  <br>Confirmez-vous que cette région/ville est votre emplacement actuelle ?",
+                () => {
+                    localStorage.setItem("region", "<?php echo e($position->cityName); ?>")
+                    <?php if(Auth::check()): ?>
+                        axios.post("/user/updateAddress/<?php echo e(Auth::user()->user_id); ?>", {
+                            address: "<?php echo e($position->cityName); ?>"
+                        }).then((res) => {
+                            console.log(res);
+                            if (cond) {
+                                window.location.reload();
+                            }
+
+                        }).catch((err) => {
+                            console.log(err.response.data);
+                        })
+                    <?php endif; ?>
+                }, () => {
+                    $("#modalRegion").modal("show")
+                }).set({
+                labels: {
+                    ok: "Oui, je confirme",
+                    cancel: "Non"
+                }
+            })
+        }
+        if (localStorage.getItem("region") == undefined) {
+
+            Position()
+        }
+    </script>
+<?php endif; ?>
 
 </html>
 <?php /**PATH C:\wamp64\www\Delivgo\resources\views/main/base.blade.php ENDPATH**/ ?>

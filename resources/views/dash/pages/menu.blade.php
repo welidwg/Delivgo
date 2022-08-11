@@ -286,6 +286,103 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                     <script>
                         $("#categoriesTable").load("/dash/categoriesTable")
                     </script>
+                    @php
+                    @endphp
+                    @forelse ($categs as $cat)
+                        {{-- Product Edit --}}
+                        <div class="modal fade" id="editCatModal{{ $cat->id }}" tabindex="-1" role="dialog"
+                            aria-labelledby="" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content rounded-0">
+                                    <div class="modal-body p-4 px-5 ">
+
+
+                                        <div class="main-content  mb-3 py-auto">
+
+                                            <a href="#" style="" class="close-btn" data-bs-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true"><span class="fal fa-times"></span></span>
+                                            </a>
+
+
+
+
+                                            <div>
+                                                <form action="#" id="editCatForm{{ $cat->id }}"
+                                                    class="formsModal">
+                                                    <h6 for="" class="mb-3 fs-3 color-3 text-center">Modifier
+                                                        Catégorie</h6>
+
+                                                    <div
+                                                        class="input-group mb-2 rounded-pill bg-light  align-items-center">
+                                                        <label for="" class="px-2 color-3 fs-5"><i
+                                                                class="fal fa-tag"></i></label>
+                                                        <input type="text" value="{{ $cat->label }}"
+                                                            class="form-control shadow-none border-0  bg-transparent"
+                                                            placeholder="titre" name="label" required>
+                                                    </div>
+
+
+
+                                                    <div class="mx-auto mt-3">
+                                                        <button href="#!" type="submit"
+                                                            id="editCatBtn{{ $cat->id }}"
+                                                            class="btn w-100">Modifier&nbsp;
+                                                            <i class="fal fa-check"></i></button>
+                                                    </div>
+                                                    @csrf
+                                                </form>
+                                            </div>
+
+                                        </div>
+                                        <script>
+                                            let oldvalEditCat{{ $cat->id }} = $("#editCatBtn{{ $cat->id }}").html()
+
+                                            $("#editCatForm{{ $cat->id }}").on("submit", (e) => {
+                                                e.preventDefault()
+                                                $("#editCatBtn{{ $cat->id }}").html(spinner)
+                                                let formEditCat{{ $cat->id }} = $("#editCatForm{{ $cat->id }}")[0]
+                                                let formdataEditCat{{ $cat->id }} = new FormData(formEditCat{{ $cat->id }})
+
+                                                axios.post("/category/update/{{ $cat->id }}", formdataEditCat{{ $cat->id }})
+                                                    .then(res => {
+                                                        toastr.info(res.data.message)
+                                                        $(".modal").modal("hide")
+                                                        setTimeout(() => {
+                                                            $("#categoriesTable").load("/dash/categoriesTable")
+                                                        }, 700);
+
+                                                    })
+                                                    .catch(err => {
+                                                        console.error(err);
+                                                        if (err.response.data.type != undefined) {
+
+                                                            toastr.error(err.response.data.message)
+                                                        } else {
+                                                            for (const k in err.response.data) {
+                                                                toastr.error(err.response.data[k])
+
+                                                            }
+                                                        }
+                                                    }).finally(() => {
+                                                        $("#editCatBtn{{ $cat->id }}").html(
+                                                            oldvalEditCat{{ $cat->id }})
+                                                    })
+
+
+                                            })
+                                        </script>
+
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    @empty
+                    @endforelse
                 </div>
             </div>
         </div>
@@ -473,10 +570,6 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                                                 aria-label="Close">
                                                 <span aria-hidden="true"><span class="fal fa-times"></span></span>
                                             </a>
-
-
-
-
                                             <div>
                                                 <form action="#" id="editToppForm{{ $topping->id }}"
                                                     class="formsModal">
@@ -520,9 +613,9 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                                                 e.preventDefault()
                                                 $("#editToppBtn{{ $topping->id }}").html(spinner)
                                                 let formEditTopp{{ $topping->id }} = $("#editToppForm{{ $topping->id }}")[0]
-                                                let formEditTopp{{ $topping->id }} = new FormData(formEditTopp{{ $topping->id }})
+                                                let formEditToppData{{ $topping->id }} = new FormData(formEditTopp{{ $topping->id }})
 
-                                                axios.post("/toppings/update/{{ $topping->id }}", formEditTopp{{ $topping->id }})
+                                                axios.post("/topping/update/{{ $topping->id }}", formEditToppData{{ $topping->id }})
                                                     .then(res => {
                                                         toastr.info(res.data.message)
                                                         $(".modal").modal("hide")
@@ -543,7 +636,7 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                                                             }
                                                         }
                                                     }).finally(() => {
-                                                        $("#editSuppBtn{{ $supplement->id }}").html(
+                                                        $("#editToppBtn{{ $topping->id }}").html(
                                                             oldvalEdit{{ $supplement->id }})
                                                     })
 
@@ -594,6 +687,112 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                     <script>
                         $("#saucesTable").load("/dash/saucesTable")
                     </script>
+                    @php
+                        $saucess = Sauce::where('resto_id', Auth::user()->user_id)->get();
+                    @endphp
+                    @forelse ($saucess as $sc)
+                        {{-- Product Edit --}}
+                        <div class="modal fade" id="editSauceModal{{ $sc->id }}" tabindex="-1" role="dialog"
+                            aria-labelledby="" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content rounded-0">
+                                    <div class="modal-body p-4 px-5 ">
+
+
+                                        <div class="main-content  mb-3 py-auto">
+
+                                            <a href="#" style="" class="close-btn" data-bs-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true"><span class="fal fa-times"></span></span>
+                                            </a>
+
+
+
+
+                                            <div>
+                                                <form action="#" id="editSauceForm{{ $sc->id }}"
+                                                    class="formsModal">
+                                                    <h6 for="" class="mb-3 fs-3 color-3 text-center">Modifier
+                                                        Sauce</h6>
+
+                                                    <div
+                                                        class="input-group mb-2 rounded-pill bg-light  align-items-center">
+                                                        <label for="" class="px-2 color-3 fs-5"><i
+                                                                class="fal fa-tag"></i></label>
+                                                        <input type="text" value="{{ $sc->label }}"
+                                                            class="form-control shadow-none border-0  bg-transparent"
+                                                            placeholder="titre" name="label" required>
+                                                    </div>
+                                                    <div
+                                                        class="input-group mb-2 rounded-pill bg-light  align-items-center">
+                                                        <label for="" class="px-2 color-3 fs-5"><i
+                                                                class="fal fa-coins"></i></label>
+                                                        <input type="number" step="0.1" value="{{ $sc->price }}"
+                                                            class="form-control shadow-none border-0  bg-transparent"
+                                                            placeholder="prix unitaire" name="price" required>
+                                                    </div>
+
+
+                                                    <div class="mx-auto mt-3">
+                                                        <button href="#!" type="submit"
+                                                            id="editSauceBtn{{ $sc->id }}"
+                                                            class="btn w-100">Modifier&nbsp;
+                                                            <i class="fal fa-check"></i></button>
+                                                    </div>
+                                                    @csrf
+                                                </form>
+                                            </div>
+
+                                        </div>
+                                        <script>
+                                            let oldvalEditSauce{{ $sc->id }} = $("#editSauceBtn{{ $sc->id }}").html()
+
+                                            $("#editSauceForm{{ $sc->id }}").on("submit", (e) => {
+                                                e.preventDefault()
+                                                $("#editSauceBtn{{ $sc->id }}").html(spinner)
+                                                let formEditSauce{{ $sc->id }} = $("#editSauceForm{{ $sc->id }}")[0]
+                                                let formdataEditSauce{{ $sc->id }} = new FormData(formEditSauce{{ $sc->id }})
+
+                                                axios.post("/sauce/update/{{ $sc->id }}", formdataEditSauce{{ $sc->id }})
+                                                    .then(res => {
+                                                        toastr.info(res.data.message)
+                                                        $(".modal").modal("hide")
+                                                        setTimeout(() => {
+                                                            $("#saucesTable").load("/dash/saucesTable")
+                                                        }, 700);
+
+                                                    })
+                                                    .catch(err => {
+                                                        console.error(err);
+                                                        if (err.response.data.type != undefined) {
+
+                                                            toastr.error(err.response.data.message)
+                                                        } else {
+                                                            for (const k in err.response.data) {
+                                                                toastr.error(err.response.data[k])
+
+                                                            }
+                                                        }
+                                                    }).finally(() => {
+                                                        $("#editSauceBtn{{ $sc->id }}").html(
+                                                            oldvalEditSauce{{ $sc->id }})
+                                                    })
+
+
+                                            })
+                                        </script>
+
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    @empty
+                    @endforelse
+
                 </div>
             </div>
         </div>
@@ -623,6 +822,112 @@ $categs = Category::where('resto_id', Auth::user()->user_id)->get();
                     <script>
                         $("#drinksTable").load("/dash/drinksTable")
                     </script>
+                    @php
+                        $drinkss = Drink::where('resto_id', Auth::user()->user_id)->get();
+                    @endphp
+                    @forelse ($drinkss as $dr)
+                        {{-- Product Edit --}}
+                        <div class="modal fade" id="editDrinkModal{{ $dr->id }}" tabindex="-1" role="dialog"
+                            aria-labelledby="" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content rounded-0">
+                                    <div class="modal-body p-4 px-5 ">
+
+
+                                        <div class="main-content  mb-3 py-auto">
+
+                                            <a href="#" style="" class="close-btn" data-bs-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true"><span class="fal fa-times"></span></span>
+                                            </a>
+
+
+
+
+                                            <div>
+                                                <form action="#" id="editDrinkForm{{ $dr->id }}"
+                                                    class="formsModal">
+                                                    <h6 for="" class="mb-3 fs-3 color-3 text-center">Modifier
+                                                        Drink</h6>
+
+                                                    <div
+                                                        class="input-group mb-2 rounded-pill bg-light  align-items-center">
+                                                        <label for="" class="px-2 color-3 fs-5"><i
+                                                                class="fal fa-tag"></i></label>
+                                                        <input type="text" value="{{ $dr->label }}"
+                                                            class="form-control shadow-none border-0  bg-transparent"
+                                                            placeholder="titre" name="label" required>
+                                                    </div>
+                                                    <div
+                                                        class="input-group mb-2 rounded-pill bg-light  align-items-center">
+                                                        <label for="" class="px-2 color-3 fs-5"><i
+                                                                class="fal fa-coins"></i></label>
+                                                        <input type="number" step="0.1"
+                                                            value="{{ $dr->price }}"
+                                                            class="form-control shadow-none border-0  bg-transparent"
+                                                            placeholder="prix unitaire" name="price" required>
+                                                    </div>
+
+
+                                                    <div class="mx-auto mt-3">
+                                                        <button href="#!" type="submit"
+                                                            id="editDrinkBtn{{ $dr->id }}"
+                                                            class="btn w-100">Modifier&nbsp;
+                                                            <i class="fal fa-check"></i></button>
+                                                    </div>
+                                                    @csrf
+                                                </form>
+                                            </div>
+
+                                        </div>
+                                        <script>
+                                            let oldvalEditDrink{{ $dr->id }} = $("#editDrinkBtn{{ $dr->id }}").html()
+
+                                            $("#editDrinkForm{{ $dr->id }}").on("submit", (e) => {
+                                                e.preventDefault()
+                                                $("#editDrinkBtn{{ $dr->id }}").html(spinner)
+                                                let formEditDrink{{ $dr->id }} = $("#editDrinkForm{{ $dr->id }}")[0]
+                                                let formdataEditDrink{{ $dr->id }} = new FormData(formEditDrink{{ $dr->id }})
+
+                                                axios.post("/drink/update/{{ $dr->id }}", formdataEditDrink{{ $dr->id }})
+                                                    .then(res => {
+                                                        toastr.info(res.data.message)
+                                                        $(".modal").modal("hide")
+                                                        setTimeout(() => {
+                                                            $("#drinksTable").load("/dash/drinksTable")
+                                                        }, 700);
+
+                                                    })
+                                                    .catch(err => {
+                                                        console.error(err);
+                                                        if (err.response.data.type != undefined) {
+
+                                                            toastr.error(err.response.data.message)
+                                                        } else {
+                                                            for (const k in err.response.data) {
+                                                                toastr.error(err.response.data[k])
+
+                                                            }
+                                                        }
+                                                    }).finally(() => {
+                                                        $("#editDrinkBtn{{ $dr->id }}").html(
+                                                            oldvalEditSauce{{ $dr->id }})
+                                                    })
+
+
+                                            })
+                                        </script>
+
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    @empty
+                    @endforelse
                 </div>
             </div>
         </div>

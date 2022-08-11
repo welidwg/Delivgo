@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\Notif;
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class notifController extends Controller
 {
@@ -19,6 +20,15 @@ class notifController extends Controller
         $new->to = $to;
         $new->save();
         event(new Notif($new));
+        return "done";
+    }
+    public function empty(Request $req)
+    {
+        $user = Auth::user();
+        $notifs = Notification::where("to", $user->user_id)->get();
+        foreach ($notifs as $notif) {
+            $notif->delete();
+        }
         return "done";
     }
 }

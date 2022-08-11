@@ -68,17 +68,19 @@
 
                   @forelse ($items as $item)
 
-                      <div class="card rounded-3 mb-4 counterCart shadow-sm" id="productno{{ $item->product_id }}"
-                          style="zoom: 0.85">
+                      <div class="card rounded-3 mb-4 counterCart shadow-sm text-nowrap"
+                          id="productno{{ $item->product_id }}" style="zoom: 0.85">
                           <div class="card-body ">
                               <div class="row d-flex justify-content-between align-items-center">
-                                  <div class="col-md-2 col-lg-2 col-xl-2">
+                                  <div class="col-md-2 col-lg-2 col-xl-2 mx-auto text-center align-center">
                                       <img src="{{ asset('/uploads/products/' . $item->product->picture) }}"
-                                          class="img-fluid rounded-3" alt="{{ $item->product->labbel }}">
+                                          class="img-fluid rounded-3 " alt="{{ $item->product->label }}">
+                                      <p class="lead fw-normal mb-2 text-wrap">{{ $item->product->label }}</p>
+
                                   </div>
-                                  <div class="col-md-3 col-lg-3 col-xl-3">
+                                  <div
+                                      class="col-md-3 col-lg-3 col-xl-3 mx-auto d-flex justify-content-center flex-column align-items-center align-center">
                                       <script></script>
-                                      <p class="lead fw-normal mb-2">{{ $item->product->label }}</p>
                                       <p>
                                           <span class="text-muted">Restaurant: </span>{{ $item->resto->name }}
                                           <br>
@@ -144,16 +146,23 @@
                                               @endforeach
                                               <br>
                                           @endif
-                                          <span class="text-muted">Prix de livraison:
-                                              {{ $item->resto->region->deliveryPrice }}
-                                              Dt
+                                          <span class="text-muted">Frais de livraison:
+                                              <span class="fw-bold text-dark">
+                                                  @if (Auth::user()->city != null)
+                                                      {{ Auth::user()->region->deliveryPrice }}
+                                                  @else
+                                                      {{ $item->resto->deliveryPrice }}
+                                                  @endif
+                                                  TND
+                                              </span>
                                           </span>
 
 
                                       </p>
                                   </div>
 
-                                  <div class="col-md-4 col-lg-3 col-xl-2 d-flex">
+                                  <div
+                                      class="col-md-4 col-lg-3 col-xl-2 d-flex justify-content-center align-items-center mx-auto">
                                       <button class="btn px-2" id="decrement{{ $item->id }}" onclick="">
                                           <i class="fal fa-minus"></i>
                                       </button>
@@ -176,13 +185,15 @@
 
 
                                   </div>
-                                  <div class="col-md-2 col-lg-2 col-xl-2 offset-lg-1">
+                                  <div
+                                      class="col-md-2 col-lg-2 col-xl-2 offset-lg-1 d-flex justify-content-center align-items-center mx-auto mt-4 mt-lg-0">
                                       <h5 class="mb-0" id=""><span id="">{{ $item->total }}</span>
                                           DT
                                       </h5>
                                   </div>
 
-                                  <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                  <div
+                                      class="col-md-1 col-lg-1 col-xl-1 text-end d-flex justify-content-center align-items-center mx-auto mt-4 mt-lg-0">
                                       <a href="" id="rm{{ $item->product_id }}" class="text-danger disabled"><i
                                               class="fal fa-minus-circle fa-lg"></i></a>
                                   </div>
@@ -222,36 +233,49 @@
 
               <div class="d-flex align-items-center mt-4 justify-content-center my-auto mx-auto text-center">
                   <div class="col-md-6">
-                      <h3 class="offcanvas-title fs-5 mt-2 mb-1" style="font-weight: bolder;text-align: right"
-                          id="offcanvasExampleLabel">Total
-                          (Dt) :
-                      </h3>
-
-                  </div>
-                  <div class="col-md-6">
                       @php
                           $cart = Cart::where('user_id', Auth::user()->user_id)
                               ->distinct('resto_id')
                               ->with('resto')
                               ->get();
-                          $totalDelivery = 0;
                           
-                          foreach ($cart as $cr) {
-                              $totalDelivery += $cr->resto->region->deliveryPrice;
-                          }
+                          //   $totalDelivery = 0;
+                          
                           $total = 0;
                           foreach ($items as $item) {
                               $total += $item->total;
                           }
+                          $livr = 0;
+                          foreach ($cart as $restoC) {
+                              $livr += Auth::user()->region->deliveryPrice;
+                          }
                           
                       @endphp
-                      <input type="number" value="{{ $total + $totalDelivery }}" readonly id="totalCart"
-                          name="totalCart" class="form-control bg-transparent w-50 fs-5  border-0 shadow-none" />
+                      <h3 class="offcanvas-title fs-5 mt-2 mb-1" style="font-weight: bolder;text-align: right">Total
+                          :
+                          <span class="fw-bold" for="">{{ $total + $livr }} TND</span>
+                          @php
+                              //   echo $total;
+                              //   echo '<br>';
+                              //   echo $totalDelivery;
+                              //   echo '<br>';
+                              
+                              //   echo $livr;
+                          @endphp
+
+                      </h3>
+
+                  </div>
+                  <div class="col-md-6">
+
+                      <input type="hidden" value="{{ $total + $livr }}" readonly id="totalCart" name="totalCart"
+                          class="form-control bg-transparent w-50 fs-5  border-0 shadow-none" />
 
                   </div>
 
               </div>
-              <small class="text-center fw-bold d-block">(compris les frais de livraion)</small>
+
+              <small class="text-center fw-bold d-block">(compris les frais de livraison)</small>
 
               {{-- <div class="input-group mb-3 mt-3">
                   <span class="input-group-text" id="inputGroup-sizing-default">Coupon code</span>
@@ -268,19 +292,49 @@
                   $("#passCommande").on("click", (e) => {
                       e.preventDefault()
                       let formData = new FormData();
+                      let adresse = "{{ Auth::user()->address }}"
                       formData.append("total", $("#totalCart").val())
                       formData.append("_token", "{{ csrf_token() }}")
-                      axios.post("/commande/add", formData)
-                          .then(res => {
-                              console.log(res)
-                              $("#cart").load("/cartContent")
+                      if (localStorage.region == undefined) {
+                          Position()
+                      } else {
+                          alertify.prompt("Adresse de livraison",
+                              "Veuillez préciser votre adresse afin qu'on peut livrer votre commande", adresse,
+                              (ev, val) => {
+                                  if (val != "") {
+                                      adresse = val
+                                      formData.append("address", adresse)
 
+                                      axios.post("/commande/add", formData)
+                                          .then(res => {
+                                              console.log(res)
+                                              $("#cart").load("/cartContent")
+
+                                          })
+                                          .catch(err => {
+                                              console.error(err);
+                                              toastr.error(err.response.data)
+                                          })
+                                  } else {
+                                      toastr.error("Vous devez préciser votre adresse de livraison afin de commander!")
+
+                                  }
+
+                              }, () => {
+                                  toastr.error("Vous devez préciser votre adresse de livraison afin de commander!")
+                              }).set({
+                              labels: {
+                                  ok: "Commander",
+                                  cancel: "Annuler"
+                              }
                           })
-                          .catch(err => {
-                              console.error(err);
-                              toastr.error(err.response.data)
-                          })
+                      }
+
+
+
+
                   })
+                  //   $("body").appendChild("body")
               </script>
           </div>
       </div>

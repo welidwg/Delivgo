@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\Commande;
 use App\Models\commande_ref;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
@@ -21,6 +22,10 @@ class CommandeController extends Controller
             $ref = Random::generate(6, '0-9A-Z');
             $notif = new notifController();
             $cmd_id = 0;
+            $user = User::where("user_id", Auth::user()->user_id)->first();
+            $user->address
+                = $req->address;
+            $user->save();
 
             foreach ($cart as $item) {
                 $checkref = commande_ref::where("user_id", $item->user_id)->where("resto_id", $item->resto_id)->with("user")->first();
@@ -32,6 +37,7 @@ class CommandeController extends Controller
                         $newRefCmd->statut = 1;
                         $newRefCmd->taken = 0;
                         $newRefCmd->reference = $ref;
+                        $newRefCmd->address = $req->address;
                         $newRefCmd->save();
                         $cmd_id = $newRefCmd->id;
                     } else {
@@ -45,6 +51,8 @@ class CommandeController extends Controller
                     $newRefCmd->statut = 1;
                     $newRefCmd->taken = 0;
                     $newRefCmd->reference = $ref;
+                    $newRefCmd->address = $req->address;
+
                     $newRefCmd->save();
                     $cmd_id = $newRefCmd->id;
                 }

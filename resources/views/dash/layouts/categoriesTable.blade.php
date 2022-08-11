@@ -20,9 +20,12 @@
 
                    <td>
                        <div class="">
-
-                           <a href="#!" id="deleteCategory{{ $cat->id }}" class="btn shadow-none text-danger"><i
-                                   class="fas fa-trash"></i></a>
+                           <a href="#!" class="btn shadow-none text-primary" data-bs-toggle="modal"
+                               data-bs-target="#editCatModal{{ $cat->id }}">
+                               <i class="fas fa-edit"></i>
+                           </a>
+                           <a href="#!" id="deleteCategory{{ $cat->id }}"
+                               class="btn shadow-none text-danger"><i class="fas fa-trash"></i></a>
 
                        </div>
                        <script>
@@ -64,7 +67,7 @@
        $('#categoriesTable1').DataTable({
            "language": {
                "decimal": ".",
-            "emptyTable": "Aucune catégorie encore",
+               "emptyTable": "Aucune catégorie encore",
                "info": "",
                "infoFiltered": "",
                "infoEmpty": "",

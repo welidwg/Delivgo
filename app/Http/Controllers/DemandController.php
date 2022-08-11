@@ -45,7 +45,11 @@ class DemandController extends Controller
                 $message = "L'entreprise $nom veut rejoigner delivgo";
             }
             if ($new->save()) {
-                $this->notif->storeNotif("Nouvelle demande", $message, 1, 1);
+                $admin = User::where("type", 4)->get();
+                foreach ($admin as $ad) {
+                    # code...
+                    $this->notif->storeNotif("Nouvelle demande", $message, $ad->user_id, $ad->user_id);
+                }
 
                 return response(json_encode(["type" => "success", "message" => "Opération réussite!"]), 200);
             }

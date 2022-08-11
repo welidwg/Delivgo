@@ -84,6 +84,10 @@
 
 
                                         <td>
+                                            @if ($user->type == 2 || $user->type == 3)
+                                                <a href="{{ url('/dash/profile/' . $user->user_id) }}"
+                                                    class="btn shadow-none text-primary"><i class="fas fa-eye"></i></a>
+                                            @endif
                                             <a href="#!" id="deleteUser{{ $user->user_id }}"
                                                 class="btn shadow-none text-danger"><i class="fas fa-times"></i></a>
                                             <script>

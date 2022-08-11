@@ -27,6 +27,23 @@ class SauceController extends Controller
         }
     }
 
+    public function Update(Request $req, $id)
+    {
+        try {
+            $supp = Sauce::where("id", $id)->first();
+            $supp->label = $req->label;
+            $supp->price = $req->price;
+
+            if ($supp->save()) {
+                return \response(json_encode(["type" => "success", "message" => "Mis à jour"]), 200);
+            } else {
+                return \response(json_encode(["type" => "error", "message" => "Erreur inconnue"]), 500);
+            }
+        } catch (\Throwable $th) {
+            return \response(json_encode(["type" => "error", "message" => $th->getMessage()]), 500);
+        }
+    }
+
     public function Delete($id)
     {
         if (Sauce::where("id", $id)->first()->delete()) {

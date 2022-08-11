@@ -25,22 +25,21 @@
                    <td>
                        <div class="">
 
-                           <a href="#!" id="editDrink{{ $drink->id }}" class="btn shadow-none text-danger"><i
-                                   class="fas fa-trash"></i></a>
+                           <a href="#!" data-bs-toggle="modal" data-bs-target="#editDrinkModal{{ $drink->id }}"
+                               class="btn shadow-none text-primary"><i class="fas fa-edit"></i></a>
                            <a href="#!" id="deleteDrink{{ $drink->id }}" class="btn shadow-none text-danger"><i
                                    class="fas fa-trash"></i></a>
 
                        </div>
                        <script>
                            $("#deleteDrink{{ $drink->id }}").on("click", (e) => {
-                               alertify.confirm("Confirmation", "Are you sure that you want to delete this ?", () => {
+                               alertify.confirm("Confirmation", "Vous êtes sûr de supprimer ce boisson?", () => {
                                    axios.delete("/drink/delete/{{ $drink->id }}")
                                        .then(res => {
                                            console.log(res)
                                            toastr.info(res.data.message)
-                                           setTimeout(() => {
-                                               $("#drinksTable").load("/dash/drinksTable")
-                                           }, 700);
+                                           $("#drinksTable").load("/dash/drinksTable")
+
                                        })
                                        .catch(err => {
                                            console.error(err);
@@ -67,7 +66,7 @@
        $("#drinksTable1").DataTable({
            "language": {
                "decimal": ".",
-            "emptyTable": "Aucun boisson encore",
+               "emptyTable": "Aucun boisson encore",
                "info": "",
                "infoFiltered": "",
                "infoEmpty": "",

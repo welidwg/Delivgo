@@ -50,12 +50,16 @@ class commandesRefController extends Controller
                         $cmds =
                             commande_ref::where("user_id", $user_id)->where("resto_id", $resto_id)->with("resto")->with("user")->first();
                     }
-
-                    if ($cmds->statut == 3) {
-                        $notif->storeNotif($cmds->resto->name, " Votre commande avec le référence  $cmds->reference  est en cours de livraison", $resto_id, $user_id);
+                    if ($cmds->taken) {
+                        return response(json_encode(["type" => "error", "message" => "Cette commande est déjà acceptée par un autre livreur"]), 500);
                     } else {
-                        $statut = $cmds->statut;
+                        if ($cmds->statut == 3) {
+                            $notif->storeNotif($cmds->resto->name, " Votre commande avec le référence  $cmds->reference  est en cours de livraison", $resto_id, $user_id);
+                        } else {
+                            $statut = $cmds->statut;
+                        }
                     }
+
                     $notif->storeNotif("Commande acceptée", "La commande avec le référence  $cmds->reference est acceptée par le livreur  " . Auth::user()->name, $user_id, $resto_id);
 
                     $cmds->taken = 1;

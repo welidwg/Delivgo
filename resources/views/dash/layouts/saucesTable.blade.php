@@ -1,7 +1,7 @@
    <table class="table mb-0 table-hover align-middle text-nowrap" id="saucesTable1">
        <thead>
            <tr>
-                <th class="border-top-0">Nom</th>
+               <th class="border-top-0">Nom</th>
                <th class="border-top-0">Prix unitaire</th>
                <th class="border-top-0 mx-auto">Actions</th>
 
@@ -25,15 +25,15 @@
                    <td>
                        <div class="">
 
-                           <a href="#!" id="editGarn{{ $sauce->id }}" class="btn shadow-none text-danger"><i
-                                   class="fas fa-trash"></i></a>
+                           <a href="#!" data-bs-toggle="modal" data-bs-target="#editSauceModal{{ $sauce->id }}"
+                               class="btn shadow-none text-primary"><i class="fas fa-edit"></i></a>
                            <a href="#!" id="deleteSauce{{ $sauce->id }}" class="btn shadow-none text-danger"><i
                                    class="fas fa-trash"></i></a>
 
                        </div>
                        <script>
                            $("#deleteSauce{{ $sauce->id }}").on("click", (e) => {
-                               alertify.confirm("Confirmation", "Are you sure that you want to delete this ?", () => {
+                               alertify.confirm("Confirmation", "Vous êtes sûr de supprimer ce sauce?", () => {
                                    axios.delete("/sauce/delete/{{ $sauce->id }}")
                                        .then(res => {
                                            console.log(res)
@@ -66,7 +66,7 @@
        $("#saucesTable1").DataTable({
            "language": {
                "decimal": ".",
-            "emptyTable": "Aucune sauce encore",
+               "emptyTable": "Aucune sauce encore",
                "info": "",
                "infoFiltered": "",
                "infoEmpty": "",

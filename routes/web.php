@@ -10,6 +10,8 @@ use App\Http\Controllers\ConfigsController;
 use App\Http\Controllers\DemandController;
 use App\Http\Controllers\DrinkController;
 use App\Http\Controllers\GarnitureController;
+use App\Http\Controllers\notifController;
+use App\Http\Controllers\OtherCommandecONTROLLER;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\RequestController;
@@ -76,6 +78,9 @@ Route::group(["middleware" => "auth"], function () {
     Route::get("/user/all", [UserController::class, "GetAllUsers"]);
     Route::get("/user/all/restau", [UserController::class, "GetAllRestau"]);
     Route::post("/user/update/duty/{id}", [UserController::class, "DutyManager"]);
+    Route::post("/user/updateAddress/{id}", [UserController::class, "UpdateAddress"]);
+
+
 
 
     //products manager
@@ -88,20 +93,25 @@ Route::group(["middleware" => "auth"], function () {
 
     //categories manager
     Route::post("/category/add", [CategoryController::class, "AddCategory"])->name("category.add");
+    Route::post("/category/update/{id}", [CategoryController::class, "Update"])->name("category.update");
     Route::delete("/category/delete/{id}", [CategoryController::class, "DeleteCategory"]);
 
     //Toppings manager
     Route::post("/topping/add", [GarnitureController::class, "store"])->name("topping.add");
-    Route::post("/topping/update/{id}", [SupplementController::class, "Update"])->name("topping.update");
+    Route::post("/topping/update/{id}", [GarnitureController::class, "Update"])->name("topping.update");
 
     Route::delete("/topping/delete/{id}", [GarnitureController::class, "Delete"]);
 
     //Sauces manager
     Route::post("/sauce/add", [SauceController::class, "store"])->name("sauce.add");
+    Route::post("/sauce/update/{id}", [SauceController::class, "Update"])->name("sauce.update");
+
     Route::delete("/sauce/delete/{id}", [SauceController::class, "Delete"]);
 
     //drink manager
     Route::post("/drink/add", [DrinkController::class, "store"])->name("drink.add");
+    Route::post("/drink/update/{id}", [DrinkController::class, "Update"])->name("drink.update");
+
     Route::delete("/drink/delete/{id}", [DrinkController::class, "Delete"]);
 
     //supplements manager
@@ -126,6 +136,11 @@ Route::group(["middleware" => "auth"], function () {
     //commandeMessage_manager    
     Route::post("/commandeMessage/add", [CommandeMessageController::class, "store"])->name("commandemessage.add");
 
+    //otherCommande_Manager
+    Route::post("/otherCommande/add", [OtherCommandecONTROLLER::class, "store"])->name("otherCommande.add");
+    Route::post("/otherCommande/accept", [OtherCommandecONTROLLER::class, "accept"])->name("otherCommande.accept");
+    Route::post("/otherCommande/cancel", [OtherCommandecONTROLLER::class, "cancel"])->name("otherCommande.cancel");
+    Route::post("/otherCommande/termine", [OtherCommandecONTROLLER::class, "termine"])->name("otherCommande.termine");
 
 
     //request_manager
@@ -173,8 +188,8 @@ Route::group(["middleware" => "auth"], function () {
         return view("dash/layouts/supplementsTable", ["supps" => $supps]);
     });
 
-    Route::get("/layouts/profile", function () {
-        $user = User::where("user_id", Auth::user()->user_id)->with("configs")->with("region")->first();
+    Route::get("/layouts/profile/{id}", function ($id) {
+        $user = User::where("user_id", $id)->with("configs")->with("region")->first();
         return view("dash/layouts/profile", ["user" => $user]);
     });
 
@@ -187,6 +202,13 @@ Route::group(["middleware" => "auth"], function () {
         return view('dash/pages/main', ["user" => Auth::user()]);
     })->name("dash");
 
+    Route::get('/dash/historique', function () {
+        return view('dash/pages/historique');
+    })->name("dash.historique");
+
+    Route::get('/dash/historiqueContent', function () {
+        return view('dash/layouts/historiqueContent');
+    })->name("dash.historiqueC");
 
     Route::get(
         '/dash/users',
@@ -194,8 +216,6 @@ Route::group(["middleware" => "auth"], function () {
             return view('dash/pages/users', ["users" => User::where("user_id", "!=", Auth::user()->user_id)->get()]);
         }
     )->name("dash.users");
-
-
 
     Route::get('/dash/mainContent', function () {
         return view('dash/layouts/indexContent', ["user" => Auth::user()]);
@@ -211,8 +231,9 @@ Route::group(["middleware" => "auth"], function () {
         return view('dash/layouts/indexContent', ["user" => Auth::user()]);
     })->name("dash.mainContent");
 
-    Route::get('/dash/profile', function () {
-        return view('dash/pages/profile', ["user" => Auth::user()]);
+    Route::get('/dash/profile/{id}', function ($id) {
+        $user = User::where("user_id", $id)->first();
+        return view('dash/pages/profile', ["user" => $user]);
     })->name("dash.profile");;
 
 
@@ -229,7 +250,8 @@ Route::group(["middleware" => "auth"], function () {
         return view('main/layouts/ordersTable', ["user" => Auth::user()]);
     })->name("main.ordersTable");
 
-
+    //notif_manager
+    Route::post("/notif/empty", [notifController::class, "empty"]);
     Route::get('/notif', function () {
         return view('main/layouts/notif');
     })->name("main.notifs");
@@ -263,20 +285,22 @@ Route::get("/restosContent/{params}", function (Request $req, $params) {
 
     $city = Region::get();
     $arr = [];
+    $check = false;
     foreach ($city as $ct) {
         array_push($arr, $ct->label);
     }
     if ($params == "0" || $params == "") {
-        $restos = User::where("type", 2)->where("city", "!=", "")->with("region")->get();
+        $restos = User::where("type", 2)->where("city", "!=", "")->with("region")->with("products")->get();
     } else {
         if (in_array($params, $arr)) {
-            $restos = User::where("type", 2)->where("city", "!=", "")->with("region")->get();
+            $restos = User::where("type", 2)->where("city", "!=", "")->with("region")->with("products")->get();
         } else {
             $restos = [];
+            $check = true;
         }
     }
 
-    return view("main/layouts/restoCard", ["restos" => $restos]);
+    return view("main/layouts/restoCard", ["restos" => $restos, "check" => $check]);
 });
 
 Route::get('/resto/{id}', function ($id) {
@@ -284,7 +308,7 @@ Route::get('/resto/{id}', function ($id) {
         ->first();
     return view('main/pages/menu', ["resto" => $user]);
 });
-Route::get('/profile', function () {
+Route::get('/profile/{id}', function () {
     return view('main/pages/profile');
 });
 Route::get('/cart', function () {

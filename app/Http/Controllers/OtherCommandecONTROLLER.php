@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Config;
+use App\Models\IsNight;
 use App\Models\OtherCommande;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -34,7 +36,13 @@ class OtherCommandecONTROLLER extends Controller
                 $new->picture = $file_name;
             }
             $new->user_id = $user_id;
+            $frais = Config::latest()->first();
+            $is_night = IsNight::latest()->first();
             $new->frais = Auth::user()->region->deliveryPrice;
+
+            if ($is_night->id_night) {
+                $new->frais = $frais->frais_nuit;
+            }
             $new->save();
             $check = User::where("type", 3)->where("onDuty", 1)->get();
             foreach ($check as $deliv) {

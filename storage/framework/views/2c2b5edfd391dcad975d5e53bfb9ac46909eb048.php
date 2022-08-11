@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
-@php
+<?php
 $user = Auth::user();
 use Illuminate\Support\Carbon;
-@endphp
-@if (Auth::user()->type != 1)
+?>
+<?php if(Auth::user()->type != 1): ?>
 
     <head>
         <meta charset="utf-8" />
@@ -12,16 +12,16 @@ use Illuminate\Support\Carbon;
         <!-- Tell the browser to be responsive to screen width -->
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <title>Delivgo | @section('title')
+        <title>Delivgo | <?php $__env->startSection('title'); ?>
 
-            @show
+            <?php echo $__env->yieldSection(); ?>
         </title>
-        <meta http-equiv="refresh" content="{{ config('session.lifetime') * 60 }}">
+        <meta http-equiv="refresh" content="<?php echo e(config('session.lifetime') * 60); ?>">
 
         <!-- Favicon icon -->
-        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/logo/logo1.jpg') }}" />
+        <link rel="icon" type="image/png" sizes="16x16" href="<?php echo e(asset('images/logo/logo1.jpg')); ?>" />
         <!-- Custom CSS -->
-        <link href="{{ asset('dist/css/style.min.css') }}" rel="stylesheet" />
+        <link href="<?php echo e(asset('dist/css/style.min.css')); ?>" rel="stylesheet" />
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"
@@ -33,18 +33,16 @@ use Illuminate\Support\Carbon;
         <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"
             integrity="sha512-xIPqqrfvUAc/Cspuj7Bq0UtHNo/5qkdyngx6Vwt+tmbvTLDszzXM0G6c91LXmGrRx8KEPulT+AfOOez+TeVylg=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <link rel="stylesheet" href="{{ asset('assets/fa/css/all.min.css') }}">
+        <link rel="stylesheet" href="<?php echo e(asset('assets/fa/css/all.min.css')); ?>">
 
-        {{-- <link href="assets/libs/chartist/dist/chartist.min.css" rel="stylesheet">
-    <link href="assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.css" rel="stylesheet"> --}}
+        
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
-        {{-- <script src="assets/libs/chartist/dist/chartist.min.js"></script>
-    <script src="assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script> --}}
+        
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
             integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
             crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -52,7 +50,7 @@ use Illuminate\Support\Carbon;
             integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-        <link href="{{ asset('dist/css/custom.css') }}" rel="stylesheet" />
+        <link href="<?php echo e(asset('dist/css/custom.css')); ?>" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/css/alertify.min.css"
             integrity="sha512-IXuoq1aFd2wXs4NqGskwX2Vb+I8UJ+tGJEu/Dc0zwLNKeQ7CW3Sr6v0yU3z5OQWe3eScVIkER4J9L7byrgR/fA=="
             crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -69,9 +67,7 @@ use Illuminate\Support\Carbon;
         <script type="text/javascript"
             src="https://cdn.datatables.net/v/bs5/dt-1.11.5/fh-3.2.2/sc-2.0.5/sb-1.3.2/sp-2.0.0/datatables.min.js"></script>
 
-        {{-- <link rel="stylesheet" href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
-
-    <script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script> --}}
+        
         <script>
             alertify.defaults.theme.input = "form-control focus text-dark"
             alertify.defaults.theme.ok = "btn btn-success"
@@ -79,13 +75,13 @@ use Illuminate\Support\Carbon;
         </script>
 
         <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
-        <script src="{{ asset('/js/pusher.js') }}"></script>
+        <script src="<?php echo e(asset('/js/pusher.js')); ?>"></script>
         <style>
 
         </style>
 
-        <script src="{{ asset('js/moment/moment.js') }}"></script>
-        <script src="{{ asset('js/moment/fr.js') }}"></script>
+        <script src="<?php echo e(asset('js/moment/moment.js')); ?>"></script>
+        <script src="<?php echo e(asset('js/moment/fr.js')); ?>"></script>
         <script>
             $.extend(true, $.fn.dataTable.defaults, {
 
@@ -102,20 +98,20 @@ use Illuminate\Support\Carbon;
 
             });
         </script>
-        @php
+        <?php
             Carbon::setLocale('fr');
             
-        @endphp
-        @if (Auth::check())
+        ?>
+        <?php if(Auth::check()): ?>
             <script>
-                var audio = new Audio("{{ asset('notif.wav') }}");
+                var audio = new Audio("<?php echo e(asset('notif.wav')); ?>");
                 var pusher = new Pusher("33ae8c9470ab8fad0744", {
                     cluster: "eu",
                 });
 
                 Pusher.logToConsole = true;
 
-                var channel = pusher.subscribe('notif-{{ Auth::user()->user_id }}');
+                var channel = pusher.subscribe('notif-<?php echo e(Auth::user()->user_id); ?>');
                 channel.bind('notif', function(data) {
                     audio.play();
 
@@ -131,7 +127,7 @@ use Illuminate\Support\Carbon;
 
                         const notif = new Notification(data.notif.title, {
                             body: data.notif.content,
-                            icon: "{{ asset('/images/logo/logoOrange.PNG') }}"
+                            icon: "<?php echo e(asset('/images/logo/logoOrange.PNG')); ?>"
                         });
                     }
 
@@ -141,7 +137,7 @@ use Illuminate\Support\Carbon;
                     console.log(data);
                 });
             </script>
-        @endif
+        <?php endif; ?>
 
 
     </head>
@@ -181,7 +177,7 @@ use Illuminate\Support\Carbon;
                             <b class="logo-icon">
                                 <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
                                 <!-- Dark Logo icon -->
-                                <img src="{{ asset('/images/logo/logo2.png') }}" width="50" alt="homepage"
+                                <img src="<?php echo e(asset('/images/logo/logo2.png')); ?>" width="50" alt="homepage"
                                     class="dark-logo" />
                                 <!-- Light Logo icon -->
                             </b>
@@ -216,8 +212,7 @@ use Illuminate\Support\Carbon;
                                 }
                                 notifLoad()
                             </script>
-                            {{-- <a class="dropdown-item text-center small text-gray-500" href="#">Show All
-                            Alerts</a> --}}
+                            
                         </div>
                     </div>
                     <!-- ============================================================== -->
@@ -268,15 +263,14 @@ use Illuminate\Support\Carbon;
                                         }
                                         notifLoad()
                                     </script>
-                                    {{-- <a class="dropdown-item text-center small text-gray-500" href="#">Show All
-                                    Alerts</a> --}}
+                                    
                                 </div>
                             </li>
                             <script>
                                 $('.EmptyNotif').on("click", (e) => {
                                     alertify.confirm("Confirmation", "Vous êtes sûr d'effacer vos notifications ?", () => {
                                             axios.post("/notif/empty", {
-                                                    _token: "{{ csrf_token() }}"
+                                                    _token: "<?php echo e(csrf_token()); ?>"
                                                 })
                                                 .then(res => {
                                                     console.log(res)
@@ -300,10 +294,11 @@ use Illuminate\Support\Carbon;
                                 <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic"
                                     href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                                     aria-expanded="false">
-                                    <img src={{ $user->avatar != null ? asset('uploads/logos/' . $user->avatar) : asset('images/users/profile.png') }}
+                                    <img src=<?php echo e($user->avatar != null ? asset('uploads/logos/' . $user->avatar) : asset('images/users/profile.png')); ?>
+
                                         alt="user" class="rounded- mx-2" width="31" />
-                                    <span class="fs-5">{{ $user->name }} | <span class="fw-bolder">
-                                            @php
+                                    <span class="fs-5"><?php echo e($user->name); ?> | <span class="fw-bolder">
+                                            <?php
                                                 switch ($user->type) {
                                                     case 2:
                                                         echo 'Restaurant';
@@ -318,7 +313,7 @@ use Illuminate\Support\Carbon;
                                                         # code...
                                                         break;
                                                 }
-                                            @endphp
+                                            ?>
                                         </span></span>
 
                                 </a>
@@ -326,7 +321,7 @@ use Illuminate\Support\Carbon;
                                 <ul class="dropdown-menu dropdown-menu-end user-dd animated"
                                     aria-labelledby="navbarDropdown">
 
-                                    <a class="dropdown-item" href={{ url('/logout') }}><i
+                                    <a class="dropdown-item" href=<?php echo e(url('/logout')); ?>><i
                                             class="fal fa-sign-out-alt"></i>
                                         Déconnexion</a>
                                 </ul>
@@ -350,69 +345,55 @@ use Illuminate\Support\Carbon;
                     <!-- Sidebar navigation-->
                     <nav class="sidebar-nav">
                         <ul id="sidebarnav">
-                            <li class="sidebar-item {{ request()->routeIs('dash') ? 'selected' : '' }}">
+                            <li class="sidebar-item <?php echo e(request()->routeIs('dash') ? 'selected' : ''); ?>">
                                 <a class="sidebar-link waves-effect waves-dark sidebar-link "
-                                    href="{{ route('dash') }}" aria-expanded="false"><i
+                                    href="<?php echo e(route('dash')); ?>" aria-expanded="false"><i
                                         class="mdi mdi-view-dashboard"></i><span class="hide-menu">Tableau de
                                         board</span></a>
                             </li>
-                            @if (Auth::user()->type == 2)
-                                <li class="sidebar-item {{ request()->routeIs('dash.menu') ? 'selected' : '' }} ">
+                            <?php if(Auth::user()->type == 2): ?>
+                                <li class="sidebar-item <?php echo e(request()->routeIs('dash.menu') ? 'selected' : ''); ?> ">
                                     <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                        href="{{ route('dash.menu') }}" aria-expanded="false">
+                                        href="<?php echo e(route('dash.menu')); ?>" aria-expanded="false">
 
                                         <i class="fal fa-burger-soda"></i>&nbsp;<span class="hide-menu">Mon
                                             Menu</span></a>
                                 </li>
-                            @endif
-                            @if (Auth::user()->type == 2 || Auth::user()->type == 3)
+                            <?php endif; ?>
+                            <?php if(Auth::user()->type == 2 || Auth::user()->type == 3): ?>
                                 <li
-                                    class="sidebar-item {{ request()->routeIs('dash.historique') ? 'selected' : '' }} ">
+                                    class="sidebar-item <?php echo e(request()->routeIs('dash.historique') ? 'selected' : ''); ?> ">
                                     <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                        href="{{ route('dash.historique') }}" aria-expanded="false">
+                                        href="<?php echo e(route('dash.historique')); ?>" aria-expanded="false">
 
                                         <i class="fal fa-history"></i>&nbsp;<span
                                             class="hide-menu">Historique</span></a>
                                 </li>
-                            @endif
+                            <?php endif; ?>
 
-                            @if (Auth::user()->type == 4)
-                                <li class="sidebar-item {{ request()->routeIs('dash.users') ? 'selected' : '' }} ">
+                            <?php if(Auth::user()->type == 4): ?>
+                                <li class="sidebar-item <?php echo e(request()->routeIs('dash.users') ? 'selected' : ''); ?> ">
                                     <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                        href="{{ route('dash.users') }}" aria-expanded="false">
+                                        href="<?php echo e(route('dash.users')); ?>" aria-expanded="false">
 
                                         <i class="fal fa-users"></i>&nbsp;<span class="hide-menu">Utilisateurs
                                         </span></a>
                                 </li>
-                            @endif
-                            <li class="sidebar-item {{ request()->routeIs('stats') ? 'selected' : '' }}">
+                            <?php endif; ?>
+                            <li class="sidebar-item <?php echo e(request()->routeIs('stats') ? 'selected' : ''); ?>">
                                 <a class="sidebar-link waves-effect waves-dark sidebar-link "
-                                    href="{{ route('stats') }}" aria-expanded="false"><i
+                                    href="<?php echo e(route('stats')); ?>" aria-expanded="false"><i
                                         class="fal fa-chart-line"></i><span class="hide-menu">Mes
                                         statistiques</span></a>
                             </li>
-                            <li class="sidebar-item {{ request()->routeIs('dash.profile') ? 'selected' : '' }} ">
+                            <li class="sidebar-item <?php echo e(request()->routeIs('dash.profile') ? 'selected' : ''); ?> ">
                                 <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                    href="{{ url('/dash/profile/' . Auth::user()->user_id) }}"
+                                    href="<?php echo e(url('/dash/profile/' . Auth::user()->user_id)); ?>"
                                     aria-expanded="false"><i class="mdi mdi-account-network"></i><span
                                         class="hide-menu">Profile</span></a>
                             </li>
 
-                            {{-- <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="table-basic.html"
-                                aria-expanded="false"><i class="mdi mdi-border-all"></i><span
-                                    class="hide-menu">Table</span></a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="icon-material.html"
-                                aria-expanded="false"><i class="mdi mdi-face"></i><span
-                                    class="hide-menu">Icon</span></a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="starter-kit.html"
-                                aria-expanded="false"><i class="mdi mdi-file"></i><span
-                                    class="hide-menu">Blank</span></a>
-                        </li> --}}
+                            
                             <li class="sidebar-item">
                                 <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/"
                                     aria-expanded="false"><i class="fal fa-arrow-circle-left"></i><span
@@ -437,15 +418,15 @@ use Illuminate\Support\Carbon;
                                                 class="mdi mdi-home-outline fs-4"></i></a>
                                     </li>
                                     <li class="breadcrumb-item active" aria-current="page">
-                                        @section('header_path')
+                                        <?php $__env->startSection('header_path'); ?>
 
-                                        @show
+                                        <?php echo $__env->yieldSection(); ?>
                                     </li>
                                 </ol>
                             </nav>
-                            <h1 class="mb-0 fw-bold"> @section('header_title')
+                            <h1 class="mb-0 fw-bold"> <?php $__env->startSection('header_title'); ?>
 
-                                @show
+                                <?php echo $__env->yieldSection(); ?>
                             </h1>
                         </div>
 
@@ -453,20 +434,20 @@ use Illuminate\Support\Carbon;
                 </div>
                 <div class="container-fluid" style="zoom: 0.85">
 
-                    @section('content')
+                    <?php $__env->startSection('content'); ?>
 
-                    @show
+                    <?php echo $__env->yieldSection(); ?>
 
                 </div>
 
-                @include('dash/footer')
+                <?php echo $__env->make('dash/footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
             </div>
 
         </div>
-        @if (Auth::user()->type != 4)
+        <?php if(Auth::user()->type != 4): ?>
 
-            @if ($user->address == '' && Route::currentRouteName() != 'dash.profile')
+            <?php if($user->address == '' && Route::currentRouteName() != 'dash.profile'): ?>
                 <div class="modal fade in" id="Astuces" aria-labelledby="astuces" data-bs-backdrop="static"
                     data-bs-keyboard="false" aria-hidden="false">
                     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -474,7 +455,7 @@ use Illuminate\Support\Carbon;
                             <div class="modal-body p-4 px-5 ">
                                 <div class="main-content text-center mb-3 py-auto">
                                     <label for="" class="mb-3 fs-1 color-3">Bienvenue ,
-                                        {{ $user->name }}</label>
+                                        <?php echo e($user->name); ?></label>
                                     <p class="fw-bold">Nous sommes très honoreux que vous joignez nous .<br>
                                         Mais, avant de commencez votre experience avec notre plateforme,nous demandons
                                         de
@@ -483,7 +464,8 @@ use Illuminate\Support\Carbon;
                                         <br>
                                     </p>
                                     <div class="mx-auto mt-3">
-                                        <a href={{ url('/dash/profile/' . Auth::user()->user_id) }}
+                                        <a href=<?php echo e(url('/dash/profile/' . Auth::user()->user_id)); ?>
+
                                             id="checkBtnSubmit" class="btn  w-100">Vers
                                             votre
                                             profile <i class="fad fa-angle-double-right"></i></a>
@@ -512,18 +494,18 @@ use Illuminate\Support\Carbon;
 
                     });
                 </script>
-            @endif
+            <?php endif; ?>
 
-        @endif
+        <?php endif; ?>
 
 
-        <script src={{ asset('dist/js/app-style-switcher.js') }}></script>
+        <script src=<?php echo e(asset('dist/js/app-style-switcher.js')); ?>></script>
         <!--Wave Effects -->
-        <script src="{{ asset('dist/js/waves.js') }}"></script>
+        <script src="<?php echo e(asset('dist/js/waves.js')); ?>"></script>
         <!--Menu sidebar -->
-        <script src="{{ asset('dist/js/sidebarmenu.js') }}"></script>
+        <script src="<?php echo e(asset('dist/js/sidebarmenu.js')); ?>"></script>
         <!--Custom JavaScript -->
-        <script src={{ asset('dist/js/custom.js') }}></script>
+        <script src=<?php echo e(asset('dist/js/custom.js')); ?>></script>
 
         <script>
             moment.locale('fr')
@@ -533,8 +515,9 @@ use Illuminate\Support\Carbon;
     </body>
 
 </html>
-@else
+<?php else: ?>
 <script>
-    window.location.href = "{{ url('/') }}"
+    window.location.href = "<?php echo e(url('/')); ?>"
 </script>
-@endif
+<?php endif; ?>
+<?php /**PATH C:\wamp64\www\Delivgo\resources\views/dash/base.blade.php ENDPATH**/ ?>

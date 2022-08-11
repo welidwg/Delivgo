@@ -1,10 +1,10 @@
-  @php
+  <?php
       use App\Models\Supplement;
       use App\Models\Sauce;
       use App\Models\Drink;
       use App\Models\Garniture;
       use App\Models\Cart;
-  @endphp
+  ?>
 
   <div class="offcanvas-header">
       <button type="button" class="btn text-dark  bg-light rounded-circle border-1 "
@@ -22,7 +22,7 @@
                       <script>
                           $("#emptyCart").on("click", (e) => {
                               e.preventDefault()
-                              axios.delete("/cart/delete/all/{{ Auth::user()->user_id }}")
+                              axios.delete("/cart/delete/all/<?php echo e(Auth::user()->user_id); ?>")
                                   .then(res => {
                                       console.log(res)
                                       $("#cart").load("/cartContent");
@@ -66,98 +66,105 @@
                       }, 1000);
                   </script>
 
-                  @forelse ($items as $item)
+                  <?php $__empty_1 = true; $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
 
                       <div class="card rounded-3 mb-4 counterCart shadow-sm text-wrap"
-                          id="productno{{ $item->product_id }}" style="zoom: 0.85">
+                          id="productno<?php echo e($item->product_id); ?>" style="zoom: 0.85">
                           <div class="card-body ">
                               <div class="row d-flex justify-content-between align-items-center">
                                   <div class="col-md-2 col-lg-2 col-xl-2 mx-auto text-center align-center">
-                                      <img src="{{ asset('/uploads/products/' . $item->product->picture) }}"
-                                          class="img-fluid rounded-3 " alt="{{ $item->product->label }}">
-                                      <p class="lead fw-normal mb-2 text-wrap">{{ $item->product->label }}</p>
+                                      <img src="<?php echo e(asset('/uploads/products/' . $item->product->picture)); ?>"
+                                          class="img-fluid rounded-3 " alt="<?php echo e($item->product->label); ?>">
+                                      <p class="lead fw-normal mb-2 text-wrap"><?php echo e($item->product->label); ?></p>
 
                                   </div>
                                   <div
                                       class="col-md-3 col-lg-3 col-xl-3 mx-auto d-flex justify-content-center flex-column align-items-center align-center">
                                       <script></script>
                                       <p>
-                                          <span class="text-muted">Restaurant: </span>{{ $item->resto->name }}
+                                          <span class="text-muted">Restaurant: </span><?php echo e($item->resto->name); ?>
+
                                           <br>
 
                                           <span class="text-muted">Prix :
                                           </span>
-                                          <span id="unit{{ $item->product_id }}">{{ $item->product->price }}</span>
+                                          <span id="unit<?php echo e($item->product_id); ?>"><?php echo e($item->product->price); ?></span>
                                           TND
                                           <br>
-                                          @if ($item->toppings != '')
+                                          <?php if($item->toppings != ''): ?>
                                               <span class="text-muted">Garnitures: </span>
-                                              @php
+                                              <?php
                                                   $toppings = json_decode($item->toppings);
                                                   
-                                              @endphp
-                                              @foreach ($toppings as $topping)
-                                                  @php
+                                              ?>
+                                              <?php $__currentLoopData = $toppings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $topping): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                  <?php
                                                       $topp = Garniture::where('id', $topping)->first();
-                                                  @endphp
-                                                  {{ $topp->label }}
-                                              @endforeach
+                                                  ?>
+                                                  <?php echo e($topp->label); ?>
+
+                                              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                               <br>
-                                          @endif
-                                          @if ($item->supplements != '')
+                                          <?php endif; ?>
+                                          <?php if($item->supplements != ''): ?>
                                               <span class="text-muted">Supplements: </span>
-                                              @php
+                                              <?php
                                                   $supplements = json_decode($item->supplements);
                                                   
-                                              @endphp
-                                              @foreach ($supplements as $supplement)
-                                                  @php
+                                              ?>
+                                              <?php $__currentLoopData = $supplements; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $supplement): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                  <?php
                                                       $supp = Supplement::where('id', $supplement)->first();
-                                                  @endphp
-                                                  {{ $supp->label }}
-                                              @endforeach
+                                                  ?>
+                                                  <?php echo e($supp->label); ?>
+
+                                              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                               <br>
-                                          @endif
-                                          @if ($item->sauces != '')
+                                          <?php endif; ?>
+                                          <?php if($item->sauces != ''): ?>
                                               <span class="text-muted">Sauces: </span>
-                                              @php
+                                              <?php
                                                   $sauces = json_decode($item->sauces);
                                                   
-                                              @endphp
-                                              @foreach ($sauces as $sauce)
-                                                  @php
+                                              ?>
+                                              <?php $__currentLoopData = $sauces; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sauce): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                  <?php
                                                       $sauc = Sauce::where('id', $sauce)->first();
-                                                  @endphp
-                                                  {{ $sauc->label }}
-                                              @endforeach
+                                                  ?>
+                                                  <?php echo e($sauc->label); ?>
+
+                                              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                               <br>
-                                          @endif
-                                          @if ($item->drinks != '')
+                                          <?php endif; ?>
+                                          <?php if($item->drinks != ''): ?>
                                               <span class="text-muted">Boissons: </span>
-                                              @php
+                                              <?php
                                                   $drinks = json_decode($item->drinks);
                                                   
-                                              @endphp
-                                              @foreach ($drinks as $drink)
-                                                  @php
+                                              ?>
+                                              <?php $__currentLoopData = $drinks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $drink): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                  <?php
                                                       $drnk = Drink::where('id', $drink)->first();
-                                                  @endphp
-                                                  {{ $drnk->label }}
-                                              @endforeach
+                                                  ?>
+                                                  <?php echo e($drnk->label); ?>
+
+                                              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                               <br>
-                                          @endif
+                                          <?php endif; ?>
                                           <span class="text-muted">Frais de livraison:
                                               <span class="fw-bold text-dark">
-                                                  @if ($is_night)
-                                                      {{ $frais_nuit->frais_nuit }} TND
-                                                  @else
-                                                      @if (Auth::user()->city != null)
-                                                          {{ Auth::user()->region->deliveryPrice }}
-                                                      @else
-                                                          {{ $item->resto->deliveryPrice }}
-                                                      @endif
+                                                  <?php if($is_night): ?>
+                                                      <?php echo e($frais_nuit->frais_nuit); ?> TND
+                                                  <?php else: ?>
+                                                      <?php if(Auth::user()->city != null): ?>
+                                                          <?php echo e(Auth::user()->region->deliveryPrice); ?>
+
+                                                      <?php else: ?>
+                                                          <?php echo e($item->resto->deliveryPrice); ?>
+
+                                                      <?php endif; ?>
                                                       TND
-                                                  @endif
+                                                  <?php endif; ?>
 
                                               </span>
                                           </span>
@@ -168,23 +175,23 @@
 
                                   <div
                                       class="col-md-4 col-lg-3 col-xl-2 d-flex justify-content-center align-items-center mx-auto">
-                                      <button class="btn px-2" id="decrement{{ $item->id }}" onclick="">
+                                      <button class="btn px-2" id="decrement<?php echo e($item->id); ?>" onclick="">
                                           <i class="fal fa-minus"></i>
                                       </button>
-                                      <input id="quantityCart{{ $item->id }}" min="0"
-                                          name="quantity{{ $item->id }}" value="{{ $item->quantity }}"
+                                      <input id="quantityCart<?php echo e($item->id); ?>" min="0"
+                                          name="quantity<?php echo e($item->id); ?>" value="<?php echo e($item->quantity); ?>"
                                           type="number" class="form-control"
                                           style="width: 50px !important;text-align: center" disabled />
 
-                                      <button class="btn  px-2" id="increment{{ $item->id }}">
+                                      <button class="btn  px-2" id="increment<?php echo e($item->id); ?>">
                                           <i class="fal fa-plus"></i>
                                       </button>
                                       <script>
-                                          $("#decrement{{ $item->id }}").on("click", () => {
-                                              decrementInput('quantityCart{{ $item->id }}', '{{ $item->product_id }}', '{{ $item->id }}')
+                                          $("#decrement<?php echo e($item->id); ?>").on("click", () => {
+                                              decrementInput('quantityCart<?php echo e($item->id); ?>', '<?php echo e($item->product_id); ?>', '<?php echo e($item->id); ?>')
                                           })
-                                          $("#increment{{ $item->id }}").on("click", () => {
-                                              incrementInput('quantityCart{{ $item->id }}', '{{ $item->product_id }}', '{{ $item->id }}')
+                                          $("#increment<?php echo e($item->id); ?>").on("click", () => {
+                                              incrementInput('quantityCart<?php echo e($item->id); ?>', '<?php echo e($item->product_id); ?>', '<?php echo e($item->id); ?>')
                                           })
                                       </script>
 
@@ -192,23 +199,23 @@
                                   </div>
                                   <div
                                       class="col-md-2 col-lg-2 col-xl-2 offset-lg-1 d-flex justify-content-center align-items-center mx-auto mt-4 mt-lg-0">
-                                      <h5 class="mb-0" id=""><span id="">{{ $item->total }}</span>
+                                      <h5 class="mb-0" id=""><span id=""><?php echo e($item->total); ?></span>
                                           TND
                                       </h5>
                                   </div>
 
                                   <div
                                       class="col-md-1 col-lg-1 col-xl-1 text-end d-flex justify-content-center align-items-center mx-auto mt-4 mt-lg-0">
-                                      <a href="" id="rm{{ $item->product_id }}" class="text-danger disabled"><i
+                                      <a href="" id="rm<?php echo e($item->product_id); ?>" class="text-danger disabled"><i
                                               class="fal fa-minus-circle fa-lg"></i></a>
                                   </div>
                                   <script>
-                                      $("#rm{{ $item->product_id }}").click((e) => {
+                                      $("#rm<?php echo e($item->product_id); ?>").click((e) => {
                                           e.preventDefault()
-                                          console.log("{{ $item->id }}");
-                                          axios.delete(`/cart/delete/{{ $item->id }}`, {
-                                                  _token: "{{ csrf_token() }}",
-                                                  idCart: "{{ $item->id }}",
+                                          console.log("<?php echo e($item->id); ?>");
+                                          axios.delete(`/cart/delete/<?php echo e($item->id); ?>`, {
+                                                  _token: "<?php echo e(csrf_token()); ?>",
+                                                  idCart: "<?php echo e($item->id); ?>",
                                               })
                                               .then(res => {
                                                   console.log(res)
@@ -223,10 +230,10 @@
                           </div>
                       </div>
 
-                  @empty
-                      @include('main/layouts/notfound')
+                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                      <?php echo $__env->make('main/layouts/notfound', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                       <p style='text-align:center'>Votre panier est vide</p>
-                  @endforelse
+                  <?php endif; ?>
 
 
 
@@ -238,7 +245,7 @@
 
               <div class="d-flex align-items-center mt-4 justify-content-center my-auto mx-auto text-center">
                   <div class="col-md-6">
-                      @php
+                      <?php
                           $cart = Cart::where('user_id', Auth::user()->user_id)
                               ->distinct('resto_id')
                               ->with('resto')
@@ -259,25 +266,25 @@
                               }
                           }
                           
-                      @endphp
+                      ?>
                       <h3 class="offcanvas-title fs-5 mt-2 mb-1" style="font-weight: bolder;text-align: right">Total
                           :
-                          <span class="fw-bold" for="">{{ $total + $livr }} TND</span>
-                          @php
+                          <span class="fw-bold" for=""><?php echo e($total + $livr); ?> TND</span>
+                          <?php
                               //   echo $total;
                               //   echo '<br>';
                               //   echo $totalDelivery;
                               //   echo '<br>';
                               
                               //   echo $livr;
-                          @endphp
+                          ?>
 
                       </h3>
 
                   </div>
                   <div class="col-md-6">
 
-                      <input type="hidden" value="{{ $total + $livr }}" readonly id="totalCart" name="totalCart"
+                      <input type="hidden" value="<?php echo e($total + $livr); ?>" readonly id="totalCart" name="totalCart"
                           class="form-control bg-transparent w-50 fs-5  border-0 shadow-none" />
 
                   </div>
@@ -286,11 +293,7 @@
 
               <small class="text-center fw-bold d-block">(compris les frais de livraison)</small>
 
-              {{-- <div class="input-group mb-3 mt-3">
-                  <span class="input-group-text" id="inputGroup-sizing-default">Coupon code</span>
-                  <input type="text" style="border-radius: 0px" class="form-control"
-                      aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-              </div> --}}
+              
 
               <div class="card">
                   <div class="card-body d-flex align-items-center justify-content-center" id="passCommande">
@@ -301,9 +304,9 @@
                   $("#passCommande").on("click", (e) => {
                       e.preventDefault()
                       let formData = new FormData();
-                      let adresse = "{{ Auth::user()->address }}"
+                      let adresse = "<?php echo e(Auth::user()->address); ?>"
                       formData.append("total", $("#totalCart").val())
-                      formData.append("_token", "{{ csrf_token() }}")
+                      formData.append("_token", "<?php echo e(csrf_token()); ?>")
                       if (localStorage.region == undefined) {
                           Position()
                       } else {
@@ -356,7 +359,7 @@
               let inp = document.getElementById(id)
               inp.value++;
               axios.post("/cart/increment", {
-                      _token: "{{ csrf_token() }}",
+                      _token: "<?php echo e(csrf_token()); ?>",
                       idCart: idCart
 
                   })
@@ -379,7 +382,7 @@
               if (inp.value != 1) {
                   inp.value--;
                   axios.post("/cart/decrement", {
-                          _token: "{{ csrf_token() }}",
+                          _token: "<?php echo e(csrf_token()); ?>",
                           idCart: idCart
 
                       })
@@ -397,3 +400,4 @@
           }
       </script>
   </div>
+<?php /**PATH C:\wamp64\www\Delivgo\resources\views/main/pages/cart.blade.php ENDPATH**/ ?>

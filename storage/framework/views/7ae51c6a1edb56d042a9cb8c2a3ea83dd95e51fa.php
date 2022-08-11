@@ -1,23 +1,24 @@
-@extends('dash/base')
 
 
 
 
 
-@section('title')
+
+<?php $__env->startSection('title'); ?>
     Tableau de bord
-@endsection
-@section('header_path')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('header_path'); ?>
     Tableau de bord
-@endsection
-@section('header_title')
-    @if (Auth::user()->type == 2 || Auth::user()->type == 3)
-        <span class="d-flex align-items-center justify-content-between"> Bienvenue , {{ $user->name }}
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('header_title'); ?>
+    <?php if(Auth::user()->type == 2 || Auth::user()->type == 3): ?>
+        <span class="d-flex align-items-center justify-content-between"> Bienvenue , <?php echo e($user->name); ?>
+
             <div class="form-check form-switch">
                 <label class="form-check-label fs-4 text-dark" id="ondutylabel" for="onduty"></label>
 
                 <input class="form-check-input" type="checkbox" role="switch" id="onduty"
-                    {{ Auth::user()->onDuty ? 'checked' : '' }}>
+                    <?php echo e(Auth::user()->onDuty ? 'checked' : ''); ?>>
                 <script>
                     if ($('#onduty').is(":checked")) {
                         $("#ondutylabel").html("En service")
@@ -32,7 +33,7 @@
                             $("#ondutylabel").html("Hors service")
 
                         }
-                        axios.post("/user/update/duty/{{ Auth::user()->user_id }}")
+                        axios.post("/user/update/duty/<?php echo e(Auth::user()->user_id); ?>")
                             .then(res => {
                                 console.log(res)
                                 toastr.info(res.data.message)
@@ -49,11 +50,11 @@
             </div>
 
         </span>
-    @endif
-@endsection
+    <?php endif; ?>
+<?php $__env->stopSection(); ?>
 
-@section('content')
-    @if (Auth::user()->type == 4)
+<?php $__env->startSection('content'); ?>
+    <?php if(Auth::user()->type == 4): ?>
         <div class="row">
             <div class="col-md-3 col-xl-3 mb-4">
                 <div class="card shadow border-start-success py-2">
@@ -65,7 +66,7 @@
 
                                 </div>
                                 <div class="text-dark fw-bold h5 mb-0">
-                                    {{-- <span>{{ $type == 2 ? count($commandes) : count($response) }}</span> --}}
+                                    
                                 </div>
                             </div>
                             <div class="col-auto"><i class="fas fa-layer-plus fa-2x text-gray-300"></i></div>
@@ -86,7 +87,7 @@
 
                                 </div>
                                 <div class="text-dark fw-bold h5 mb-0">
-                                    {{-- <span>{{ $type == 2 ? count($commandes) : count($response) }}</span> --}}
+                                    
                                 </div>
                             </div>
                             <div class="col-auto"><i class="fas fa-user-plus fa-2x text-gray-300"></i></div>
@@ -110,7 +111,7 @@
 
 
                                 <form action="# " class="formsModal" id="registerForm" enctype="multipart/form-data">
-                                    @csrf
+                                    <?php echo csrf_field(); ?>
 
                                     <h6 for="" class="mb-3 fs-3 color-3">Ajoutez utilisateur </h6>
 
@@ -347,7 +348,7 @@
                                                                         id="aDDrEGsUBMIT" class="btn w-100">Ajouter&nbsp;
                                                                         <i class="fal fa-check"></i></button>
                                                                 </div>
-                                                                @csrf
+                                                                <?php echo csrf_field(); ?>
                                                             </form>
                                                         </div>
 
@@ -411,7 +412,7 @@
 
                                 </div>
                                 <div class="text-dark fw-bold h5 mb-0">
-                                    {{-- <span>{{ $type == 2 ? count($commandes) : count($response) }}</span> --}}
+                                    
                                 </div>
                             </div>
                             <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i></div>
@@ -422,10 +423,10 @@
             </div>
 
         </div>
-    @endif
+    <?php endif; ?>
     <ul class="nav justify-content-end flex-column">
-        @if (Auth::user()->type != 4)
-            @if (Auth::user()->type == 2)
+        <?php if(Auth::user()->type != 4): ?>
+            <?php if(Auth::user()->type == 2): ?>
                 <li class="nav-item" style="">
                     <a class="nav-link  text-primary" href="#commandes"><i
                             class="fal fa-angle-double-right"></i>&nbsp;Commandes non terminées</a>
@@ -442,14 +443,12 @@
                         de
                         livreurs</a>
                 </li>
-            @endif
-            @if (Auth::user()->type == 3)
-            @endif
-        @endif
+            <?php endif; ?>
+            <?php if(Auth::user()->type == 3): ?>
+            <?php endif; ?>
+        <?php endif; ?>
 
-        {{-- <li class="nav-item">
-            <a class="nav-link disabled" href="#">Disabled</a>
-        </li> --}}
+        
     </ul>
     <div id="mainContent">
 
@@ -473,7 +472,7 @@
                             <form action="#" method="post" id="AddFraisForm" class="formsModal">
                                 <h6 for="" class="mb-3 fs-3 color-3 text-center">
                                     Frais de nuit</h6>
-                                @php
+                                <?php
                                     use App\Models\Config;
                                     $check = Config::where('id', '!=', null)->first();
                                     $frais = null;
@@ -488,33 +487,33 @@
                                         $old = true;
                                     }
                                     
-                                @endphp
+                                ?>
 
                                 <div class="input-group mb-2 rounded-pill bg-light  align-items-center">
                                     <label for="" class="px-2 color-3 fs-5"><i class="fal fa-coins"></i></label>
                                     <input type="number" class="form-control shadow-none border-0  bg-transparent"
-                                        placeholder="Frais" name="frais_nuit" required value="{{ $frais }}">
+                                        placeholder="Frais" name="frais_nuit" required value="<?php echo e($frais); ?>">
 
                                 </div>
                                 <div class="input-group mb-2  rounded-pill bg-light  align-items-center">
                                     <label for="" class="px-2 color-3 fs-5">Du
                                     </label>
                                     <input type="time" class="form-control shadow-none border-0  bg-transparent"
-                                        placeholder="Du" name="du" required value="{{ $du }}">
+                                        placeholder="Du" name="du" required value="<?php echo e($du); ?>">
                                 </div>
                                 <div class="input-group mb-2  rounded-pill bg-light  align-items-center">
                                     <label for="" class="px-2 color-3 fs-5">
                                         Jusqu'à</label>&nbsp;
                                     <input type="time" class="form-control shadow-none border-0  bg-transparent"
-                                        placeholder="Jusqu'à" name="to" required value="{{ $to }}">
+                                        placeholder="Jusqu'à" name="to" required value="<?php echo e($to); ?>">
                                 </div>
 
-                                @csrf
+                                <?php echo csrf_field(); ?>
 
 
                                 <div class="mx-auto mt-3">
                                     <button href="#!" type="submit" id="addfraisbtn"
-                                        class="btn w-100">{{ $old ? 'Modifier' : 'Ajouter' }}&nbsp;
+                                        class="btn w-100"><?php echo e($old ? 'Modifier' : 'Ajouter'); ?>&nbsp;
                                         <i class="fal fa-check"></i></button>
                                 </div>
                             </form>
@@ -586,4 +585,6 @@
 
         LoadContentMain()
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('dash/base', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\wamp64\www\Delivgo\resources\views/dash/pages/main.blade.php ENDPATH**/ ?>

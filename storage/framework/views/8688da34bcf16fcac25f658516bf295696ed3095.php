@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <meta http-equiv="refresh" content="<?php echo e(config('session.lifetime') * 60); ?>">
+
     <!-- CSS only -->
     <link rel="icon" type="image/png" sizes="16x16" href="<?php echo e(asset('images/logo/logo1.jpg')); ?>" />
 
@@ -33,7 +35,7 @@
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"
         integrity="sha512-xIPqqrfvUAc/Cspuj7Bq0UtHNo/5qkdyngx6Vwt+tmbvTLDszzXM0G6c91LXmGrRx8KEPulT+AfOOez+TeVylg=="
@@ -59,33 +61,7 @@
     <script src="<?php echo e(asset('js/moment/fr.js')); ?>"></script>
     <?php if(Auth::check()): ?>
         <script>
-            var audio = new Audio("<?php echo e(asset('notif.wav')); ?>");
-
-            var pusher = new Pusher("33ae8c9470ab8fad0744", {
-                cluster: "eu",
-            });
-
-            Pusher.logToConsole = true;
-
-            var channel = pusher.subscribe('notif-<?php echo e(Auth::user()->user_id); ?>');
-            channel.bind('notif', function(data) {
-                audio.play();
-
-                toastr.info(`
-        <strong>${data.notif.title}</strong>
-        ${data.notif.content}
-        `)
-
-                let permission = Notification.requestPermission();
-                if (Notification.permission == "granted") {
-
-                    const notif = new Notification(data.notif.title, {
-                        body: data.notif.content,
-                        icon: "<?php echo e(asset('/images/logo/logoOrange.PNG')); ?>"
-                    });
-                }
-                console.log(data);
-            });
+         
         </script>
     <?php endif; ?>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css" />
@@ -107,6 +83,23 @@
             },
 
         });
+    </script>
+    <script>
+        function isNight() {
+            axios.get("/isnight")
+                .then(res => {
+                    console.log(res)
+                })
+                .catch(err => {
+                    console.error(err);
+                })
+            setTimeout(() => {
+                isNight()
+            }, 60 * 1000);
+            console.log("test");
+
+        }
+        isNight()
     </script>
 </head>
 <?php
@@ -277,9 +270,7 @@ $ip = request()->ip() == '127.0.0.1' ? '102.154.237.218' : request()->ip();
                                         </script>
                                         <option value="<?php echo e($region->label); ?>">
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                    <script>
-                                        console.log("reg", regs);
-                                    </script>
+
 
                                 </datalist>
                             </div>
@@ -307,7 +298,6 @@ $ip = request()->ip() == '127.0.0.1' ? '102.154.237.218' : request()->ip();
                                             axios.post("/user/updateAddress/<?php echo e(Auth::user()->user_id); ?>", {
                                                 adresse: value
                                             }).then((res) => {
-                                                console.log(res);
                                                 window.location.reload();
 
 
@@ -336,7 +326,7 @@ $ip = request()->ip() == '127.0.0.1' ? '102.154.237.218' : request()->ip();
 
         </div>
     </main>
-  
+
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
 
@@ -373,7 +363,6 @@ $ip = request()->ip() == '127.0.0.1' ? '102.154.237.218' : request()->ip();
                         axios.post("/user/updateAddress/<?php echo e(Auth::user()->user_id); ?>", {
                             address: "<?php echo e($position->cityName); ?>"
                         }).then((res) => {
-                            console.log(res);
                             if (cond) {
                                 window.location.reload();
                             }

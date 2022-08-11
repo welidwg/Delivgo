@@ -23,17 +23,23 @@
                                   <div class="col d-flex align-items-center justify-content-end"
                                       style="flex-wrap: nowrap;white-space: nowrap;">
                                       <div><i class="fal fa-biking-mountain"></i>
-                                          <?php if(Auth::check()): ?>
-                                              <?php if(Auth::user()->city != null): ?>
-                                                  <?php echo e(Auth::user()->region->deliveryPrice); ?>.000 TND
+                                          <?php if($is_night): ?>
+                                              <?php echo e($frais_nuit != null ? $frais_nuit . '.000 TND' : 'N/A'); ?>
+
+                                          <?php else: ?>
+                                              <?php if(Auth::check()): ?>
+                                                  <?php if(Auth::user()->city != null): ?>
+                                                      <?php echo e(Auth::user()->region->deliveryPrice); ?>.000 TND
+                                                  <?php else: ?>
+                                                      <?php echo e($resto->deliveryPrice != null ? $resto->deliveryPrice . '.000 TND' : 'N/A'); ?>
+
+                                                  <?php endif; ?>
                                               <?php else: ?>
                                                   <?php echo e($resto->deliveryPrice != null ? $resto->deliveryPrice . '.000 TND' : 'N/A'); ?>
 
                                               <?php endif; ?>
-                                          <?php else: ?>
-                                              <?php echo e($resto->deliveryPrice != null ? $resto->deliveryPrice . '.000 TND' : 'N/A'); ?>
-
                                           <?php endif; ?>
+
 
 
 

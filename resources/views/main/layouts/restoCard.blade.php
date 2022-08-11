@@ -22,15 +22,20 @@
                                   <div class="col d-flex align-items-center justify-content-end"
                                       style="flex-wrap: nowrap;white-space: nowrap;">
                                       <div><i class="fal fa-biking-mountain"></i>
-                                          @if (Auth::check())
-                                              @if (Auth::user()->city != null)
-                                                  {{ Auth::user()->region->deliveryPrice }}.000 TND
+                                          @if ($is_night)
+                                              {{ $frais_nuit != null ? $frais_nuit . '.000 TND' : 'N/A' }}
+                                          @else
+                                              @if (Auth::check())
+                                                  @if (Auth::user()->city != null)
+                                                      {{ Auth::user()->region->deliveryPrice }}.000 TND
+                                                  @else
+                                                      {{ $resto->deliveryPrice != null ? $resto->deliveryPrice . '.000 TND' : 'N/A' }}
+                                                  @endif
                                               @else
                                                   {{ $resto->deliveryPrice != null ? $resto->deliveryPrice . '.000 TND' : 'N/A' }}
                                               @endif
-                                          @else
-                                              {{ $resto->deliveryPrice != null ? $resto->deliveryPrice . '.000 TND' : 'N/A' }}
                                           @endif
+
 
 
 

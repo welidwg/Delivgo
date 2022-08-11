@@ -1,17 +1,17 @@
-   @php
+   <?php
        use App\models\User;
        use App\models\Commande;
        use App\models\commande_ref;
        use App\models\RequestResto;
        use App\models\Region;
-   @endphp
-   @php
+   ?>
+   <?php
        use App\Models\Garniture;
        use App\Models\Sauce;
        use App\Models\Drink;
        use App\Models\Supplement;
        use App\Models\Demande;
-   @endphp
+   ?>
    <div class="col-12 mb-3" id="ff">
        <div class="card ">
            <div class="card-body">
@@ -19,7 +19,7 @@
                <div class="d-md-flex p-0">
                    <div>
                        <h4 class="card-title">Liste des commandes</h4>
-                       {{-- <h5 class="card-subtitle">Overview of Top Selling Items</h5> --}}
+                       
                    </div>
 
                </div>
@@ -49,190 +49,191 @@
                            }
                        </style>
                        <tbody>
-                           @php
+                           <?php
                                $cmds = commande_ref::where('resto_id', Auth::user()->user_id)
                                    ->where('statut', '=', 5)
                                    ->with('items')
                                    ->orderBy('statut', 'asc')
                                    ->get();
                                
-                           @endphp
-                           @forelse ($cmds as $cmd)
-                               @if (!$cmd->is_message)
-                                   @php
+                           ?>
+                           <?php $__empty_1 = true; $__currentLoopData = $cmds; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cmd): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                               <?php if(!$cmd->is_message): ?>
+                                   <?php
                                        $total = 0;
-                                   @endphp
+                                   ?>
                                    <tr>
                                        <td class="d-none d-lg-table-cell">
-                                           <strong>#{{ $cmd->reference }}</strong>
+                                           <strong>#<?php echo e($cmd->reference); ?></strong>
                                        </td>
                                        <td>
                                            <div class="d-flex align-items-center">
                                                <div class="m-r-10"><a class="btn btn-circle d-flex btn-info text-white">
-                                                       <img src="{{ asset('uploads/logos/' . $cmd->user->avatar) }}"
+                                                       <img src="<?php echo e(asset('uploads/logos/' . $cmd->user->avatar)); ?>"
                                                            alt="" class="img-fluid " width="80px">
                                                    </a>
                                                </div>
                                                <div class="">
-                                                   <h4 class="m-b-0 font-16">{{ $cmd->user->name }}</h4>
+                                                   <h4 class="m-b-0 font-16"><?php echo e($cmd->user->name); ?></h4>
                                                </div>
                                            </div>
                                        </td>
                                        <td class="d-none d-lg-table-cell">
 
 
-                                           @foreach ($cmd->items as $passed)
-                                               @php
+                                           <?php $__currentLoopData = $cmd->items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $passed): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                               <?php
                                                    $total += $passed->total;
-                                               @endphp
+                                               ?>
                                                <div class="accordion accordion-flush"style="max-width: 200px !important;word-wrap: break-word"
-                                                   id="accordionExample{{ $passed->id }}">
+                                                   id="accordionExample<?php echo e($passed->id); ?>">
                                                    <div class="accordion-item">
-                                                       <h2 class="accordion-header" id="pr{{ $passed->id }}">
+                                                       <h2 class="accordion-header" id="pr<?php echo e($passed->id); ?>">
                                                            <button class="accordion-button collapsed" type="button"
                                                                data-bs-toggle="collapse"
-                                                               data-bs-target="#product{{ $passed->id }}"
+                                                               data-bs-target="#product<?php echo e($passed->id); ?>"
                                                                aria-expanded="true" aria-controls="collapseOne">
-                                                               {{ $passed->product->label }}
-                                                               ({{ $passed->quantity }})
+                                                               <?php echo e($passed->product->label); ?>
+
+                                                               (<?php echo e($passed->quantity); ?>)
                                                            </button>
                                                        </h2>
-                                                       <div id="product{{ $passed->id }}"
+                                                       <div id="product<?php echo e($passed->id); ?>"
                                                            class="accordion-collapse collapse " aria-labelledby=""
-                                                           data-bs-parent="#accordionExample{{ $passed->id }}"
+                                                           data-bs-parent="#accordionExample<?php echo e($passed->id); ?>"
                                                            style="max-width: 200px !important;word-wrap: break-word">
                                                            <div class="accordion-body h-100">
                                                                <span class="text-muted fw-bold">Total:
-                                                               </span> {{ $passed->total }} DT
+                                                               </span> <?php echo e($passed->total); ?> DT
                                                                <br>
 
-                                                               @if ($passed->garnitures != '')
+                                                               <?php if($passed->garnitures != ''): ?>
                                                                    <span class="text-muted fw-bold">Granitures:
                                                                    </span>
-                                                                   @php
+                                                                   <?php
                                                                        $toppings = json_decode($passed->garnitures);
                                                                        
-                                                                   @endphp
-                                                                   @foreach ($toppings as $topping)
-                                                                       @php
+                                                                   ?>
+                                                                   <?php $__currentLoopData = $toppings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $topping): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                       <?php
                                                                            $topp = Garniture::where('id', $topping)->first();
-                                                                       @endphp
-                                                                       {{ $topp->label }},
-                                                                   @endforeach
+                                                                       ?>
+                                                                       <?php echo e($topp->label); ?>,
+                                                                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                                    <br>
-                                                               @endif
-                                                               @if ($passed->supplements != '')
+                                                               <?php endif; ?>
+                                                               <?php if($passed->supplements != ''): ?>
                                                                    <span class="text-muted fw-bold">Supplements:
                                                                    </span>
-                                                                   @php
+                                                                   <?php
                                                                        $supplements = json_decode($passed->supplements);
                                                                        
-                                                                   @endphp
-                                                                   @foreach ($supplements as $supplement)
-                                                                       @php
+                                                                   ?>
+                                                                   <?php $__currentLoopData = $supplements; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $supplement): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                       <?php
                                                                            $sp = Supplement::where('id', $supplement)->first();
-                                                                       @endphp
-                                                                       {{ $sp->label }},
-                                                                   @endforeach
+                                                                       ?>
+                                                                       <?php echo e($sp->label); ?>,
+                                                                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                                    <br>
-                                                                   @if ($passed->sauces != '')
+                                                                   <?php if($passed->sauces != ''): ?>
                                                                        <span class="text-muted fw-bold">Sauces:
                                                                        </span>
-                                                                       @php
+                                                                       <?php
                                                                            $sauces = json_decode($passed->sauces);
                                                                            
-                                                                       @endphp
-                                                                       @foreach ($sauces as $sauce)
-                                                                           @php
+                                                                       ?>
+                                                                       <?php $__currentLoopData = $sauces; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sauce): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                           <?php
                                                                                $sc = Sauce::where('id', $sauce)->first();
-                                                                           @endphp
-                                                                           {{ $sc->label }},
-                                                                       @endforeach
+                                                                           ?>
+                                                                           <?php echo e($sc->label); ?>,
+                                                                       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                                        <br>
-                                                                   @endif
-                                                               @endif
+                                                                   <?php endif; ?>
+                                                               <?php endif; ?>
 
-                                                               @if ($passed->drinks != '')
+                                                               <?php if($passed->drinks != ''): ?>
                                                                    <span class="text-muted fw-bold">Boissons:
                                                                    </span>
-                                                                   @php
+                                                                   <?php
                                                                        $drinks = json_decode($passed->drinks);
                                                                        
-                                                                   @endphp
-                                                                   @foreach ($drinks as $drink)
-                                                                       @php
+                                                                   ?>
+                                                                   <?php $__currentLoopData = $drinks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $drink): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                       <?php
                                                                            $dr = Drink::where('id', $drink)->first();
-                                                                       @endphp
-                                                                       {{ $dr->label }},
-                                                                   @endforeach
+                                                                       ?>
+                                                                       <?php echo e($dr->label); ?>,
+                                                                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                                    <br>
-                                                               @endif
+                                                               <?php endif; ?>
 
                                                            </div>
                                                        </div>
                                                    </div>
                                                </div>
-                                           @endforeach
+                                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                        </td>
                                        <td class="d-none d-lg-table-cell"><a
-                                               href="tel:{{ $cmd->user->phone }}">{{ $cmd->user->phone }}</a>
+                                               href="tel:<?php echo e($cmd->user->phone); ?>"><?php echo e($cmd->user->phone); ?></a>
                                        </td>
-                                       <td id="datepass{{ $cmd->id }}" class="d-none d-lg-table-cell">
+                                       <td id="datepass<?php echo e($cmd->id); ?>" class="d-none d-lg-table-cell">
                                        </td>
                                        <script>
-                                           $('#datepass{{ $cmd->id }}').html(moment("{{ $cmd->created_at }}").format("LL | LT"))
+                                           $('#datepass<?php echo e($cmd->id); ?>').html(moment("<?php echo e($cmd->created_at); ?>").format("LL | LT"))
                                        </script>
                                        <td>
-                                           @switch($cmd->statut)
-                                               @case(1)
+                                           <?php switch($cmd->statut):
+                                               case (1): ?>
                                                    <label class="badge bg-warning">En attente</label>
-                                               @break
+                                               <?php break; ?>
 
-                                               @case(2)
+                                               <?php case (2): ?>
                                                    <label class="badge bg-info">Traitement</label>
-                                               @break
+                                               <?php break; ?>
 
-                                               @case(3)
+                                               <?php case (3): ?>
                                                    <label class="badge bg-primary">Prêt</label>
-                                               @break
+                                               <?php break; ?>
 
-                                               @case(4)
+                                               <?php case (4): ?>
                                                    <label class="badge bg-warning">En livraison</label>
-                                               @break
+                                               <?php break; ?>
 
-                                               @case(5)
+                                               <?php case (5): ?>
                                                    <label class="badge bg-success">Livrée
 
                                                    </label>
-                                               @break
+                                               <?php break; ?>
 
-                                               @case(6)
+                                               <?php case (6): ?>
                                                    <label class="badge bg-danger">Annulée</label>
-                                               @break
+                                               <?php break; ?>
 
-                                               @default
-                                           @endswitch
+                                               <?php default: ?>
+                                           <?php endswitch; ?>
                                        </td>
                                        <td class="d-none d-lg-table-cell">
-                                           {{ $total }} TND</td>
+                                           <?php echo e($total); ?> TND</td>
                                        <td class="d-none d-lg-table-cell">
-                                           {{ $cmd->deliverer_id == null ? '' : $cmd->deliverer->name }}</td>
+                                           <?php echo e($cmd->deliverer_id == null ? '' : $cmd->deliverer->name); ?></td>
                                        <td class="d-none d-lg-table-cell">
-                                           @if ($cmd->statut != 5)
-                                               @switch($cmd->statut)
-                                                   @case(1)
-                                                       <a href="#!" id="startCmd{{ $cmd->id }}"
+                                           <?php if($cmd->statut != 5): ?>
+                                               <?php switch($cmd->statut):
+                                                   case (1): ?>
+                                                       <a href="#!" id="startCmd<?php echo e($cmd->id); ?>"
                                                            class="btn shadow-none text-success"><i class="fas fa-play"></i></a>
                                                        <script>
-                                                           $("#startCmd{{ $cmd->id }}").on("click", (e) => {
+                                                           $("#startCmd<?php echo e($cmd->id); ?>").on("click", (e) => {
                                                                e.preventDefault()
                                                                let arr = []
 
                                                                axios.post("/commande/statut", {
-                                                                       "_token": "{{ csrf_token() }}",
-                                                                       user_id: "{{ $cmd->user_id }}",
-                                                                       resto_id: "{{ $cmd->resto_id }}",
-                                                                       ref: "{{ $cmd->reference }}",
+                                                                       "_token": "<?php echo e(csrf_token()); ?>",
+                                                                       user_id: "<?php echo e($cmd->user_id); ?>",
+                                                                       resto_id: "<?php echo e($cmd->resto_id); ?>",
+                                                                       ref: "<?php echo e($cmd->reference); ?>",
                                                                        statut: 2
                                                                    })
                                                                    .then(res => {
@@ -248,19 +249,19 @@
                                                                    })
                                                            })
                                                        </script>
-                                                   @break
+                                                   <?php break; ?>
 
-                                                   @case(2)
-                                                       <a href="#!" id="completeCmd{{ $cmd->id }}"
+                                                   <?php case (2): ?>
+                                                       <a href="#!" id="completeCmd<?php echo e($cmd->id); ?>"
                                                            class="btn shadow-none text-success"><i class="fas fa-check"></i></a>
                                                        <script>
-                                                           $("#completeCmd{{ $cmd->id }}").on("click", (e) => {
+                                                           $("#completeCmd<?php echo e($cmd->id); ?>").on("click", (e) => {
                                                                e.preventDefault()
                                                                axios.post("/commande/statut", {
-                                                                       "_token": "{{ csrf_token() }}",
-                                                                       user_id: "{{ $cmd->user_id }}",
-                                                                       resto_id: "{{ $cmd->resto_id }}",
-                                                                       ref: "{{ $cmd->reference }}",
+                                                                       "_token": "<?php echo e(csrf_token()); ?>",
+                                                                       user_id: "<?php echo e($cmd->user_id); ?>",
+                                                                       resto_id: "<?php echo e($cmd->resto_id); ?>",
+                                                                       ref: "<?php echo e($cmd->reference); ?>",
 
                                                                        statut: 3
                                                                    })
@@ -277,25 +278,25 @@
                                                                    })
                                                            })
                                                        </script>
-                                                   @break
+                                                   <?php break; ?>
 
-                                                   @default
-                                               @endswitch
+                                                   <?php default: ?>
+                                               <?php endswitch; ?>
 
 
-                                               <a href="#!" id="deleteCmd{{ $cmd->id }}"
+                                               <a href="#!" id="deleteCmd<?php echo e($cmd->id); ?>"
                                                    class="btn shadow-none text-danger"><i class="fas fa-trash"></i></a>
-                                           @else
+                                           <?php else: ?>
                                                -
-                                           @endif
+                                           <?php endif; ?>
                                        </td>
                                        <td class="d-lg-none">
                                            <a href="#!" data-bs-toggle="modal"
-                                               data-bs-target="#DetailsModal{{ $cmd->id }}"
+                                               data-bs-target="#DetailsModal<?php echo e($cmd->id); ?>"
                                                class="btn shadow-none text-danger"><i class="fas fa-eye"></i></a>
                                        </td>
                                    </tr>
-                                   <div class="modal fade" id="DetailsModal{{ $cmd->id }}"
+                                   <div class="modal fade" id="DetailsModal<?php echo e($cmd->id); ?>"
                                        aria-labelledby="DetailsModal" tabindex="-1" aria-hidden="true">
                                        <div class="modal-dialog modal-dialog-centered" role="document">
                                            <div class="modal-content rounded-0">
@@ -311,17 +312,18 @@
                                                                    class="fal fa-times"></span></span>
                                                        </a>
                                                        <h6 class="text-center">Référence :
-                                                           <strong>#{{ $cmd->reference }}</strong>
+                                                           <strong>#<?php echo e($cmd->reference); ?></strong>
                                                        </h6>
                                                        <div
                                                            class="row flex-column justify-content-start align-items-center">
-                                                           @if (Auth::user()->user_id !== $cmd->resto->user_id)
+                                                           <?php if(Auth::user()->user_id !== $cmd->resto->user_id): ?>
                                                                <div class="col mb">
                                                                    <label class="">Restaurant:</label>
                                                                    <strong>
                                                                        <a
-                                                                           href="{{ url('/resto/' . $cmd->resto->user_id) }}">
-                                                                           {{ $cmd->resto->name }}
+                                                                           href="<?php echo e(url('/resto/' . $cmd->resto->user_id)); ?>">
+                                                                           <?php echo e($cmd->resto->name); ?>
+
 
                                                                        </a>
 
@@ -332,8 +334,9 @@
                                                                </div>
                                                                <div class="col mb-2">
                                                                    <span>N° Restaurant: <strong>
-                                                                           <a href="tel:+216{{ $cmd->resto->phone }}">
-                                                                               {{ $cmd->resto->phone }}
+                                                                           <a href="tel:+216<?php echo e($cmd->resto->phone); ?>">
+                                                                               <?php echo e($cmd->resto->phone); ?>
+
 
                                                                            </a>
 
@@ -342,29 +345,30 @@
 
 
                                                                </div>
-                                                           @endif
+                                                           <?php endif; ?>
 
                                                            <div class="col mb-2">
-                                                               <span>Date : <strong id="dateTelff{{ $cmd->id }}">
+                                                               <span>Date : <strong id="dateTelff<?php echo e($cmd->id); ?>">
 
 
                                                                    </strong></span>
                                                                <script>
-                                                                   $('#dateTelff{{ $cmd->id }}').html(moment("{{ $cmd->created_at }}").format('LL | LT'))
+                                                                   $('#dateTelff<?php echo e($cmd->id); ?>').html(moment("<?php echo e($cmd->created_at); ?>").format('LL | LT'))
                                                                </script>
 
 
                                                            </div>
                                                            <div class="col mb-2">
                                                                <span>Livreur : <strong>
-                                                                       @if ($cmd->taken)
-                                                                           {{ $cmd->deliverer->name }}
-                                                                       @else
+                                                                       <?php if($cmd->taken): ?>
+                                                                           <?php echo e($cmd->deliverer->name); ?>
+
+                                                                       <?php else: ?>
                                                                            <span class="text-warning">
                                                                                en attente de livreur
 
                                                                            </span>
-                                                                       @endif
+                                                                       <?php endif; ?>
 
 
                                                                    </strong></span>
@@ -375,126 +379,129 @@
                                                            <div class="col mb-2">
                                                                <span class="fw-bold">Produits/Message:</span>
 
-                                                               @if ($cmd->is_message)
+                                                               <?php if($cmd->is_message): ?>
                                                                    <p class="text-center">
-                                                                       {{ $cmd->messages[0]->message }}</p>
-                                                               @else
-                                                                   @foreach ($cmd->items as $command)
+                                                                       <?php echo e($cmd->messages[0]->message); ?></p>
+                                                               <?php else: ?>
+                                                                   <?php $__currentLoopData = $cmd->items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $command): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                        <div class="accordion bg-transparent accordion-flush mx-auto"style="max-width: 200px !important;word-wrap: break-word;background:transparent !important"
-                                                                           id="accordionExample{{ $command->id }}">
+                                                                           id="accordionExample<?php echo e($command->id); ?>">
                                                                            <div class="accordion-item">
                                                                                <h2 class="accordion-header"
-                                                                                   id="pr{{ $command->id }}">
+                                                                                   id="pr<?php echo e($command->id); ?>">
                                                                                    <button
                                                                                        class="accordion-button collapsed bg-transparent rounded-pill shadow-sm mb-2 text-nowrap"
                                                                                        style="background: transparent !important"
                                                                                        type="button"
                                                                                        data-bs-toggle="collapse"
-                                                                                       data-bs-target="#product{{ $command->id }}"
+                                                                                       data-bs-target="#product<?php echo e($command->id); ?>"
                                                                                        aria-expanded="true"
                                                                                        aria-controls="collapseOne">
-                                                                                       {{ $command->product->label }}
-                                                                                       ({{ $command->quantity }})
+                                                                                       <?php echo e($command->product->label); ?>
+
+                                                                                       (<?php echo e($command->quantity); ?>)
                                                                                    </button>
                                                                                </h2>
-                                                                               <div id="product{{ $command->id }}"
+                                                                               <div id="product<?php echo e($command->id); ?>"
                                                                                    class="accordion-collapse collapse "
                                                                                    aria-labelledby=""
-                                                                                   data-bs-parent="#accordionExample{{ $command->id }}"
+                                                                                   data-bs-parent="#accordionExample<?php echo e($command->id); ?>"
                                                                                    style="max-width: 200px !important;word-wrap: break-word">
                                                                                    <div class="accordion-body h-100">
                                                                                        <span
                                                                                            class="text-muted fw-bold">Totale:
                                                                                        </span>
-                                                                                       {{ $command->total }} DT
+                                                                                       <?php echo e($command->total); ?> DT
                                                                                        <br>
 
-                                                                                       @if ($command->garnitures != '')
+                                                                                       <?php if($command->garnitures != ''): ?>
                                                                                            <span
                                                                                                class="text-muted fw-bold">Garnitures:
                                                                                            </span>
-                                                                                           @php
+                                                                                           <?php
                                                                                                $toppings = json_decode($command->garnitures);
                                                                                                
-                                                                                           @endphp
-                                                                                           @foreach ($toppings as $topping)
-                                                                                               @php
+                                                                                           ?>
+                                                                                           <?php $__currentLoopData = $toppings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $topping): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                                               <?php
                                                                                                    $topp = Garniture::where('id', $topping)->first();
-                                                                                               @endphp
-                                                                                               {{ $topp->label }},
-                                                                                           @endforeach
+                                                                                               ?>
+                                                                                               <?php echo e($topp->label); ?>,
+                                                                                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                                                            <br>
-                                                                                       @endif
-                                                                                       @if ($command->supplements != '')
+                                                                                       <?php endif; ?>
+                                                                                       <?php if($command->supplements != ''): ?>
                                                                                            <span
                                                                                                class="text-muted fw-bold">Suppléments:
                                                                                            </span>
-                                                                                           @php
+                                                                                           <?php
                                                                                                $supplements = json_decode($command->supplements);
                                                                                                
-                                                                                           @endphp
-                                                                                           @foreach ($supplements as $supplement)
-                                                                                               @php
+                                                                                           ?>
+                                                                                           <?php $__currentLoopData = $supplements; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $supplement): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                                               <?php
                                                                                                    $sp = Supplement::where('id', $supplement)->first();
-                                                                                               @endphp
-                                                                                               {{ $sp->label }},
-                                                                                           @endforeach
+                                                                                               ?>
+                                                                                               <?php echo e($sp->label); ?>,
+                                                                                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                                                            <br>
-                                                                                           @if ($command->sauces != '')
+                                                                                           <?php if($command->sauces != ''): ?>
                                                                                                <span
                                                                                                    class="text-muted fw-bold">Sauces:
                                                                                                </span>
-                                                                                               @php
+                                                                                               <?php
                                                                                                    $sauces = json_decode($command->sauces);
                                                                                                    
-                                                                                               @endphp
-                                                                                               @foreach ($sauces as $sauce)
-                                                                                                   @php
+                                                                                               ?>
+                                                                                               <?php $__currentLoopData = $sauces; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sauce): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                                                   <?php
                                                                                                        $sc = Sauce::where('id', $sauce)->first();
-                                                                                                   @endphp
-                                                                                                   {{ $sc->label }},
-                                                                                               @endforeach
+                                                                                                   ?>
+                                                                                                   <?php echo e($sc->label); ?>,
+                                                                                               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                                                                <br>
-                                                                                           @endif
-                                                                                       @endif
+                                                                                           <?php endif; ?>
+                                                                                       <?php endif; ?>
 
-                                                                                       @if ($command->drinks != '')
+                                                                                       <?php if($command->drinks != ''): ?>
                                                                                            <span
                                                                                                class="text-muted fw-bold">Boissons:
                                                                                            </span>
-                                                                                           @php
+                                                                                           <?php
                                                                                                $drinks = json_decode($command->drinks);
                                                                                                
-                                                                                           @endphp
-                                                                                           @foreach ($drinks as $drink)
-                                                                                               @php
+                                                                                           ?>
+                                                                                           <?php $__currentLoopData = $drinks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $drink): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                                               <?php
                                                                                                    $dr = Drink::where('id', $drink)->first();
-                                                                                               @endphp
-                                                                                               {{ $dr->label }},
-                                                                                           @endforeach
+                                                                                               ?>
+                                                                                               <?php echo e($dr->label); ?>,
+                                                                                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                                                            <br>
-                                                                                       @endif
+                                                                                       <?php endif; ?>
 
                                                                                    </div>
                                                                                </div>
 
                                                                            </div>
                                                                        </div>
-                                                                   @endforeach
-                                                               @endif
+                                                                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                               <?php endif; ?>
 
 
                                                            </div>
                                                            <div class="col mb-2">
                                                                <span>Total : <strong>
-                                                                       @if ($cmd->is_message)
+                                                                       <?php if($cmd->is_message): ?>
                                                                            Livraison :
-                                                                           {{ $cmd->user->region->deliveryPrice }}
+                                                                           <?php echo e($cmd->user->region->deliveryPrice); ?>
+
                                                                            TND
-                                                                       @else
-                                                                           {{ $total }}
+                                                                       <?php else: ?>
+                                                                           <?php echo e($total); ?>
+
                                                                            TND
-                                                                       @endif
+                                                                       <?php endif; ?>
 
 
                                                                    </strong></span>
@@ -511,15 +518,15 @@
                                    </div>
 
                                    <script>
-                                       $('#DetailsModal{{ $cmd->id }}').appendTo("body")
+                                       $('#DetailsModal<?php echo e($cmd->id); ?>').appendTo("body")
                                    </script>
-                                   @php
+                                   <?php
                                        $total = 0;
-                                   @endphp
-                               @endif
+                                   ?>
+                               <?php endif; ?>
 
-                               @empty
-                               @endforelse
+                               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                               <?php endif; ?>
 
 
 
@@ -542,3 +549,4 @@
                </div>
            </div>
        </div>
+<?php /**PATH C:\wamp64\www\Delivgo\resources\views/dash/layouts/historiqueContent.blade.php ENDPATH**/ ?>

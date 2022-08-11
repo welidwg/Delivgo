@@ -26,6 +26,7 @@ use App\Models\CommandeMessage;
 use App\Models\Config;
 use App\Models\Drink;
 use App\Models\Garniture;
+use App\Models\IsNight;
 use App\Models\Notification;
 use App\Models\Product;
 use App\Models\Region;
@@ -33,6 +34,7 @@ use App\Models\RequestResto;
 use App\Models\Sauce;
 use App\Models\Supplement;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -247,7 +249,9 @@ Route::group(["middleware" => "auth"], function () {
 
 
     Route::get('/ordersTable', function () {
-        return view('main/layouts/ordersTable', ["user" => Auth::user()]);
+        $is_night = IsNight::latest()->first();
+        $frais_nuit = Config::latest()->first();
+        return view('main/layouts/ordersTable', ["user" => Auth::user(), "frais_nuit" => $frais_nuit, "is_night" => $is_night->id_night]);
     })->name("main.ordersTable");
 
     //notif_manager
@@ -264,10 +268,13 @@ Route::get('/getToken', function () {
 
 Route::get('/', function () {
     $restos = User::where("type", 2)->where("city", "!=", "")->with("region")->get();
-    return view('main/pages/index', ["restos" => $restos]);
+    $is_night = IsNight::latest()->first();
+    return view('main/pages/index', ["restos" => $restos, "is_night" => $is_night->id_night]);
 })->name("main");
 
 Route::get("/cartContent", function () {
+    $is_night = IsNight::latest()->first();
+    $frais_nuit = Config::latest()->first();
     if (Auth::check()) {
         $id = Auth::user()->user_id;
     } else {
@@ -275,7 +282,7 @@ Route::get("/cartContent", function () {
     }
     $cart = Cart::where("user_id", $id)->with("product")->with("resto")->get();
     if ($cart->count() > 0) {
-        return view("main/pages/cart", ["items" => $cart]);
+        return view("main/pages/cart", ["items" => $cart, "frais_nuit" => $frais_nuit, "is_night" => $is_night->id_night]);
     } else {
         return view("main/layouts/notfound", ["message" => "Votre panier est vide", "cart" => true]);
     }
@@ -285,6 +292,8 @@ Route::get("/restosContent/{params}", function (Request $req, $params) {
 
     $city = Region::get();
     $arr = [];
+    $is_night = IsNight::latest()->first();
+    $frais_nuit = Config::latest()->first();
     $check = false;
     foreach ($city as $ct) {
         array_push($arr, $ct->label);
@@ -300,7 +309,7 @@ Route::get("/restosContent/{params}", function (Request $req, $params) {
         }
     }
 
-    return view("main/layouts/restoCard", ["restos" => $restos, "check" => $check]);
+    return view("main/layouts/restoCard", ["restos" => $restos, "check" => $check, "is_night" => $is_night->id_night, "frais_nuit" => $frais_nuit->frais_nuit]);
 });
 
 Route::get('/resto/{id}', function ($id) {
@@ -335,4 +344,36 @@ Route::post("/frais/verif", function (Request $req) {
         return json_encode(["night" => true, "frais" => $frais]);
     }
     return "none";
+});
+
+
+Route::get("/isnight", function () {
+
+    try {
+        $check = Config::latest()->first();
+        $is_night = IsNight::latest()->first();
+        $now = Carbon::now();
+        $curr = date('a');
+        $start = Carbon::createFromTimeString($check->du);
+        $end = Carbon::createFromTimeString($check->to);
+        if (!$is_night) {
+            $is_night = new IsNight;
+        }
+        if ($curr == 'am') {
+            $start = Carbon::createFromTimeString($check->du)->subDay();
+        } else {
+            $end = Carbon::createFromTimeString($check->to)->addDay();
+        }
+
+        if ($now->between($start, $end, true)) {
+            $is_night->id_night = 1;
+        } else {
+            $is_night->id_night = 0;
+        }
+
+        $is_night->save();
+        return response(json_encode(["type" => "success", "message" => "done"]), 200);
+    } catch (\Throwable $th) {
+        return response(json_encode(["type" => "error", "message" => $th->getMessage()]), 500);
+    }
 });

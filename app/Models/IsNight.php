@@ -9,8 +9,5 @@ class IsNight extends Model
 {
     use HasFactory;
 
-    public function updateTime()
-    {
-            
-    }
+    
 }

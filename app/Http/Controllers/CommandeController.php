@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\Commande;
 use App\Models\commande_ref;
+use App\Models\Config;
+use App\Models\IsNight;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +22,9 @@ class CommandeController extends Controller
             $cart = Cart::where("user_id", Auth::user()->user_id)->with("product")->with("resto")->get();
             $items = [];
             $ref = Random::generate(6, '0-9A-Z');
+            $is_night = IsNight::latest()->first();
+            $frais_nuit = Config::latest()->first();
+
             $notif = new notifController();
             $cmd_id = 0;
             $user = User::where("user_id", Auth::user()->user_id)->first();
@@ -38,6 +43,7 @@ class CommandeController extends Controller
                         $newRefCmd->taken = 0;
                         $newRefCmd->reference = $ref;
                         $newRefCmd->address = $req->address;
+                        $newRefCmd->by_night = $is_night->id_night;
                         $newRefCmd->save();
                         $cmd_id = $newRefCmd->id;
                     } else {
@@ -51,6 +57,8 @@ class CommandeController extends Controller
                     $newRefCmd->statut = 1;
                     $newRefCmd->taken = 0;
                     $newRefCmd->reference = $ref;
+                    $newRefCmd->by_night = $is_night->id_night;
+
                     $newRefCmd->address = $req->address;
 
                     $newRefCmd->save();

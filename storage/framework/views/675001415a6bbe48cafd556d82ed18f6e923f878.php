@@ -1,28 +1,28 @@
-@extends('dash/base')
 
-@php
+
+<?php
 use App\models\User;
 use App\models\Commande;
 use App\models\commande_ref;
 use App\models\RequestResto;
 use Carbon\Carbon;
-@endphp
+?>
 
 
 
 
 
-@section('title')
+<?php $__env->startSection('title'); ?>
     Statistiques
-@endsection
-@section('header_path')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('header_path'); ?>
     Mes statistiques
-@endsection
-@section('header_title')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('header_title'); ?>
     Mes statistiques
-@endsection
-@section('content')
-    @php
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <?php
     $type = Auth::user()->type;
     $user = Auth::user();
     $frequent = [];
@@ -81,9 +81,9 @@ use Carbon\Carbon;
             # code...
             break;
     }
-    @endphp
+    ?>
     <div class="row">
-        @if (Auth::user()->type == 4)
+        <?php if(Auth::user()->type == 4): ?>
             <div class="row">
 
                 <div class="col-md-4 col-xl-3 mb-2">
@@ -96,10 +96,10 @@ use Carbon\Carbon;
                                     </div>
                                     <div class="text-dark fw-bold h5 mb-0">
                                         <span>
-                                            @php
+                                            <?php
                                                 $Clients = User::where('type', 1)->get();
                                                 echo $Clients->count();
-                                            @endphp
+                                            ?>
                                         </span>
                                     </div>
                                 </div>
@@ -118,10 +118,10 @@ use Carbon\Carbon;
                                     </div>
                                     <div class="text-dark fw-bold h5 mb-0">
                                         <span>
-                                            @php
+                                            <?php
                                                 $Clients = User::where('type', 2)->get();
                                                 echo $Clients->count();
-                                            @endphp
+                                            ?>
                                         </span>
                                     </div>
                                 </div>
@@ -140,10 +140,10 @@ use Carbon\Carbon;
                                     </div>
                                     <div class="text-dark fw-bold h5 mb-0">
                                         <span>
-                                            @php
+                                            <?php
                                                 $Clients = User::where('type', 3)->get();
                                                 echo $Clients->count();
-                                            @endphp
+                                            ?>
                                         </span>
                                     </div>
                                 </div>
@@ -161,7 +161,7 @@ use Carbon\Carbon;
                         <div class="d-md-flex">
                             <div>
                                 <h4 class="card-title">Statistiques des livreurs</h4>
-                                {{-- <h5 class="card-subtitle">Overview of Top Selling Items</h5> --}}
+                                
                             </div>
 
                         </div>
@@ -180,45 +180,46 @@ use Carbon\Carbon;
                                 </thead>
 
                                 <tbody>
-                                    @php
+                                    <?php
                                         
                                         $requests = User::where('type', 3)->get();
                                         
-                                    @endphp
-                                    @forelse ($requests as $demande)
+                                    ?>
+                                    <?php $__empty_1 = true; $__currentLoopData = $requests; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $demande): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                         <tr>
                                             <td>
-                                                <strong>#{{ $demande->username }}</strong>
+                                                <strong>#<?php echo e($demande->username); ?></strong>
                                             </td>
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <div class="m-r-10"><a
                                                             class="btn btn-circle d-flex btn-info text-white">
-                                                            <img src="{{ asset('uploads/logos/' . $demande->avatar) }}"
+                                                            <img src="<?php echo e(asset('uploads/logos/' . $demande->avatar)); ?>"
                                                                 alt="" class="img-fluid " width="80px">
                                                         </a>
                                                     </div>
                                                     <div class="">
-                                                        <h4 class="m-b-0 font-16">{{ $demande->name }}<br>
+                                                        <h4 class="m-b-0 font-16"><?php echo e($demande->name); ?><br>
                                                             <label class="mt-2"><a
-                                                                    href="tel:{{ $demande->phone }}<">{{ $demande->phone }}</a></span>
+                                                                    href="tel:<?php echo e($demande->phone); ?><"><?php echo e($demande->phone); ?></a></span>
                                                         </h4>
 
                                                     </div>
                                                 </div>
                                             </td>
                                             <td class="d-none d-lg-table-cell"
-                                                id="daterecrutlivreir2{{ $demande->user_id }}">
+                                                id="daterecrutlivreir2<?php echo e($demande->user_id); ?>">
                                             </td>
 
                                             <td class="d-none d-lg-table-cell">
-                                                @php
+                                                <?php
                                                     $countcmd = commande_ref::where('deliverer_id', $demande->user_id)->get();
-                                                @endphp
-                                                {{ $countcmd->count() }}
+                                                ?>
+                                                <?php echo e($countcmd->count()); ?>
+
                                             </td>
                                             <td class="d-none d-lg-table-cell">
-                                                @php
+                                                <?php
                                                     $frais = 0;
                                                     if ($countcmd->count() > 0) {
                                                         foreach ($countcmd as $cmd) {
@@ -226,17 +227,17 @@ use Carbon\Carbon;
                                                         }
                                                     }
                                                     
-                                                @endphp
-                                                {{ $frais }} TND
+                                                ?>
+                                                <?php echo e($frais); ?> TND
                                             </td>
 
                                             <td class="d-lg-none">
                                                 <a href="#!" id="" data-bs-toggle="modal"
-                                                    data-bs-target="#detailsSTATlIVREUR{{ $demande->user_id }}"
+                                                    data-bs-target="#detailsSTATlIVREUR<?php echo e($demande->user_id); ?>"
                                                     class="btn shadow-none text-danger"><i class="fas fa-eye"></i></a>
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="detailsSTATlIVREUR{{ $demande->user_id }}"
+                                        <div class="modal fade" id="detailsSTATlIVREUR<?php echo e($demande->user_id); ?>"
                                             aria-labelledby="DetailsModal" tabindex="-1" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content rounded-0">
@@ -251,15 +252,16 @@ use Carbon\Carbon;
                                                                         class="fal fa-times"></span></span>
                                                             </a>
                                                             <h6 class="text-center">Nom :
-                                                                <strong>{{ $demande->name }}</strong>
+                                                                <strong><?php echo e($demande->name); ?></strong>
                                                             </h6>
                                                             <div
                                                                 class="row flex-column justify-content-start align-items-center">
                                                                 <div class="col mb">
                                                                     <label class="">N° Téléphone:</label>
                                                                     <strong>
-                                                                        <a href="tel:{{ $demande->phone }}">
-                                                                            {{ $demande->phone }}
+                                                                        <a href="tel:<?php echo e($demande->phone); ?>">
+                                                                            <?php echo e($demande->phone); ?>
+
                                                                         </a>
 
                                                                     </strong>
@@ -271,26 +273,27 @@ use Carbon\Carbon;
 
                                                                 <div class="col mb-2">
                                                                     <span>Date de recrutement : <strong
-                                                                            id="daterecrutlivreir{{ $demande->user_id }}">
+                                                                            id="daterecrutlivreir<?php echo e($demande->user_id); ?>">
 
 
                                                                         </strong></span>
                                                                     <script>
-                                                                        $('#daterecrutlivreir{{ $demande->user_id }},#daterecrutlivreir2{{ $demande->user_id }}').html(moment(
-                                                                            "{{ $demande->created_at }}").format('LL'))
+                                                                        $('#daterecrutlivreir<?php echo e($demande->user_id); ?>,#daterecrutlivreir2<?php echo e($demande->user_id); ?>').html(moment(
+                                                                            "<?php echo e($demande->created_at); ?>").format('LL'))
                                                                     </script>
 
 
                                                                 </div>
                                                                 <div class="col mb">
                                                                     <label class="">Total de livraisons:</label>
-                                                                    {{ $countcmd->count() }}
+                                                                    <?php echo e($countcmd->count()); ?>
+
 
 
                                                                 </div>
                                                                 <div class="col mb">
                                                                     <label class="">Total de frais:</label>
-                                                                    {{ $frais }} TND
+                                                                    <?php echo e($frais); ?> TND
 
 
                                                                 </div>
@@ -311,11 +314,11 @@ use Carbon\Carbon;
 
                                             </div>
                                         </div>
-                                        @php
+                                        <?php
                                             $frais = 0;
-                                        @endphp
-                                    @empty
-                                    @endforelse
+                                        ?>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                    <?php endif; ?>
 
 
 
@@ -344,7 +347,7 @@ use Carbon\Carbon;
                         <div class="d-md-flex">
                             <div>
                                 <h4 class="card-title">Statistiques de jours des livreurs</h4>
-                                {{-- <h5 class="card-subtitle">Overview of Top Selling Items</h5> --}}
+                                
                             </div>
 
                         </div>
@@ -363,47 +366,48 @@ use Carbon\Carbon;
                                 </thead>
 
                                 <tbody>
-                                    @php
+                                    <?php
                                         
                                         $requests = User::where('type', 3)->get();
                                         
-                                    @endphp
-                                    @forelse ($requests as $demande)
+                                    ?>
+                                    <?php $__empty_1 = true; $__currentLoopData = $requests; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $demande): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                         <tr>
                                             <td>
-                                                <strong>#{{ $demande->username }}</strong>
+                                                <strong>#<?php echo e($demande->username); ?></strong>
                                             </td>
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <div class="m-r-10"><a
                                                             class="btn btn-circle d-flex btn-info text-white">
-                                                            <img src="{{ asset('uploads/logos/' . $demande->avatar) }}"
+                                                            <img src="<?php echo e(asset('uploads/logos/' . $demande->avatar)); ?>"
                                                                 alt="" class="img-fluid " width="80px">
                                                         </a>
                                                     </div>
                                                     <div class="">
-                                                        <h4 class="m-b-0 font-16">{{ $demande->name }}<br>
+                                                        <h4 class="m-b-0 font-16"><?php echo e($demande->name); ?><br>
                                                             <label class="mt-2"><a
-                                                                    href="tel:{{ $demande->phone }}<">{{ $demande->phone }}</a></span>
+                                                                    href="tel:<?php echo e($demande->phone); ?><"><?php echo e($demande->phone); ?></a></span>
                                                         </h4>
 
                                                     </div>
                                                 </div>
                                             </td>
                                             <td class="d-none d-lg-table-cell"
-                                                id="daterecrutlivreir2{{ $demande->user_id }}">
+                                                id="daterecrutlivreir2<?php echo e($demande->user_id); ?>">
                                             </td>
 
                                             <td class="d-none d-lg-table-cell">
-                                                @php
+                                                <?php
                                                     $countcmd = commande_ref::where('deliverer_id', $demande->user_id)
                                                         ->whereDate('created_at', Carbon::today())
                                                         ->get();
-                                                @endphp
-                                                {{ $countcmd->count() }}
+                                                ?>
+                                                <?php echo e($countcmd->count()); ?>
+
                                             </td>
                                             <td class="">
-                                                @php
+                                                <?php
                                                     $frais = 0;
                                                     if ($countcmd->count() > 0) {
                                                         foreach ($countcmd as $cmd) {
@@ -411,17 +415,17 @@ use Carbon\Carbon;
                                                         }
                                                     }
                                                     
-                                                @endphp
-                                                {{ $frais }} TND
+                                                ?>
+                                                <?php echo e($frais); ?> TND
                                             </td>
 
                                             <td class="d-lg-none">
                                                 <a href="#!" id="" data-bs-toggle="modal"
-                                                    data-bs-target="#detailsSTATlIVREURtoday{{ $demande->user_id }}"
+                                                    data-bs-target="#detailsSTATlIVREURtoday<?php echo e($demande->user_id); ?>"
                                                     class="btn shadow-none text-danger"><i class="fas fa-eye"></i></a>
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="detailsSTATlIVREURtoday{{ $demande->user_id }}"
+                                        <div class="modal fade" id="detailsSTATlIVREURtoday<?php echo e($demande->user_id); ?>"
                                             aria-labelledby="DetailsModal" tabindex="-1" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content rounded-0">
@@ -436,15 +440,16 @@ use Carbon\Carbon;
                                                                         class="fal fa-times"></span></span>
                                                             </a>
                                                             <h6 class="text-center">Nom :
-                                                                <strong>{{ $demande->name }}</strong>
+                                                                <strong><?php echo e($demande->name); ?></strong>
                                                             </h6>
                                                             <div
                                                                 class="row flex-column justify-content-start align-items-center">
                                                                 <div class="col mb">
                                                                     <label class="">N° Téléphone:</label>
                                                                     <strong>
-                                                                        <a href="tel:{{ $demande->phone }}">
-                                                                            {{ $demande->phone }}
+                                                                        <a href="tel:<?php echo e($demande->phone); ?>">
+                                                                            <?php echo e($demande->phone); ?>
+
                                                                         </a>
 
                                                                     </strong>
@@ -456,26 +461,27 @@ use Carbon\Carbon;
 
                                                                 <div class="col mb-2">
                                                                     <span>Date de recrutement : <strong
-                                                                            id="daterecrutlivreir{{ $demande->user_id }}">
+                                                                            id="daterecrutlivreir<?php echo e($demande->user_id); ?>">
 
 
                                                                         </strong></span>
                                                                     <script>
-                                                                        $('#daterecrutlivreir{{ $demande->user_id }},#daterecrutlivreir2{{ $demande->user_id }}').html(moment(
-                                                                            "{{ $demande->created_at }}").format('LL'))
+                                                                        $('#daterecrutlivreir<?php echo e($demande->user_id); ?>,#daterecrutlivreir2<?php echo e($demande->user_id); ?>').html(moment(
+                                                                            "<?php echo e($demande->created_at); ?>").format('LL'))
                                                                     </script>
 
 
                                                                 </div>
                                                                 <div class="col mb">
                                                                     <label class="">Total de livraisons:</label>
-                                                                    {{ $countcmd->count() }}
+                                                                    <?php echo e($countcmd->count()); ?>
+
 
 
                                                                 </div>
                                                                 <div class="col mb">
                                                                     <label class="">Total de frais:</label>
-                                                                    {{ $frais }} TND
+                                                                    <?php echo e($frais); ?> TND
 
 
                                                                 </div>
@@ -496,11 +502,11 @@ use Carbon\Carbon;
 
                                             </div>
                                         </div>
-                                        @php
+                                        <?php
                                             $frais = 0;
-                                        @endphp
-                                    @empty
-                                    @endforelse
+                                        ?>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                    <?php endif; ?>
 
 
 
@@ -522,17 +528,17 @@ use Carbon\Carbon;
                     </div>
                 </div>
             </div>
-        @else
+        <?php else: ?>
             <div class="col-md-4 col-xl-3 mb-2">
                 <div class="card shadow border-start-primary py-2">
                     <div class="card-body">
                         <div class="row align-items-center no-gutters">
                             <div class="col me-2">
                                 <div class="text-uppercase text-primary fw-bold text-xs mb-1">
-                                    <span>{{ $type == 2 ? 'Produits' : 'Commandes livrée' }}</span>
+                                    <span><?php echo e($type == 2 ? 'Produits' : 'Commandes livrée'); ?></span>
                                 </div>
                                 <div class="text-dark fw-bold h5 mb-0">
-                                    <span>{{ $type == 2 ? count(Auth::user()->products) : count($delivered) }}</span>
+                                    <span><?php echo e($type == 2 ? count(Auth::user()->products) : count($delivered)); ?></span>
                                 </div>
                             </div>
                             <div class="col-auto"><i class="fas fa-calendar fa-2x text-gray-300"></i></div>
@@ -546,11 +552,11 @@ use Carbon\Carbon;
                         <div class="row align-items-center no-gutters">
                             <div class="col me-2">
                                 <div class="text-uppercase text-success fw-bold text-xs mb-1">
-                                    <span>{{ $type == 2 ? 'Commandes effectuées' : 'Réponse au demande' }}</span>
+                                    <span><?php echo e($type == 2 ? 'Commandes effectuées' : 'Réponse au demande'); ?></span>
 
                                 </div>
                                 <div class="text-dark fw-bold h5 mb-0">
-                                    <span>{{ $type == 2 ? count($commandes) : count($response) }}</span>
+                                    <span><?php echo e($type == 2 ? count($commandes) : count($response)); ?></span>
                                 </div>
                             </div>
                             <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i></div>
@@ -564,30 +570,24 @@ use Carbon\Carbon;
                         <div class="row align-items-center no-gutters">
                             <div class="col me-2">
                                 <div class="text-uppercase text-info fw-bold text-xs mb-1">
-                                    <span>{{ $type == 2 ? 'Revenue' : 'Restaurant fréquent' }}</span>
+                                    <span><?php echo e($type == 2 ? 'Revenue' : 'Restaurant fréquent'); ?></span>
 
                                 </div>
                                 <div class="row g-0 align-items-center">
                                     <div class="col-auto">
                                         <div class="text-dark fw-bold h5 mb-0 me-3">
-                                            @if ($type == 2)
-                                                <span>{{ $revenue . ' Dt' }}</span>
-                                            @else
-                                                @if (count($frequent) > 0)
-                                                    <span>{{ $frequent[0]->resto->name }}</span>
-                                                @else
+                                            <?php if($type == 2): ?>
+                                                <span><?php echo e($revenue . ' Dt'); ?></span>
+                                            <?php else: ?>
+                                                <?php if(count($frequent) > 0): ?>
+                                                    <span><?php echo e($frequent[0]->resto->name); ?></span>
+                                                <?php else: ?>
                                                     Pas encore
-                                                @endif
-                                            @endif
+                                                <?php endif; ?>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
-                                    {{-- <div class="col">
-                                    <div class="progress progress-sm">
-                                        <div class="progress-bar bg-info" aria-valuenow="50" aria-valuemin="0"
-                                            aria-valuemax="100" style="width: 50%;"><span class="visually-hidden">50%</span>
-                                        </div>
-                                    </div>
-                                </div> --}}
+                                    
                                 </div>
                             </div>
                             <div class="col-auto"><i class="fas fa-clipboard-list fa-2x text-gray-300"></i></div>
@@ -595,11 +595,11 @@ use Carbon\Carbon;
                     </div>
                 </div>
             </div>
-        @endif
+        <?php endif; ?>
 
 
     </div>
-    @if ($type != 4)
+    <?php if($type != 4): ?>
         <div class="row">
             <div class="col-lg-8">
                 <div class="card">
@@ -626,7 +626,7 @@ use Carbon\Carbon;
                     </div>
                 </div>
             </div>
-            @if ($type == 2)
+            <?php if($type == 2): ?>
                 <div class="col-lg-4">
                     <div class="card">
                         <div class="card-body">
@@ -637,24 +637,24 @@ use Carbon\Carbon;
                                 </span>
                                 <div class="ms-3">
                                     <h5 class="mb-0 fw-bold">Top produit</h5>
-                                    @if ($topProduct != null)
-                                        <span class="text-muted fs-6 ">{{ $topProduct->product->label }}</span>
-                                    @else
+                                    <?php if($topProduct != null): ?>
+                                        <span class="text-muted fs-6 "><?php echo e($topProduct->product->label); ?></span>
+                                    <?php else: ?>
                                         Pas encore
-                                    @endif
+                                    <?php endif; ?>
 
                                 </div>
                                 <div class="ms-auto">
                                     <span class="badge bg-light text-muted">
-                                        @if ($topProduct != null)
-                                            @php
+                                        <?php if($topProduct != null): ?>
+                                            <?php
                                                 $count = Commande::where('product_id', $topProduct->product->product_id)
                                                     ->get()
                                                     ->count();
                                                 echo $count;
-                                            @endphp
+                                            ?>
                                     </span>
-            @endif
+            <?php endif; ?>
 
         </div>
         </div>
@@ -663,24 +663,24 @@ use Carbon\Carbon;
                 <i class="fal fa-biking-mountain fs-4"></i> </span>
             <div class="ms-3">
                 <h5 class="mb-0 fw-bold">Top livreur</h5>
-                @if ($topdilev->deliverer)
-                    <span class="text-muted fs-6">{{ $topdilev->deliverer->name }}</span>
-                @else
+                <?php if($topdilev->deliverer): ?>
+                    <span class="text-muted fs-6"><?php echo e($topdilev->deliverer->name); ?></span>
+                <?php else: ?>
                     Pas encore
-                @endif
+                <?php endif; ?>
             </div>
             <div class="ms-auto">
 
                 <span class="badge bg-light text-muted">
-                    @if ($topdilev->deliverer != null)
-                        @php
+                    <?php if($topdilev->deliverer != null): ?>
+                        <?php
                             $countLiv = commande_ref::where('resto_id', $user->user_id)
                                 ->where('deliverer_id', $topdilev->deliverer->user_id)
                                 ->get()
                                 ->count();
                             echo $countLiv;
-                        @endphp
-                    @endif
+                        ?>
+                    <?php endif; ?>
 
                 </span>
             </div>
@@ -725,8 +725,10 @@ use Carbon\Carbon;
         </div>
         </div>
         </div>
-    @endif
+    <?php endif; ?>
 
     </div>
-    @endif
-@endsection
+    <?php endif; ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('dash/base', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\wamp64\www\Delivgo\resources\views/dash/pages/stats.blade.php ENDPATH**/ ?>

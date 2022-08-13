@@ -377,7 +377,7 @@ class UserController extends Controller
                     $password = Hash::make($req->password);
                 }
                 if ($user->type == 2) {
-                    $user->deliveryPrice = $req->deliveryPrice;
+                    // $user->deliveryPrice = $req->deliveryPrice;
                     $check = RestoConfig::where("resto_id", $id)->first();
                     if ($check) {
                         $check->perSupp = $req->perSupp;
@@ -484,13 +484,17 @@ class UserController extends Controller
     public function UpdateAddress(Request $req, $id)
     {
         $user = User::where("user_id", $id)->first();
-        $check = Region::where("label", "like", "%$req->address%")->first();
+        $zone = $req->address;
+        if (strpos($req->address, '%20') !== false) {
+            $zone = str_replace("%20", " ", $req->address);
+        }
+        $check = Region::where("label", $zone)->first();
         if ($check) {
             $user->city = $check->id;
             $user->save();
             return response(json_encode(["type" => "success", "message" => "Ville à jour", "ville" => $req->address]), 200);
         } else {
-            return response(json_encode(["type" => "error", "message" => "Ville n'est pas supportée"]), 500);
+            return response(json_encode(["type" => "error", "message" => "Ville n'est pas supportée", "address" => $req->address]), 500);
         }
     }
 }

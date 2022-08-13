@@ -49,6 +49,8 @@
             </div>
 
         </span>
+    @else
+        <span class="d-flex align-items-center justify-content-between"> Bienvenue ,Admin
     @endif
 @endsection
 

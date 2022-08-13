@@ -1,4 +1,7 @@
 
+<?php $__env->startSection('title'); ?>
+    Accueil
+<?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
     <section id="hero">
         <div class="hero-container">
@@ -81,7 +84,12 @@
                 if (localStorage.region != undefined) {
                     console.log(localStorage.region);
                     let current = localStorage.region;
-                    $("#restoContainer").load(`/restosContent/${current.replaceAll(' ', '%20')}`)
+                    if (current.includes(' ')) {
+                        current = current.replaceAll(' ', '%20')
+
+                    }
+                    console.log("current", current);
+                    $("#restoContainer").load(`/restosContent/${current}`)
 
                 } else {
                     $("#restoContainer").load("/restosContent/0")

@@ -25,14 +25,21 @@ class CommandeController extends Controller
             $is_night = IsNight::latest()->first();
             $frais_nuit = Config::latest()->first();
 
+            $frais = Auth::user()->region->deliveryPrice;
+            if ($is_night->id_night) {
+                $frais = $frais_nuit->frais_nuit;
+            }
+
             $notif = new notifController();
             $cmd_id = 0;
             $user = User::where("user_id", Auth::user()->user_id)->first();
             $user->address
                 = $req->address;
+            $total = 0;
             $user->save();
 
             foreach ($cart as $item) {
+                $total += $item->total;
                 $checkref = commande_ref::where("user_id", $item->user_id)->where("resto_id", $item->resto_id)->with("user")->first();
                 if ($checkref && !$checkref->is_message) {
                     if ($checkref->statut != 1) {
@@ -40,24 +47,30 @@ class CommandeController extends Controller
                         $newRefCmd->user_id = $item->user_id;
                         $newRefCmd->resto_id = $item->resto_id;
                         $newRefCmd->statut = 1;
+                        $newRefCmd->frais = $frais;
                         $newRefCmd->taken = 0;
                         $newRefCmd->reference = $ref;
                         $newRefCmd->address = $req->address;
+                        $newRefCmd->total = $total;
                         $newRefCmd->by_night = $is_night->id_night;
                         $newRefCmd->save();
                         $cmd_id = $newRefCmd->id;
                     } else {
                         $cmd_id = $checkref->id;
                         $ref = $checkref->reference;
+                        $checkref->total += $total;
+                        $checkref->save();
                     }
                 } else {
                     $newRefCmd = new commande_ref;
                     $newRefCmd->user_id = $item->user_id;
                     $newRefCmd->resto_id = $item->resto_id;
                     $newRefCmd->statut = 1;
+                    $newRefCmd->frais = $frais;
                     $newRefCmd->taken = 0;
                     $newRefCmd->reference = $ref;
                     $newRefCmd->by_night = $is_night->id_night;
+                    $newRefCmd->total = $total;
 
                     $newRefCmd->address = $req->address;
 

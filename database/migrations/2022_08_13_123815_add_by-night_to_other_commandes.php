@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddTotalToCommandesRefs extends Migration
+class AddByNightToOtherCommandes extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddTotalToCommandesRefs extends Migration
      */
     public function up()
     {
-        Schema::table('commandes_refs', function (Blueprint $table) {
+        Schema::table('other_commandes', function (Blueprint $table) {
             //
+            $table->boolean("by_night")->default(0);
         });
     }
 
@@ -25,7 +26,7 @@ class AddTotalToCommandesRefs extends Migration
      */
     public function down()
     {
-        Schema::table('commandes_refs', function (Blueprint $table) {
+        Schema::table('other_commandes', function (Blueprint $table) {
             //
         });
     }

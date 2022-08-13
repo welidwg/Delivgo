@@ -4,6 +4,7 @@
      use App\models\commande_ref;
      use App\models\RequestResto;
      use App\models\Region;
+     use App\models\Config;
      use App\models\OtherCommande;
      
  @endphp
@@ -726,7 +727,7 @@
                                                                  style="max-width: 200px !important;word-wrap: break-word">
                                                                  <div class="accordion-body h-100">
                                                                      <span class="text-muted fw-bold">Total:
-                                                                     </span> {{ $passed->total }} DT
+                                                                     </span> {{ $passed->total }} TND
                                                                      <br>
 
                                                                      @if ($passed->garnitures != '')
@@ -837,7 +838,7 @@
                                                  @endswitch
                                              </td>
                                              <td class="d-none d-lg-table-cell">
-                                                 {{ $total }} Dt</td>
+                                                 {{ $total }} TND</td>
                                              <td class="d-none d-lg-table-cell">
                                                  {{ $cmd->deliverer_id == null ? '' : $cmd->deliverer->name }}</td>
                                              <td class="d-none d-lg-table-cell">
@@ -847,6 +848,10 @@
                                                              <a href="#!" id="startCmd{{ $cmd->id }}"
                                                                  class="btn shadow-none text-success"><i
                                                                      class="fas fa-play"></i></a>
+
+                                                             <a href="#!" id="cancel{{ $cmd->id }}"
+                                                                 class="btn shadow-none text-danger"><i
+                                                                     class="fas fa-trash"></i></a>
                                                              <script>
                                                                  $("#startCmd{{ $cmd->id }},#startCmd1{{ $cmd->id }}").on("click", (e) => {
                                                                      e.preventDefault()
@@ -906,11 +911,6 @@
 
                                                          @default
                                                      @endswitch
-
-
-                                                     <a href="#!" id="deleteCmd{{ $cmd->id }}"
-                                                         class="btn shadow-none text-danger"><i
-                                                             class="fas fa-trash"></i></a>
                                                  @else
                                                      -
                                                  @endif
@@ -1137,7 +1137,7 @@
                                                                      @case(1)
                                                                          <button href="#!"
                                                                              id="startCmd1{{ $cmd->id }}"
-                                                                             class="btn-outline shadow-none text-success"><i
+                                                                             class="btn-success shadow-none text-white w-75 rounded-pill shadow-none border-0 p-2 mb-2"><i
                                                                                  class="fas fa-play"></i>
                                                                              Confirmer</button>
                                                                          {{-- <script>
@@ -1202,10 +1202,11 @@
                                                                  @endswitch
                                                              @endif
                                                              @if ($cmd->statut == 1)
-                                                                 <a class="btn btn-danger w-75"
-                                                                     id="cancel{{ $cmd->id }}">Annuler</a>
+                                                                 <button
+                                                                     class="btn-danger shadow-none text-white  rounded-pill shadow-none border-0 p-2 w-75"
+                                                                     id="cancel1{{ $cmd->id }}">Annuler</button>
                                                                  <script>
-                                                                     $("#cancel1{{ $cmd->id }}").on("click", (e) => {
+                                                                     $("#cancel1{{ $cmd->id }},#cancel{{ $cmd->id }}").on("click", (e) => {
                                                                          e.preventDefault()
                                                                          alertify.confirm("Confirmation", "Vous êtes sûr d'annuler cette commande ?", () => {
                                                                              axios.post("/commande/statut", {
@@ -1639,7 +1640,8 @@
                                                  <th class="border-top-0">Client</th>
                                                  <th class="border-top-0 d-none d-lg-table-cell">Date de passation</th>
                                                  <th class="border-top-0">Statut</th>
-                                                 <th class="border-top-0 d-none d-lg-table-cell">Total</th>
+                                                 <th class="border-top-0 d-none d-lg-table-cell">Frais de livraison</th>
+                                                 <th class="border-top-0 d-none d-lg-table-cell">Total (compris les frais)</th>
                                                  <th class="border-top-0 d-none d-lg-table-cell">Actions</th>
                                                  <th class="d-lg-none">Détails</th>
                                              </tr>
@@ -1755,42 +1757,17 @@
                                                          @endswitch
                                                      </td>
                                                      <td class="d-none d-lg-table-cell">
-                                                         {{ $total + $cmd->user->region->deliveryPrice }}
-                                                         Dt</td>
+                                                         {{ $cmd->frais }} TND
+                                                     </td>
+                                                     <td class="d-none d-lg-table-cell">
+                                                         {{ $cmd->total + $cmd->frais }} TND
+                                                     </td>
 
                                                      <td class="d-none d-lg-table-cell">
                                                          @if (!Auth::user()->onDuty)
                                                              Vous êtes hors service
                                                          @else
                                                              @if (!$cmd->taken)
-                                                                 <a href="#!" id="startCmd{{ $cmd->id }}"
-                                                                     class="btn shadow-none text-success"><i
-                                                                         class="fas fa-play"></i></a>
-                                                                 <script>
-                                                                     $("#startCmd{{ $cmd->id }}").on("click", (e) => {
-                                                                         e.preventDefault()
-                                                                         let arr = []
-
-                                                                         axios.post("/commande/statut", {
-                                                                                 "_token": "{{ csrf_token() }}",
-                                                                                 req_id: "{{ $cmd->id }}",
-                                                                                 user_id: "{{ $cmd->user_id }}",
-                                                                                 resto_id: "{{ $cmd->resto_id }}",
-                                                                                 statut: 4
-                                                                             })
-                                                                             .then(res => {
-                                                                                 console.log(res)
-                                                                                 toastr.info("Commande acceptée")
-                                                                                 LoadContentMain()
-
-                                                                             })
-                                                                             .catch(err => {
-                                                                                 console.error(err);
-                                                                                 toastr.error("Quelque chose s'est mal passé")
-
-                                                                             })
-                                                                     })
-                                                                 </script>
                                                              @else
                                                                  @if ($cmd->taken && $cmd->deliverer_id == Auth::user()->user_id)
                                                                      @if ($cmd->statut == 4)
@@ -1798,7 +1775,7 @@
                                                                              class="btn shadow-none text-success"><i
                                                                                  class="fas fa-check"></i></a>
                                                                          <script>
-                                                                             $("#completeCmd{{ $cmd->id }},#completeCmd1{{ $cmd->id }}").on("click", (e) => {
+                                                                             $("#completeCmd{{ $cmd->id }},#completeCmdModal{{ $cmd->id }}").on("click", (e) => {
                                                                                  e.preventDefault()
                                                                                  axios.post("/commande/statut", {
                                                                                          "_token": "{{ csrf_token() }}",
@@ -1831,7 +1808,7 @@
                                                                          class="btn shadow-none text-danger"><i
                                                                              class="fas fa-times"></i></a>
                                                                      <script>
-                                                                         $("#cancelCmd{{ $cmd->id }},#cancelCmd1{{ $cmd->id }}").on("click", (e) => {
+                                                                         $("#cancelCmd{{ $cmd->id }},#cancelCmdModal{{ $cmd->id }}").on("click", (e) => {
                                                                              e.preventDefault()
                                                                              alertify.confirm("Confirmation", "Annule la livraison ?", () => {
                                                                                  axios.post("/commande/statut", {
@@ -1928,10 +1905,19 @@
 
 
                                                                          </div>
+
                                                                          <div class="col mb-2">
-                                                                             <span>Total: <strong>
-                                                                                     {{ $total + $cmd->user->region->deliveryPrice }}
-                                                                                     TND
+                                                                             <span>Frais de livraison: <strong>
+                                                                                     {{ $cmd->frais }} TND
+
+                                                                                 </strong></span>
+
+
+
+                                                                         </div>
+                                                                         <div class="col mb-2">
+                                                                             <span>Total (compris les frais): <strong>
+                                                                                     {{ $cmd->total + $cmd->frais }} TND
 
                                                                                  </strong></span>
 
@@ -1943,12 +1929,12 @@
                                                                          @if ($cmd->statut == 4)
                                                                              <button
                                                                                  class="btn-outline btn-success  mb-2 rounded-pill p-2 shadow-none text-white border-0 w-75"
-                                                                                 id="completeCmd1{{ $cmd->id }}">Terminé</button>
+                                                                                 id="completeCmdModal{{ $cmd->id }}">Terminé</button>
                                                                          @endif
 
                                                                          <button
                                                                              class="btn-outline btn-danger mb-2 rounded-pill p-2 shadow-none text-white border-0 w-75"
-                                                                             id="cancelCmd1{{ $cmd->id }}">Annuler la
+                                                                             id="cancelCmdModal{{ $cmd->id }}">Annuler la
                                                                              livraison</button>
                                                                          {{-- <a href="#!" class="btn shadow-none text-success"><i
                                                                                  class="fas fa-check"></i></a> --}}
@@ -2013,10 +1999,12 @@
                                                      <th class="border-top-0">Client</th>
                                                      <th class="border-top-0 d-none d-lg-table-cell">Date de passation</th>
                                                      <th class="border-top-0">Statut</th>
-                                                     <th class="border-top-0 d-none d-lg-table-cell">Total</th>
+                                                     <th class="border-top-0 d-none d-lg-table-cell">Frais de livraison</th>
+                                                     <th class="border-top-0 d-none d-lg-table-cell">Total (compris les frais)</th>
                                                      <th class="border-top-0 d-none d-lg-table-cell">Actions</th>
                                                      <th class="d-lg-none">Détails</th>
                                                  </tr>
+
                                              </thead>
                                              <style>
                                                  .accordion-body {
@@ -2130,9 +2118,11 @@
                                                              @endswitch
                                                          </td>
                                                          <td class="d-none d-lg-table-cell">
-                                                             {{ $total + $cmd->user->region->deliveryPrice }}
-                                                             TND</td>
-
+                                                             {{ $cmd->frais }} TND
+                                                         </td>
+                                                         <td class="d-none d-lg-table-cell">
+                                                             {{ $cmd->total + $cmd->frais }} TND
+                                                         </td>
                                                          <td class="d-none d-lg-table-cell">
                                                              @if (!Auth::user()->onDuty)
                                                                  Vous êtes hors service
@@ -2234,9 +2224,18 @@
 
                                                                              </div>
                                                                              <div class="col mb-2">
-                                                                                 <span>Total: <strong>
-                                                                                         {{ $total + $cmd->user->region->deliveryPrice }}
-                                                                                         TND
+                                                                                 <span>Frais de livraison: <strong>
+                                                                                         {{ $cmd->frais }} TND
+
+                                                                                     </strong></span>
+
+
+
+                                                                             </div>
+
+                                                                             <div class="col mb-2">
+                                                                                 <span>Total (compris frais de livraison): <strong>
+                                                                                         {{ $cmd->total + $cmd->frais }} TND
 
                                                                                      </strong></span>
 

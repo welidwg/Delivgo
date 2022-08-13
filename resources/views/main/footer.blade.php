@@ -1,4 +1,4 @@
-  <footer id="footer" style="position: relative;">
+  {{-- <footer id="footer" style="position: relative;">
       <div class="container">
           <div class="row align-items-center">
               <div class="col">
@@ -27,7 +27,27 @@
               &copy; Copyright <strong><span>Delivgo</span></strong>. All Rights Reserved
           </div>
           <div class="credits">
-              Developed By <a target="_blank" href="http://welidwg.works">Wg Holdings</a>
+              Developed By <a target="_blank" href="http://welidwg.works">Welid WG</a>
           </div>
       </div>
-  </footer>
+  </footer> --}}
+  <div class="container-fluid bg-color-3 mb-0" id="">
+      <footer class="d-flex flex-wrap flex-column justify-content-between align-items-center p-3 ">
+
+          <p class="mb-0 text-white mx-auto">
+              {{-- <img src="{{ asset('images/logo/logo2.png') }}" class="img-fluid " width="55" alt=""> --}}
+
+              Tous droits réservés pour <span style="color: #CB212E">Delivgo.</span> © {{ date('Y') }}
+
+
+
+
+          </p>
+
+          <div class=" mx-auto text-white" style="zoom: 0.9">
+              <i class="fal fa-code"></i> Developed By <a target="_blank" href="http://welidwg.works">Welid WG</a>
+          </div>
+
+
+      </footer>
+  </div>

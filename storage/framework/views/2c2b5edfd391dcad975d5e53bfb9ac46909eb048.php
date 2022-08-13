@@ -75,6 +75,9 @@ use Illuminate\Support\Carbon;
         </script>
 
         <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+        <script>
+            var audio = new Audio("<?php echo e(asset('notif.wav')); ?>");
+        </script>
         <script src="<?php echo e(asset('/js/pusher.js')); ?>"></script>
         <style>
 
@@ -172,7 +175,23 @@ use Illuminate\Support\Carbon;
                         <!-- ============================================================== -->
                         <!-- Logo -->
                         <!-- ============================================================== -->
-                        <a class="navbar-brand" href="index.html">
+                        <a class="navbar-brand d-none d-lg-block" href="<?php echo e(url('/dash')); ?>">
+                            <!-- Logo icon -->
+                            <b class="logo-icon">
+                                <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+                                <!-- Dark Logo icon -->
+                                <img src="<?php echo e(asset('/images/logo/logo2.png')); ?>" width="50" alt="homepage"
+                                    class="dark-logo" />
+                                <!-- Light Logo icon -->
+                            </b>
+                            <!--End Logo icon -->
+                            <!-- Logo text -->
+                            <span class="logo-text fw-bold">
+                                <!-- dark Logo text -->
+                                Delivgo
+                            </span>
+                        </a>
+                        <a class="navbar-brand d-block d-lg-none" style="zoom: 0.8" href="<?php echo e(url('/dash')); ?>">
                             <!-- Logo icon -->
                             <b class="logo-icon">
                                 <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
@@ -196,12 +215,57 @@ use Illuminate\Support\Carbon;
                         <a class="dropdown-toggle nav-toggler waves-effect waves-light  d-block d-md-none"
                             aria-expanded="false" data-bs-toggle="dropdown" href="#"><span
                                 class="badge bg-danger badge-counter">3+</span><i class="fas fa-bell fa-fw"></i></a>
+                        
+                        <div class="dropdown text-wrap">
+                            <a class="dropdown-togglewaves-effect waves-light  d-block d-md-none" aria-expanded="false"
+                                data-bs-toggle="dropdown" href="#">
+                                <img src="<?php echo e(asset('uploads/logos/' . Auth::user()->avatar)); ?>"
+                                    class="img-fluid rounded-circle " width="35px" alt="">
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in text-wrap ">
+                                <li>
+                                    <h6 class="dropdown-item p-2  d -flex align-items-center ">
+                                        <span class=""><?php echo e($user->name); ?> | <?php
+                                            switch ($user->type) {
+                                                case 2:
+                                                    echo 'Restaurant';
+                                                    break;
+                                                case 3:
+                                                    echo 'Livreur';
+                                                    break;
+                                                case 4:
+                                                    echo 'Admin';
+                                                    break;
+                                                default:
+                                                    # code...
+                                                    break;
+                                            }
+                                        ?></span>
+                                    </h6>
+                                    <hr>
+
+                                </li>
+                                <li>
+                                    <h6 class="dropdown-item p-2  d -flex align-items-center ">
+                                        <a class="dropdown-item p-0" style="padding: 0px !important"
+                                            href=<?php echo e(url('/logout')); ?>><i class="fal fa-sign-out-alt"></i>
+                                            Déconnexion</a>
+                                    </h6>
+
+                                </li>
+
+
+
+
+                            </ul>
+                        </div>
                         <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i
                                 class="ti-menu ti-close"></i></a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
                             <h6 class="dropdown-header fw-bold">Notifications <a href="#"
                                     class="text-danger EmptyNotif"><i class="fas fa-trash"></i></a></h6>
-                            <div id="notifCont1" style="height: 300px;max-height: 300px;overflow: auto;">
+                            <div id="notifCont1" style="height: 300px;max-height: 300px;overflow: auto;padding: 0PX;">
                             </div>
                             <script>
                                 function notifLoad() {
@@ -214,6 +278,8 @@ use Illuminate\Support\Carbon;
                             </script>
                             
                         </div>
+
+
                     </div>
                     <!-- ============================================================== -->
                     <!-- End Logo -->
@@ -226,15 +292,7 @@ use Illuminate\Support\Carbon;
                             <!-- ============================================================== -->
                             <!-- Search -->
                             <!-- ============================================================== -->
-                            <li class="nav-item search-box">
-                                <a class="nav-link waves-effect waves-dark" href="javascript:void(0)"><i
-                                        class="mdi mdi-magnify me-1"></i>
-                                    <span class="font-16">Search</span></a>
-                                <form class="app-search position-absolute">
-                                    <input type="text" class="form-control" placeholder="Search &amp; enter" />
-                                    <a class="srh-btn"><i class="mdi mdi-window-close"></i></a>
-                                </form>
-                            </li>
+                            
                         </ul>
                         <!-- ============================================================== -->
                         <!-- Right side toggle and nav items -->
@@ -339,17 +397,18 @@ use Illuminate\Support\Carbon;
             <!-- ============================================================== -->
             <!-- Left Sidebar - style you can find in sidebar.scss  -->
             <!-- ============================================================== -->
-            <aside class="left-sidebar" data-sidebarbg="skin6">
+            <aside class="left-sidebar" data-sidebarbg="skin6"
+                style="position: fixed !important;top:20px !important">
                 <!-- Sidebar scroll-->
                 <div class="scroll-sidebar">
                     <!-- Sidebar navigation-->
-                    <nav class="sidebar-nav">
-                        <ul id="sidebarnav">
+                    <nav class="sidebar-nav sticky-top">
+                        <ul id="sidebarnav ">
                             <li class="sidebar-item <?php echo e(request()->routeIs('dash') ? 'selected' : ''); ?>">
                                 <a class="sidebar-link waves-effect waves-dark sidebar-link "
                                     href="<?php echo e(route('dash')); ?>" aria-expanded="false"><i
                                         class="mdi mdi-view-dashboard"></i><span class="hide-menu">Tableau de
-                                        board</span></a>
+                                        bord</span></a>
                             </li>
                             <?php if(Auth::user()->type == 2): ?>
                                 <li class="sidebar-item <?php echo e(request()->routeIs('dash.menu') ? 'selected' : ''); ?> ">

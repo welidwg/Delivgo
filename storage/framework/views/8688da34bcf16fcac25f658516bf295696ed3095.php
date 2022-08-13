@@ -5,7 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Delivgo | <?php $__env->startSection('title'); ?>
+
+        <?php echo $__env->yieldSection(); ?>
+    </title>
     <meta http-equiv="refresh" content="<?php echo e(config('session.lifetime') * 60); ?>">
 
     <!-- CSS only -->
@@ -35,7 +38,7 @@
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"
         integrity="sha512-xIPqqrfvUAc/Cspuj7Bq0UtHNo/5qkdyngx6Vwt+tmbvTLDszzXM0G6c91LXmGrRx8KEPulT+AfOOez+TeVylg=="
@@ -54,15 +57,41 @@
         alertify.defaults.theme.ok = "btn btn-danger text-white"
         alertify.defaults.theme.cancel = "btn btn-light"
     </script>
-    <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
 
-    <script src="<?php echo e(asset('/js/pusher.js')); ?>"></script>
-    <script src="<?php echo e(asset('js/moment/moment.js')); ?>"></script>
-    <script src="<?php echo e(asset('js/moment/fr.js')); ?>"></script>
+
     <?php if(Auth::check()): ?>
+        <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
         <script>
-         
+            var audio = new Audio("<?php echo e(asset('notif.wav')); ?>");
         </script>
+        <script>
+            var pusher = new Pusher("33ae8c9470ab8fad0744", {
+                cluster: "eu",
+            });
+
+            Pusher.logToConsole = false;
+
+            var channel = pusher.subscribe('notif-<?php echo e(Auth::user()->user_id); ?>');
+            channel.bind('notif', function(data) {
+                audio.play();
+
+                toastr.info(`
+        <strong>${data.notif.title}</strong>
+        ${data.notif.content}
+        `)
+
+                let permission = Notification.requestPermission();
+                if (Notification.permission == "granted") {
+
+                    const notif = new Notification(data.notif.title, {
+                        body: data.notif.content,
+                        icon: "<?php echo e(asset('/images/logo/logoOrange.PNG')); ?>"
+                    });
+                }
+            });
+        </script>
+        <script src="<?php echo e(asset('js/moment/moment.js')); ?>"></script>
+        <script src="<?php echo e(asset('js/moment/fr.js')); ?>"></script>
     <?php endif; ?>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css" />
 
@@ -284,25 +313,23 @@ $ip = request()->ip() == '127.0.0.1' ? '102.154.237.218' : request()->ip();
                             </div>
                             <script>
                                 $("#btnRegion").on("click", () => {
-                                    let value = $("#browser").val();
-                                    localStorage.setItem("region", value)
+                                    let valueadd = $("#browser").val();
+                                    localStorage.setItem("region", valueadd)
                                     $("#modalRegion").modal("hide")
-
-                                    if (!regs.includes(value)) {
+                                    if (!regs.includes(valueadd)) {
                                         toastr.warning(
                                             "<span style='color:black'>Cette région/ville n'est pas encore dans nos zones de livraison</span>"
                                         )
-
                                     } else {
                                         <?php if(Auth::check()): ?>
                                             axios.post("/user/updateAddress/<?php echo e(Auth::user()->user_id); ?>", {
-                                                adresse: value
+                                                _token: '<?php echo e(csrf_token()); ?>',
+                                                address: valueadd
                                             }).then((res) => {
                                                 window.location.reload();
-
-
                                             }).catch((err) => {
                                                 console.log(err.response.data);
+                                                toastr.error(err.response.data.message)
                                             })
                                         <?php endif; ?>
 

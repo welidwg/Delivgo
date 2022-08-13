@@ -11,7 +11,7 @@
 
 
  @forelse ($notifs as $notif)
-     <a class="dropdown-item d-flex align-items-center bg-light" href="#">
+     <a class="dropdown-item d-flex align-items-center bg-light  " href="#">
          <div class="me-3 col-3">
              <div class=" "><img src="{{ asset('/uploads/logos/' . $notif->sender->avatar) }}"
                      class="rounded-circle shadow-sm" width="45px" alt="">

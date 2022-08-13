@@ -82,18 +82,25 @@ class commandesRefController extends Controller
 
                     if (Auth::user()->type == 3) {
                         # code...
+                        if ($cmds->statut == 4) {
+                            $statut = 3;
+                        } else {
+                            $statut = $cmds->statut;
+                        }
                         $notif->storeNotif("Livraison", "Le livreur " . $cmds->deliverer->name . " a annulé la livraison de la commande avec le référence  $cmds->reference ", $cmds->deliverer->user_id, $resto_id);
-                        $statut = 3;
+
                         $cmds->taken = 0;
                         $cmds->deliverer_id = null;
+                    } else if (Auth::user()->type == 2) {
+                        $notif->storeNotif("Commande annulée", $cmds->resto->name . " a annulé votre commande avec la référence  $cmds->reference ", $cmds->resto->user_id, $cmds->user->user_id);
+                        $to_delete = true;
                     } else {
-                        $notif->storeNotif("Commande", $cmds->user->name . " a annulé sa commande avec le référence  $cmds->reference ", $user_id, $resto_id);
+                        $notif->storeNotif("Commande", $cmds->user->name . " a annulé sa commande avec la référence  $cmds->reference ", $user_id, $resto_id);
                         if ($cmds->taken) {
-                            $notif->storeNotif("Commande", $cmds->user->name . " a annulé sa commande avec le référence  $cmds->reference ", $user_id, $cmds->deliverer_id);
+                            $notif->storeNotif("Commande", $cmds->user->name . " a annulé sa commande avec la référence  $cmds->reference ", $user_id, $cmds->deliverer_id);
                         }
                         $to_delete = true;
                     }
-
                     break;
                 default:
                     # code...

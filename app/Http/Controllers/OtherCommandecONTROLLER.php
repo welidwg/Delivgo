@@ -41,6 +41,7 @@ class OtherCommandecONTROLLER extends Controller
             $new->frais = Auth::user()->region->deliveryPrice;
 
             if ($is_night->id_night) {
+                $new->by_night = 1;
                 $new->frais = $frais->frais_nuit;
             }
             $new->save();

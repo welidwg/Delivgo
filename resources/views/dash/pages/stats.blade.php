@@ -5,7 +5,9 @@ use App\models\User;
 use App\models\Commande;
 use App\models\commande_ref;
 use App\models\RequestResto;
+use App\models\OtherCommande;
 use Carbon\Carbon;
+
 @endphp
 
 
@@ -397,7 +399,7 @@ use Carbon\Carbon;
                                             <td class="d-none d-lg-table-cell">
                                                 @php
                                                     $countcmd = commande_ref::where('deliverer_id', $demande->user_id)
-                                                        ->whereDate('created_at', Carbon::today())
+                                                        ->whereDate('updated_at', Carbon::today())
                                                         ->get();
                                                 @endphp
                                                 {{ $countcmd->count() }}
@@ -553,11 +555,12 @@ use Carbon\Carbon;
                                     <span>{{ $type == 2 ? count($commandes) : count($response) }}</span>
                                 </div>
                             </div>
-                            <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i></div>
+                            <div class="col-auto"><i class="fas fa-check fa-2x text-gray-300"></i></div>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="col-md-4 col-xl-3 mb-4">
                 <div class="card shadow border-start-info py-2">
                     <div class="card-body">
@@ -595,13 +598,198 @@ use Carbon\Carbon;
                     </div>
                 </div>
             </div>
+            @if ($type == 2)
+                <div class="col-md-4 col-xl-3 mb-4">
+                    <div class="card shadow border-start-success py-2">
+                        <div class="card-body">
+                            <div class="row align-items-center no-gutters">
+                                <div class="col me-2">
+                                    <div class="text-uppercase text-success fw-bold text-xs mb-1">
+                                        <span>Revenue d'aujourd'hui</span>
+
+                                    </div>
+                                    <div class="text-dark fw-bold h5 mb-0">
+                                        <span>
+                                            @php
+                                                $revtotalresto = commande_ref::where('resto_id', $user->user_id)
+                                                    ->where('statut', 5)
+                                                    ->whereDate('updated_at', Carbon::today())
+                                                    ->get();
+                                                $totalCmd = 0;
+                                                foreach ($revtotalresto as $tt) {
+                                                    $totalCmd += $tt->total;
+                                                }
+                                            @endphp
+                                            {{ $totalCmd }} TND
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-xl-3 mb-4">
+                    <div class="card shadow border-start-success py-2">
+                        <div class="card-body">
+                            <div class="row align-items-center no-gutters">
+                                <div class="col me-2">
+                                    <div class="text-uppercase text-success fw-bold text-xs mb-1">
+                                        @php
+                                            $now = Carbon::now();
+                                            $month = $now->translatedFormat('M');
+                                            
+                                        @endphp
+                                        <span>Revenue de mois {{ $month }}</span>
+
+                                    </div>
+                                    <div class="text-dark fw-bold h5 mb-0">
+                                        <span>
+                                            @php
+                                                $revtotalresto = commande_ref::where('resto_id', $user->user_id)
+                                                    ->where('statut', 5)
+                                                    ->whereMonth('updated_at', date('m'))
+                                                    ->get();
+                                                $totalCmd = 0;
+                                                foreach ($revtotalresto as $tt) {
+                                                    $totalCmd += $tt->total;
+                                                }
+                                            @endphp
+                                            {{ $totalCmd }} TND
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+            @if ($type == 3)
+                <div class="col-md-4 col-xl-3 mb-4">
+                    <div class="card shadow border-start-success py-2">
+                        <div class="card-body">
+                            <div class="row align-items-center no-gutters">
+                                <div class="col me-2">
+                                    <div class="text-uppercase text-success fw-bold text-xs mb-1">
+                                        <span>Revenue d'aujourd'hui</span>
+
+                                    </div>
+                                    <div class="text-dark fw-bold h5 mb-0">
+                                        <span>
+                                            @php
+                                                $revtotalDeliv = commande_ref::where('deliverer_id', $user->user_id)
+                                                    ->where('statut', 5)
+                                                    ->whereDate('updated_at', Carbon::today())
+                                                    ->get();
+                                                $revenue2 = OtherCommande::where('deliverer_id', $user->user_id)
+                                                    ->where('statut', 3)
+                                                    ->whereDate('updated_at', Carbon::today())
+                                                    ->get();
+                                                $totalDelivfrais = 0;
+                                                foreach ($revtotalDeliv as $tt) {
+                                                    $totalDelivfrais += $tt->frais;
+                                                }
+                                                foreach ($revenue2 as $tt) {
+                                                    $totalDelivfrais += $tt->frais;
+                                                }
+                                            @endphp
+                                            {{ $totalDelivfrais }} TND
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-xl-3 mb-4">
+                    <div class="card shadow border-start-success py-2">
+                        <div class="card-body">
+                            <div class="row align-items-center no-gutters">
+                                <div class="col me-2">
+                                    <div class="text-uppercase text-success fw-bold text-xs mb-1">
+                                        @php
+                                            $now = Carbon::now();
+                                            $month = $now->translatedFormat('M');
+                                            
+                                        @endphp
+                                        <span>Revenue de mois {{ $month }}</span>
+
+                                    </div>
+                                    <div class="text-dark fw-bold h5 mb-0">
+                                        <span>
+                                            @php
+                                                $revtotalDeliv = commande_ref::where('deliverer_id', $user->user_id)
+                                                    ->where('statut', 5)
+                                                    ->whereMonth('updated_at', date('m'))
+                                                    ->get();
+                                                $revenue2 = OtherCommande::where('deliverer_id', $user->user_id)
+                                                    ->where('statut', 3)
+                                                    ->whereMonth('updated_at', date('m'))
+                                                    ->get();
+                                                $totalDelivfrais = 0;
+                                                foreach ($revtotalDeliv as $tt) {
+                                                    $totalDelivfrais += $tt->frais;
+                                                }
+                                                
+                                                foreach ($revenue2 as $tt) {
+                                                    $totalDelivfrais += $tt->frais;
+                                                }
+                                                
+                                            @endphp
+                                            {{ $totalDelivfrais }} TND
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-xl-3 mb-4">
+                    <div class="card shadow border-start-success py-2">
+                        <div class="card-body">
+                            <div class="row align-items-center no-gutters">
+                                <div class="col me-2">
+                                    <div class="text-uppercase text-success fw-bold text-xs mb-1">
+                                        <span>Revenue Total</span>
+
+                                    </div>
+                                    <div class="text-dark fw-bold h5 mb-0">
+                                        <span>
+                                            @php
+                                                $revtotalDeliv = commande_ref::where('deliverer_id', $user->user_id)
+                                                    ->where('statut', 5)
+                                                    ->get();
+                                                $revenue2 = OtherCommande::where('deliverer_id', $user->user_id)
+                                                    ->where('statut', 3)
+                                                    ->get();
+                                                $totalDelivfrais = 0;
+                                                foreach ($revtotalDeliv as $tt) {
+                                                    $totalDelivfrais += $tt->frais;
+                                                }
+                                                foreach ($revenue2 as $tt) {
+                                                    $totalDelivfrais += $tt->frais;
+                                                }
+                                            @endphp
+                                            {{ $totalDelivfrais }} TND
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         @endif
 
 
     </div>
     @if ($type != 4)
         <div class="row">
-            <div class="col-lg-8">
+            {{-- <div class="col-lg-8">
                 <div class="card">
                     <div class="card-body">
                         <div class="d-md-flex align-items-center">
@@ -625,9 +813,9 @@ use Carbon\Carbon;
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             @if ($type == 2)
-                <div class="col-lg-4">
+                <div class="col-lg-4 mx-auto">
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Statistiques générale</h4>
@@ -653,80 +841,44 @@ use Carbon\Carbon;
                                                     ->count();
                                                 echo $count;
                                             @endphp
+                                        @endif
                                     </span>
+
+                                </div>
+                            </div>
+                            <div class="py-3 d-flex align-items-center">
+                                <span class="btn btn-warning btn-circle d-flex align-items-center">
+                                    <i class="fal fa-biking-mountain fs-4"></i> </span>
+                                <div class="ms-3">
+                                    <h5 class="mb-0 fw-bold">Top livreur</h5>
+                                    @if ($topdilev->deliverer)
+                                        <span class="text-muted fs-6">{{ $topdilev->deliverer->name }}</span>
+                                    @else
+                                        Pas encore
+                                    @endif
+                                </div>
+                                <div class="ms-auto">
+
+                                    <span class="badge bg-light text-muted">
+                                        @if ($topdilev->deliverer != null)
+                                            @php
+                                                $countLiv = commande_ref::where('resto_id', $user->user_id)
+                                                    ->where('deliverer_id', $topdilev->deliverer->user_id)
+                                                    ->get()
+                                                    ->count();
+                                                echo $countLiv;
+                                            @endphp
+                                        @endif
+
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             @endif
 
         </div>
-        </div>
-        <div class="py-3 d-flex align-items-center">
-            <span class="btn btn-warning btn-circle d-flex align-items-center">
-                <i class="fal fa-biking-mountain fs-4"></i> </span>
-            <div class="ms-3">
-                <h5 class="mb-0 fw-bold">Top livreur</h5>
-                @if ($topdilev->deliverer)
-                    <span class="text-muted fs-6">{{ $topdilev->deliverer->name }}</span>
-                @else
-                    Pas encore
-                @endif
-            </div>
-            <div class="ms-auto">
-
-                <span class="badge bg-light text-muted">
-                    @if ($topdilev->deliverer != null)
-                        @php
-                            $countLiv = commande_ref::where('resto_id', $user->user_id)
-                                ->where('deliverer_id', $topdilev->deliverer->user_id)
-                                ->get()
-                                ->count();
-                            echo $countLiv;
-                        @endphp
-                    @endif
-
-                </span>
-            </div>
-        </div>
-        <div class="py-3 d-flex align-items-center">
-            <span class="btn btn-success btn-circle d-flex align-items-center">
-                <i class="mdi mdi-comment-multiple-outline text-white fs-4"></i>
-            </span>
-            <div class="ms-3">
-                <h5 class="mb-0 fw-bold">Most Commented</h5>
-                <span class="text-muted fs-6">Ample Admin</span>
-            </div>
-            <div class="ms-auto">
-                <span class="badge bg-light text-muted">+68%</span>
-            </div>
-        </div>
-        <div class="py-3 d-flex align-items-center">
-            <span class="btn btn-info btn-circle d-flex align-items-center">
-                <i class="mdi mdi-diamond fs-4 text-white"></i>
-            </span>
-            <div class="ms-3">
-                <h5 class="mb-0 fw-bold">Top Budgets</h5>
-                <span class="text-muted fs-6">Sunil Joshi</span>
-            </div>
-            <div class="ms-auto">
-                <span class="badge bg-light text-muted">+15%</span>
-            </div>
-        </div>
-
-        <div class="pt-3 d-flex align-items-center">
-            <span class="btn btn-danger btn-circle d-flex align-items-center">
-                <i class="mdi mdi-content-duplicate fs-4 text-white"></i>
-            </span>
-            <div class="ms-3">
-                <h5 class="mb-0 fw-bold">Best Designer</h5>
-                <span class="text-muted fs-6">Nirav Joshi</span>
-            </div>
-            <div class="ms-auto">
-                <span class="badge bg-light text-muted">+90%</span>
-            </div>
-        </div>
-        </div>
-        </div>
-        </div>
-    @endif
-
-    </div>
     @endif
 @endsection

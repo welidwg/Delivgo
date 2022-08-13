@@ -32,7 +32,9 @@
                       <li><a class="nav-link scrollto" href="#menu">Restaurants</a></li>
 
                       <li><a class="nav-link scrollto" href="#why-us">Pourquoi delivgo ? </a></li>
-                      <li><a class="nav-link scrollto" href="#join-us">Rejoignez-nous </a></li>
+                      @if (!Auth::check())
+                          <li><a class="nav-link scrollto" href="#join-us">Rejoignez-nous </a></li>
+                      @endif
                   @else
                       <li><a class="nav-link scrollto" href="{{ url('/#menu') }}">Restaurants</a></li>
                   @endif
@@ -68,14 +70,25 @@
                   </ul>
               </div>
           @else
-              <a class="scrollto fs-5 mx-3" data-bs-toggle="offcanvas" href="#cart"><i
-                      class="fas fa-shopping-cart"></i></a>
-              <div class="dropdown"><a href="#" class="fs-5"><i class="fas fa-bell"></i></a>
+              <a class="scrollto fs-5 mx-3 position-relative" data-bs-toggle="offcanvas" href="#cart"><i
+                      class="fas fa-shopping-cart"></i>
+
+              </a>
+              <div class="dropdown position-relative"><a href="#" class="fs-5" id="bellNotif"><i
+                          class="fas fa-bell"></i>
+
+                      <span id="notifAlert" style="display: none"
+                          class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                          <span class="visually-hidden">New alerts</span>
+                      </span>
+                  </a>
                   <ul class="" style="width: 400px;right:-190px">
                       <div>
                           <h6 class="text-center fs-5">Notifications
 
-                              <a href="#" class="text-danger EmptyNotif"><i class="fas fa-trash"></i></a>
+                              <a href="#" class="text-danger EmptyNotif"><i class="fas fa-trash"></i>
+
+                              </a>
                           </h6>
                           <hr>
                       </div>
@@ -91,13 +104,43 @@
                   </ul>
               </div>
               <script>
+                  function checkNumber() {
+                      axios.get("/checkNotifNumber")
+                          .then(res => {
+                              if (res.data) {
+                                  $("#notifAlert").fadeIn()
+                              } else {
+                                  $("#notifAlert").fadeOut()
+
+                              }
+
+                          })
+                          .catch(err => {
+                              console.error(err);
+                          })
+                  }
+
                   function notifLoad() {
                       $("#notifCont").load("/notif")
                       setTimeout(() => {
                           notifLoad()
-                      }, 10 * 1000);
+                          checkNumber()
+                      }, 4 * 1000);
                   }
+
                   notifLoad()
+                  $("#bellNotif").click(() => {
+                      axios.post("/notif/seen", {
+                              _token: "{{ csrf_token() }}"
+                          })
+                          .then(res => {
+                              notifLoad()
+                          })
+                          .catch(err => {
+                              console.error(err);
+                          })
+                  })
+
                   $('.EmptyNotif').on("click", (e) => {
                       alertify.confirm("Confirmation", "Vous êtes sûr d'effacer vos notifications ?", () => {
                               axios.post("/notif/empty", {

@@ -1,6 +1,8 @@
 @extends('main/base')
 
-
+@section('title')
+    Profile
+@endsection
 @section('content')
     <section class="inner-page-hero bg-image  bg-color-3 shadow-sm "
         style="position: sticky;top:0px;left:0;right:0;z-index: -998 !important;">

@@ -50,6 +50,8 @@
             </div>
 
         </span>
+    <?php else: ?>
+        <span class="d-flex align-items-center justify-content-between"> Bienvenue ,Admin
     <?php endif; ?>
 <?php $__env->stopSection(); ?>
 

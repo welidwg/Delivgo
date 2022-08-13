@@ -259,6 +259,34 @@ Route::group(["middleware" => "auth"], function () {
     Route::get('/notif', function () {
         return view('main/layouts/notif');
     })->name("main.notifs");
+    Route::post("/notif/seen", function () {
+        $notifs = Notification::where('to', Auth::user()->user_id)
+            ->where("seen", 0)
+            ->with('sender')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        foreach ($notifs as $notif) {
+            $notif->seen = 1;
+            $notif->save();
+        }
+        return "done";
+    });
+    Route::get("/checkNotifNumber", function () {
+        $notifs = Notification::where('to', Auth::user()->user_id)
+
+            ->with('sender')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $seen = false;
+        foreach ($notifs as $notif) {
+            if ($notif->seen == 0) {
+                $seen = true;
+                break;
+            }
+        }
+
+        return $seen;
+    });
 });
 
 Route::get('/getToken', function () {
@@ -309,7 +337,7 @@ Route::get("/restosContent/{params}", function (Request $req, $params) {
         }
     }
 
-    return view("main/layouts/restoCard", ["restos" => $restos, "check" => $check, "is_night" => $is_night->id_night, "frais_nuit" => $frais_nuit->frais_nuit]);
+    return view("main/layouts/restoCard", ["restos" => $restos, "check" => $check, "is_night" => $is_night->id_night, "frais_nuit" => $frais_nuit->frais_nuit, "params" => $params]);
 });
 
 Route::get('/resto/{id}', function ($id) {

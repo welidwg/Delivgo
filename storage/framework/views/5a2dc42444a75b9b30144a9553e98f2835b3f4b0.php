@@ -4,6 +4,7 @@
      use App\models\commande_ref;
      use App\models\RequestResto;
      use App\models\Region;
+     use App\models\Config;
      use App\models\OtherCommande;
      
  ?>
@@ -739,7 +740,7 @@
                                                                  style="max-width: 200px !important;word-wrap: break-word">
                                                                  <div class="accordion-body h-100">
                                                                      <span class="text-muted fw-bold">Total:
-                                                                     </span> <?php echo e($passed->total); ?> DT
+                                                                     </span> <?php echo e($passed->total); ?> TND
                                                                      <br>
 
                                                                      <?php if($passed->garnitures != ''): ?>
@@ -850,7 +851,7 @@
                                                  <?php endswitch; ?>
                                              </td>
                                              <td class="d-none d-lg-table-cell">
-                                                 <?php echo e($total); ?> Dt</td>
+                                                 <?php echo e($total); ?> TND</td>
                                              <td class="d-none d-lg-table-cell">
                                                  <?php echo e($cmd->deliverer_id == null ? '' : $cmd->deliverer->name); ?></td>
                                              <td class="d-none d-lg-table-cell">
@@ -860,6 +861,10 @@
                                                              <a href="#!" id="startCmd<?php echo e($cmd->id); ?>"
                                                                  class="btn shadow-none text-success"><i
                                                                      class="fas fa-play"></i></a>
+
+                                                             <a href="#!" id="cancel<?php echo e($cmd->id); ?>"
+                                                                 class="btn shadow-none text-danger"><i
+                                                                     class="fas fa-trash"></i></a>
                                                              <script>
                                                                  $("#startCmd<?php echo e($cmd->id); ?>,#startCmd1<?php echo e($cmd->id); ?>").on("click", (e) => {
                                                                      e.preventDefault()
@@ -919,11 +924,6 @@
 
                                                          <?php default: ?>
                                                      <?php endswitch; ?>
-
-
-                                                     <a href="#!" id="deleteCmd<?php echo e($cmd->id); ?>"
-                                                         class="btn shadow-none text-danger"><i
-                                                             class="fas fa-trash"></i></a>
                                                  <?php else: ?>
                                                      -
                                                  <?php endif; ?>
@@ -1156,7 +1156,7 @@
                                                                      case (1): ?>
                                                                          <button href="#!"
                                                                              id="startCmd1<?php echo e($cmd->id); ?>"
-                                                                             class="btn-outline shadow-none text-success"><i
+                                                                             class="btn-success shadow-none text-white w-75 rounded-pill shadow-none border-0 p-2 mb-2"><i
                                                                                  class="fas fa-play"></i>
                                                                              Confirmer</button>
                                                                          
@@ -1174,10 +1174,11 @@
                                                                  <?php endswitch; ?>
                                                              <?php endif; ?>
                                                              <?php if($cmd->statut == 1): ?>
-                                                                 <a class="btn btn-danger w-75"
-                                                                     id="cancel<?php echo e($cmd->id); ?>">Annuler</a>
+                                                                 <button
+                                                                     class="btn-danger shadow-none text-white  rounded-pill shadow-none border-0 p-2 w-75"
+                                                                     id="cancel1<?php echo e($cmd->id); ?>">Annuler</button>
                                                                  <script>
-                                                                     $("#cancel1<?php echo e($cmd->id); ?>").on("click", (e) => {
+                                                                     $("#cancel1<?php echo e($cmd->id); ?>,#cancel<?php echo e($cmd->id); ?>").on("click", (e) => {
                                                                          e.preventDefault()
                                                                          alertify.confirm("Confirmation", "Vous êtes sûr d'annuler cette commande ?", () => {
                                                                              axios.post("/commande/statut", {
@@ -1614,7 +1615,8 @@
                                                  <th class="border-top-0">Client</th>
                                                  <th class="border-top-0 d-none d-lg-table-cell">Date de passation</th>
                                                  <th class="border-top-0">Statut</th>
-                                                 <th class="border-top-0 d-none d-lg-table-cell">Total</th>
+                                                 <th class="border-top-0 d-none d-lg-table-cell">Frais de livraison</th>
+                                                 <th class="border-top-0 d-none d-lg-table-cell">Total (compris les frais)</th>
                                                  <th class="border-top-0 d-none d-lg-table-cell">Actions</th>
                                                  <th class="d-lg-none">Détails</th>
                                              </tr>
@@ -1732,43 +1734,17 @@
                                                          <?php endswitch; ?>
                                                      </td>
                                                      <td class="d-none d-lg-table-cell">
-                                                         <?php echo e($total + $cmd->user->region->deliveryPrice); ?>
-
-                                                         Dt</td>
+                                                         <?php echo e($cmd->frais); ?> TND
+                                                     </td>
+                                                     <td class="d-none d-lg-table-cell">
+                                                         <?php echo e($cmd->total + $cmd->frais); ?> TND
+                                                     </td>
 
                                                      <td class="d-none d-lg-table-cell">
                                                          <?php if(!Auth::user()->onDuty): ?>
                                                              Vous êtes hors service
                                                          <?php else: ?>
                                                              <?php if(!$cmd->taken): ?>
-                                                                 <a href="#!" id="startCmd<?php echo e($cmd->id); ?>"
-                                                                     class="btn shadow-none text-success"><i
-                                                                         class="fas fa-play"></i></a>
-                                                                 <script>
-                                                                     $("#startCmd<?php echo e($cmd->id); ?>").on("click", (e) => {
-                                                                         e.preventDefault()
-                                                                         let arr = []
-
-                                                                         axios.post("/commande/statut", {
-                                                                                 "_token": "<?php echo e(csrf_token()); ?>",
-                                                                                 req_id: "<?php echo e($cmd->id); ?>",
-                                                                                 user_id: "<?php echo e($cmd->user_id); ?>",
-                                                                                 resto_id: "<?php echo e($cmd->resto_id); ?>",
-                                                                                 statut: 4
-                                                                             })
-                                                                             .then(res => {
-                                                                                 console.log(res)
-                                                                                 toastr.info("Commande acceptée")
-                                                                                 LoadContentMain()
-
-                                                                             })
-                                                                             .catch(err => {
-                                                                                 console.error(err);
-                                                                                 toastr.error("Quelque chose s'est mal passé")
-
-                                                                             })
-                                                                     })
-                                                                 </script>
                                                              <?php else: ?>
                                                                  <?php if($cmd->taken && $cmd->deliverer_id == Auth::user()->user_id): ?>
                                                                      <?php if($cmd->statut == 4): ?>
@@ -1776,7 +1752,7 @@
                                                                              class="btn shadow-none text-success"><i
                                                                                  class="fas fa-check"></i></a>
                                                                          <script>
-                                                                             $("#completeCmd<?php echo e($cmd->id); ?>,#completeCmd1<?php echo e($cmd->id); ?>").on("click", (e) => {
+                                                                             $("#completeCmd<?php echo e($cmd->id); ?>,#completeCmdModal<?php echo e($cmd->id); ?>").on("click", (e) => {
                                                                                  e.preventDefault()
                                                                                  axios.post("/commande/statut", {
                                                                                          "_token": "<?php echo e(csrf_token()); ?>",
@@ -1809,7 +1785,7 @@
                                                                          class="btn shadow-none text-danger"><i
                                                                              class="fas fa-times"></i></a>
                                                                      <script>
-                                                                         $("#cancelCmd<?php echo e($cmd->id); ?>,#cancelCmd1<?php echo e($cmd->id); ?>").on("click", (e) => {
+                                                                         $("#cancelCmd<?php echo e($cmd->id); ?>,#cancelCmdModal<?php echo e($cmd->id); ?>").on("click", (e) => {
                                                                              e.preventDefault()
                                                                              alertify.confirm("Confirmation", "Annule la livraison ?", () => {
                                                                                  axios.post("/commande/statut", {
@@ -1907,11 +1883,19 @@
 
 
                                                                          </div>
-                                                                         <div class="col mb-2">
-                                                                             <span>Total: <strong>
-                                                                                     <?php echo e($total + $cmd->user->region->deliveryPrice); ?>
 
-                                                                                     TND
+                                                                         <div class="col mb-2">
+                                                                             <span>Frais de livraison: <strong>
+                                                                                     <?php echo e($cmd->frais); ?> TND
+
+                                                                                 </strong></span>
+
+
+
+                                                                         </div>
+                                                                         <div class="col mb-2">
+                                                                             <span>Total (compris les frais): <strong>
+                                                                                     <?php echo e($cmd->total + $cmd->frais); ?> TND
 
                                                                                  </strong></span>
 
@@ -1923,12 +1907,12 @@
                                                                          <?php if($cmd->statut == 4): ?>
                                                                              <button
                                                                                  class="btn-outline btn-success  mb-2 rounded-pill p-2 shadow-none text-white border-0 w-75"
-                                                                                 id="completeCmd1<?php echo e($cmd->id); ?>">Terminé</button>
+                                                                                 id="completeCmdModal<?php echo e($cmd->id); ?>">Terminé</button>
                                                                          <?php endif; ?>
 
                                                                          <button
                                                                              class="btn-outline btn-danger mb-2 rounded-pill p-2 shadow-none text-white border-0 w-75"
-                                                                             id="cancelCmd1<?php echo e($cmd->id); ?>">Annuler la
+                                                                             id="cancelCmdModal<?php echo e($cmd->id); ?>">Annuler la
                                                                              livraison</button>
                                                                          
 
@@ -1992,10 +1976,12 @@
                                                      <th class="border-top-0">Client</th>
                                                      <th class="border-top-0 d-none d-lg-table-cell">Date de passation</th>
                                                      <th class="border-top-0">Statut</th>
-                                                     <th class="border-top-0 d-none d-lg-table-cell">Total</th>
+                                                     <th class="border-top-0 d-none d-lg-table-cell">Frais de livraison</th>
+                                                     <th class="border-top-0 d-none d-lg-table-cell">Total (compris les frais)</th>
                                                      <th class="border-top-0 d-none d-lg-table-cell">Actions</th>
                                                      <th class="d-lg-none">Détails</th>
                                                  </tr>
+
                                              </thead>
                                              <style>
                                                  .accordion-body {
@@ -2111,10 +2097,11 @@
                                                              <?php endswitch; ?>
                                                          </td>
                                                          <td class="d-none d-lg-table-cell">
-                                                             <?php echo e($total + $cmd->user->region->deliveryPrice); ?>
-
-                                                             TND</td>
-
+                                                             <?php echo e($cmd->frais); ?> TND
+                                                         </td>
+                                                         <td class="d-none d-lg-table-cell">
+                                                             <?php echo e($cmd->total + $cmd->frais); ?> TND
+                                                         </td>
                                                          <td class="d-none d-lg-table-cell">
                                                              <?php if(!Auth::user()->onDuty): ?>
                                                                  Vous êtes hors service
@@ -2217,10 +2204,18 @@
 
                                                                              </div>
                                                                              <div class="col mb-2">
-                                                                                 <span>Total: <strong>
-                                                                                         <?php echo e($total + $cmd->user->region->deliveryPrice); ?>
+                                                                                 <span>Frais de livraison: <strong>
+                                                                                         <?php echo e($cmd->frais); ?> TND
 
-                                                                                         TND
+                                                                                     </strong></span>
+
+
+
+                                                                             </div>
+
+                                                                             <div class="col mb-2">
+                                                                                 <span>Total (compris frais de livraison): <strong>
+                                                                                         <?php echo e($cmd->total + $cmd->frais); ?> TND
 
                                                                                      </strong></span>
 

@@ -386,7 +386,7 @@
                                              <div class="row align-items-center no-gutters">
                                                  <div class="col me-2">
                                                      <div class="text-uppercase text-info fw-bold text-xs mb-1">
-                                                         <span>{{ 'Restaurant fréquent' }}</span>
+                                                         <span>Restaurant fréquent</span>
 
                                                      </div>
                                                      <div class="row g-0 align-items-center">
@@ -433,14 +433,9 @@
                                                                  ->where('statut', 3)
                                                                  ->whereDate('updated_at', Carbon::today())
                                                                  ->get();
-                                                             $frais = Config::latest()->first();
                                                          
                                                              foreach ($revenue as $rev) {
-                                                                 if ($rev->by_night) {
-                                                                     $totalRevToday += $frais->frais_nuit;
-                                                                 } else {
-                                                                     $totalRevToday += $rev->user->region->deliveryPrice;
-                                                                 }
+                                                                 $totalRevToday += $rev->frais;
                                                              }
                                                              foreach ($revenue2 as $rev) {
                                                                  $totalRevToday += $rev->frais;
@@ -454,6 +449,65 @@
                                                                  foreach ($rev->items as $it) {
                                                                      $totalRevToday += $it->total;
                                                                  }
+                                                             }
+                                                         }
+                                                         
+                                                     @endphp
+
+                                                     <span>{{ $totalRevToday }} TND</span>
+
+                                                 </div>
+                                             </div>
+                                             <div class="col-auto"><i
+                                                     class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="col-md-4 col-xl-3 mb-4">
+                                 <div class="card shadow border-start-success py-2">
+                                     <div class="card-body">
+                                         <div class="row align-items-center no-gutters">
+                                             <div class="col me-2">
+                                                 <div class="text-uppercase text-success fw-bold text-xs mb-1">
+                                                     @php
+                                                         $now = Carbon::now();
+                                                         $month = $now->translatedFormat('M');
+                                                         
+                                                     @endphp
+                                                     <span>Revenue du mois {{ $month }} </span>
+
+                                                 </div>
+                                                 <div class="text-dark fw-bold h5 mb-0">
+                                                     @php
+                                                         $totalRevToday = 0;
+                                                         
+                                                         if ($type == 3) {
+                                                             # code...
+                                                             $revenue = commande_ref::where('deliverer_id', $user->user_id)
+                                                                 ->where('statut', 5)
+                                                                 ->whereMonth('updated_at', date('m'))
+                                                                 ->get();
+                                                             $revenue2 = OtherCommande::where('deliverer_id', $user->user_id)
+                                                                 ->where('statut', 3)
+                                                                 ->whereMonth('updated_at', date('m'))
+                                                                 ->get();
+                                                             $frais = Config::latest()->first();
+                                                         
+                                                             foreach ($revenue as $rev) {
+                                                                 $totalRevToday += $rev->frais;
+                                                             }
+                                                             foreach ($revenue2 as $rev) {
+                                                                 $totalRevToday += $rev->frais;
+                                                             }
+                                                         } else {
+                                                             $revtotalresto = commande_ref::where('resto_id', $user->user_id)
+                                                                 ->where('statut', 5)
+                                                                 ->whereMonth('updated_at', date('m'))
+                                                                 ->get();
+                                                             foreach ($revtotalresto as $tt) {
+                                                                 $totalRevToday += $tt->total;
                                                              }
                                                          }
                                                          
@@ -492,19 +546,17 @@
                                                                  ->where('statut', 3)
                                                                  ->get();
                                                              foreach ($revenue as $rev) {
-                                                                 $totalRev += $rev->user->region->deliveryPrice;
+                                                                 $totalRev += $rev->frais;
                                                              }
                                                              foreach ($revenue2 as $rev) {
-                                                                 $totalRev += $rev->user->region->deliveryPrice;
+                                                                 $totalRev += $rev->frais;
                                                              }
                                                          } else {
                                                              $revenue = commande_ref::where('resto_id', $user->user_id)
                                                                  ->where('statut', 5)
                                                                  ->get();
                                                              foreach ($revenue as $rev) {
-                                                                 foreach ($rev->items as $it) {
-                                                                     $totalRev += $it->total;
-                                                                 }
+                                                                 $totalRev += $rev->total;
                                                              }
                                                          }
                                                          

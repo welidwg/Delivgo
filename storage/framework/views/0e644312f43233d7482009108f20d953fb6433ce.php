@@ -11,7 +11,7 @@
 
 
  <?php $__empty_1 = true; $__currentLoopData = $notifs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $notif): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-     <a class="dropdown-item d-flex align-items-center bg-light" href="#">
+     <a class="dropdown-item d-flex align-items-center bg-light  " href="#">
          <div class="me-3 col-3">
              <div class=" "><img src="<?php echo e(asset('/uploads/logos/' . $notif->sender->avatar)); ?>"
                      class="rounded-circle shadow-sm" width="45px" alt="">

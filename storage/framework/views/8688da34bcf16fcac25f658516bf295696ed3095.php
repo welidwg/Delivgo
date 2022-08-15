@@ -38,7 +38,7 @@
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"
         integrity="sha512-xIPqqrfvUAc/Cspuj7Bq0UtHNo/5qkdyngx6Vwt+tmbvTLDszzXM0G6c91LXmGrRx8KEPulT+AfOOez+TeVylg=="
@@ -241,7 +241,13 @@ $ip = request()->ip() == '127.0.0.1' ? '102.154.237.218' : request()->ip();
                                             })
                                             .catch(err => {
                                                 console.error(err);
-                                                toastr.error("Quelque chose s'est mal passé")
+                                                if (err.response.data.type != undefined) {
+                                                    toastr.error(err.response.data.message)
+
+                                                } else {
+                                                    toastr.error("Quelque chose s'est mal passé")
+
+                                                }
 
                                             })
 
@@ -387,6 +393,7 @@ $ip = request()->ip() == '127.0.0.1' ? '102.154.237.218' : request()->ip();
                 () => {
                     localStorage.setItem("region", "<?php echo e($position->cityName); ?>")
                     <?php if(Auth::check()): ?>
+
                         axios.post("/user/updateAddress/<?php echo e(Auth::user()->user_id); ?>", {
                             address: "<?php echo e($position->cityName); ?>"
                         }).then((res) => {
@@ -396,6 +403,13 @@ $ip = request()->ip() == '127.0.0.1' ? '102.154.237.218' : request()->ip();
 
                         }).catch((err) => {
                             console.log(err.response.data);
+                            if (err.response.data.message != undefined) {
+                                toastr.error(err.response.data.message);
+
+                            } else {
+                                toastr.error("Erreur de serveur");
+
+                            }
                         })
                     <?php endif; ?>
                 }, () => {

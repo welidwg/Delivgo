@@ -1,7 +1,5 @@
 @extends('dash/base')
-@section('title')
-    Profile
-@endsection
+
 @section('header_path')
     Profile
 @endsection

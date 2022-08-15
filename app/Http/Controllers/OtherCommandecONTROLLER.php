@@ -24,6 +24,10 @@ class OtherCommandecONTROLLER extends Controller
         try {
             $user_id = Auth::user()->user_id;
             $message = $req->message;
+            $available = User::where("type", 3)->where("onDuty", 1)->get();
+            if ($available->count() == 0) {
+                return response(json_encode(["type" => "error", "message" => "Aucun livreur est diponible pour le moment"]), 500);
+            }
 
 
             $new = new OtherCommande;

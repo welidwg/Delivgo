@@ -211,10 +211,16 @@ use Illuminate\Support\Carbon;
                         <!-- End Logo -->
                         <!-- ============================================================== -->
                         <!-- This is for the sidebar toggle which is visible on mobile only -->
+                        <div></div>
+                        <a class="dropdown-toggle  waves-effect waves-light d-block d-md-none position-relative"
+                            style="width: 90px" aria-expanded="false" data-bs-toggle="dropdown" href="#">
+                            <i class="fas fa-bell fa-fw"></i>
 
-                        <a class="dropdown-toggle nav-toggler waves-effect waves-light  d-block d-md-none"
-                            aria-expanded="false" data-bs-toggle="dropdown" href="#"><span
-                                class="badge bg-danger badge-counter">3+</span><i class="fas fa-bell fa-fw"></i></a>
+                            <span id="notifAlert"
+                                class="position-absolute start-100 top-50 translate-middle p-1 bg-danger border border-light rounded-circle">
+                                <span class="visually-hidden">New alerts</span>
+                            </span>
+                        </a>
                         
                         <div class="dropdown text-wrap">
                             <a class="dropdown-togglewaves-effect waves-light  d-block d-md-none" aria-expanded="false"

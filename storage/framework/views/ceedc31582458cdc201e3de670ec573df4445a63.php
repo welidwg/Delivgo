@@ -1,7 +1,7 @@
- @php
+ <?php
      use App\Models\Region;
- @endphp
- @php
+ ?>
+ <?php
      use App\models\User;
      use App\models\Commande;
      use App\models\commande_ref;
@@ -10,14 +10,15 @@
      use App\models\OtherCommande;
      use Carbon\Carbon;
      
- @endphp
+ ?>
  <script type="text/javascript"
      src="//maps.googleapis.com/maps/api/js?v=quarterly&region=GB&language=en-gb&key=AIzaSyB2F2iNc14AvTI9_I2zk9O4exeJ-eKxGGM&libraries=places">
  </script>
 
- @section('title')
-     {{ $user->name }}
- @endsection
+ <?php $__env->startSection('title'); ?>
+     <?php echo e($user->name); ?>
+
+ <?php $__env->stopSection(); ?>
 
  <script type="text/javascript" src="//googlearchive.github.io/js-marker-clusterer/src/markerclusterer.js"></script>
  <div class="row" id="content">
@@ -30,17 +31,18 @@
                          <div class="position-relative">
 
                              <img id="avatarContainer"
-                                 src={{ $user->avatar == '' ? asset('images/users/1.jpg') : asset('uploads/logos/' . $user->avatar) }}
+                                 src=<?php echo e($user->avatar == '' ? asset('images/users/1.jpg') : asset('uploads/logos/' . $user->avatar)); ?>
+
                                  class="rounded shadow" width="150" />
                              <br>
-                             @if (Auth::user()->user_id == $user->user_id)
+                             <?php if(Auth::user()->user_id == $user->user_id): ?>
                                  <label for="avatar1" class="btn text-dark position-relative fs-4 fw-bold"><i
                                          class="fas fa-edit"></i></label>
                                  <input type="file" id="avatar1" accept="image/*" hidden name="avatar">
-                             @endif
+                             <?php endif; ?>
 
                          </div>
-                         @csrf
+                         <?php echo csrf_field(); ?>
                          <button id="submitAvatar" style="display: none" type="submit"
                              class="btn btn-primary mt-3 ">Save</button>
 
@@ -51,7 +53,7 @@
                              let form = $("#avatarForm")[0]
                              let formData = new FormData(form)
                              $("#submitAvatar").html(spinner)
-                             axios.post("/user/update/logo/{{ Auth::user()->user_id }}", formData)
+                             axios.post("/user/update/logo/<?php echo e(Auth::user()->user_id); ?>", formData)
                                  .then(res => {
 
                                      console.log(res)
@@ -70,37 +72,30 @@
                                  })
                          })
                      </script>
-                     <h4 class="card-title m-t-10">{{ $user->name }}</h4>
+                     <h4 class="card-title m-t-10"><?php echo e($user->name); ?></h4>
                      <h6 class="card-subtitle">
-                         @switch($user->type)
-                             @case(1)
+                         <?php switch($user->type):
+                             case (1): ?>
                                  Client
-                             @break
+                             <?php break; ?>
 
-                             @case(2)
+                             <?php case (2): ?>
                                  Restaurant
-                             @break
+                             <?php break; ?>
 
-                             @case(3)
+                             <?php case (3): ?>
                                  Livreur
-                             @break
+                             <?php break; ?>
 
-                             @case(4)
+                             <?php case (4): ?>
                                  Admin
-                             @break
+                             <?php break; ?>
 
-                             @default
+                             <?php default: ?>
                                  N/A
-                         @endswitch
+                         <?php endswitch; ?>
                      </h6>
-                     {{-- <div class="row text-center justify-content-md-center">
-                            <div class="col-4"><a href="javascript:void(0)" class="link"><i class="icon-people"></i>
-                                    <font class="font-medium">254</font>
-                                </a></div>
-                            <div class="col-4"><a href="javascript:void(0)" class="link"><i class="icon-picture"></i>
-                                    <font class="font-medium">54</font>
-                                </a></div>
-                        </div> --}}
+                     
                  </center>
                  <script>
                      $('#avatar1').change(function() {
@@ -123,16 +118,12 @@
                  <hr>
              </div>
              <div class="card-body"> <small class="text-muted">E-mail </small>
-                 <h6>{{ $user->email }}</h6> <small class="text-muted p-t-30 db">Téléphone</small>
-                 <h6>+216 {{ $user->phone }}</h6> <small class="text-muted p-t-30 db">Adresse</small>
-                 <h6>{{ $user->address != '' ? $user->address : 'Pas encore configuré' }}</h6>
+                 <h6><?php echo e($user->email); ?></h6> <small class="text-muted p-t-30 db">Téléphone</small>
+                 <h6>+216 <?php echo e($user->phone); ?></h6> <small class="text-muted p-t-30 db">Adresse</small>
+                 <h6><?php echo e($user->address != '' ? $user->address : 'Pas encore configuré'); ?></h6>
 
 
-                 {{-- <small class="text-muted p-t-30 db">Social Profile</small>
-                 <br />
-                 <button class="btn btn-circle btn-secondary"><i class="fab fa-facebook-f"></i></button>
-                 <button class="btn btn-circle btn-secondary"><i class="fab fa-twitter"></i></button>
-                 <button class="btn btn-circle btn-secondary"><i class="fab fa-youtube"></i></button> --}}
+                 
              </div>
          </div>
 
@@ -142,27 +133,27 @@
      <div class="col-lg-8 col-xlg-9 col-md-7">
          <div class="card">
              <div class="card-body">
-                 @if (Auth::user()->user_id == $user->user_id)
+                 <?php if(Auth::user()->user_id == $user->user_id): ?>
 
                      <form class="form-horizontal form-material mx-2" id="updateForm">
                          <div class="form-group">
                              <label class="col-md-12">Nom complet</label>
                              <div class="col-md-12">
                                  <input type="text" name="name" placeholder="Johnathan Doe"
-                                     value="{{ $user->name }}" class="form-control form-control-line">
+                                     value="<?php echo e($user->name); ?>" class="form-control form-control-line">
                              </div>
                          </div>
                          <div class="form-group">
                              <label class="col-md-12">Matricule</label>
                              <div class="col-md-12">
                                  <input type="text" name="username" placeholder="" disabled
-                                     value="{{ $user->username }}" class="form-control form-control-line">
+                                     value="<?php echo e($user->username); ?>" class="form-control form-control-line">
                              </div>
                          </div>
                          <div class="form-group">
                              <label for="example-email" class="col-md-12">E-mail</label>
                              <div class="col-md-12">
-                                 <input type="email" name="email" value="{{ $user->email }}"
+                                 <input type="email" name="email" value="<?php echo e($user->email); ?>"
                                      placeholder="johnathan@admin.com" class="form-control form-control-line"
                                      name="example-email" id="example-email">
                              </div>
@@ -177,26 +168,17 @@
                          <div class="form-group">
                              <label class="col-md-12">N° Téléphone:</label>
                              <div class="col-md-12">
-                                 <input type="tel" name="phone" value="{{ $user->phone }}"
+                                 <input type="tel" name="phone" value="<?php echo e($user->phone); ?>"
                                      placeholder="votre numéro" class="form-control form-control-line">
                              </div>
                          </div>
-                         @if ($user->type == 2)
-                             {{-- <div class="form-group">
-                                 <label class="col-md-12">Frais de livraison (DT)</label>
-                                 <small class="fw-bold text-info">NB:écrire 0 si vous livrez sans frais.
-                                 </small>
-
-                                 <div class="col-md-12">
-                                     <input type="number" name="deliveryPrice" value="{{ $user->deliveryPrice }}"
-                                         placeholder="(ex:7 )" required class="form-control form-control-line">
-                                 </div>
-                             </div> --}}
+                         <?php if($user->type == 2): ?>
+                             
                              <div class="form-group">
                                  <label class="col-md-12">Suppléments maximum :</label>
                                  <div class="col-md-12">
                                      <input type="number" name="perSupp" placeholder="(ex:5 )" required
-                                         value="{{ count($user->configs) != 0 ? $user->configs[0]->perSupp : '' }}"
+                                         value="<?php echo e(count($user->configs) != 0 ? $user->configs[0]->perSupp : ''); ?>"
                                          class="form-control form-control-line">
                                  </div>
 
@@ -205,7 +187,7 @@
                                  <label class="col-md-12">Garnitures maximum :</label>
                                  <div class="col-md-12">
                                      <input type="number" name="perTopp"
-                                         value="{{ count($user->configs) != 0 ? $user->configs[0]->perTopp : '' }}"
+                                         value="<?php echo e(count($user->configs) != 0 ? $user->configs[0]->perTopp : ''); ?>"
                                          placeholder="(ex:5 )" required class="form-control form-control-line">
                                  </div>
                              </div>
@@ -213,7 +195,7 @@
                                  <label class="col-md-12">Sauces maximum :</label>
                                  <div class="col-md-12">
                                      <input type="number" name="perSauce"
-                                         value="{{ count($user->configs) != 0 ? $user->configs[0]->perSauce : '' }}"
+                                         value="<?php echo e(count($user->configs) != 0 ? $user->configs[0]->perSauce : ''); ?>"
                                          placeholder="(ex:5 )" required class="form-control form-control-line">
                                  </div>
                              </div>
@@ -221,32 +203,32 @@
                                  <label class="col-md-12">Boissons maximum :</label>
                                  <div class="col-md-12">
                                      <input type="number" name="perDrink"
-                                         value="{{ count($user->configs) != 0 ? $user->configs[0]->perDrink : '' }}"
+                                         value="<?php echo e(count($user->configs) != 0 ? $user->configs[0]->perDrink : ''); ?>"
                                          placeholder="(ex:5 )" required class="form-control form-control-line">
                                  </div>
                              </div>
-                             @foreach ($user->configs as $config)
-                             @endforeach
+                             <?php $__currentLoopData = $user->configs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $config): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 
-                         @endif
+                         <?php endif; ?>
                          <div class="form-group">
                              <label class="col-sm-12">Selectionnez votre ville/région</label>
                              <div class="col-sm-12">
                                  <select required class="form-select shadow-none form-control-line" name="city">
-                                     @php
+                                     <?php
                                          $regions = Region::get();
                                          
                                          if ($user->city != '') {
                                              $regions = Region::where('id', '!=', $user->city)->get();
                                          }
-                                     @endphp
-                                     @if ($user->city != '')
-                                         <option value="{{ $user->region->id }}">{{ $user->region->label }}</option>
-                                     @endif
-                                     @foreach ($regions as $region)
-                                         <option value="{{ $region->id }}">{{ $region->label }}</option>
-                                     @endforeach
+                                     ?>
+                                     <?php if($user->city != ''): ?>
+                                         <option value="<?php echo e($user->region->id); ?>"><?php echo e($user->region->label); ?></option>
+                                     <?php endif; ?>
+                                     <?php $__currentLoopData = $regions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $region): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                         <option value="<?php echo e($region->id); ?>"><?php echo e($region->label); ?></option>
+                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 
 
@@ -258,12 +240,12 @@
                              <label class="col-md-12">adresse</label>
                              <div class="col-md-12">
                                  <textarea rows="3" name="address" class="form-control form-control-line" required
-                                     placeholder="Précisez votre adresse">{{ $user->address != '' ? $user->address : null }}</textarea>
+                                     placeholder="Précisez votre adresse"><?php echo e($user->address != '' ? $user->address : null); ?></textarea>
                              </div>
                          </div>
-                         <input type="hidden" name="id" id="id" value={{ $user->user_id }}>
+                         <input type="hidden" name="id" id="id" value=<?php echo e($user->user_id); ?>>
 
-                         @csrf
+                         <?php echo csrf_field(); ?>
 
                          <div class="form-group">
                              <div class="col-sm-12">
@@ -272,10 +254,10 @@
                              </div>
                          </div>
                      </form>
-                 @else
+                 <?php else: ?>
                      <h3>Statistiques</h3>
-                     @if ($user->type == 3 || $user->type == 2)
-                         @php
+                     <?php if($user->type == 3 || $user->type == 2): ?>
+                         <?php
                              $type = $user->type;
                              $frequent = [];
                              $delivered = [];
@@ -333,7 +315,7 @@
                                      # code...
                                      break;
                              }
-                         @endphp
+                         ?>
                          <div class="row">
 
                              <div class="col-md-4 col-xl-3 mb-4">
@@ -342,11 +324,11 @@
                                          <div class="row align-items-center no-gutters">
                                              <div class="col me-2">
                                                  <div class="text-uppercase text-success fw-bold text-xs mb-1">
-                                                     <span>{{ $type == 2 ? 'Commandes ' : 'Réponse au demande des restaurants' }}</span>
+                                                     <span><?php echo e($type == 2 ? 'Commandes ' : 'Réponse au demande des restaurants'); ?></span>
 
                                                  </div>
                                                  <div class="text-dark fw-bold h5 mb-0">
-                                                     <span>{{ $type == 2 ? count($commandes) : count($response) }}</span>
+                                                     <span><?php echo e($type == 2 ? count($commandes) : count($response)); ?></span>
                                                  </div>
                                              </div>
                                              <div class="col-auto"><i
@@ -356,7 +338,7 @@
                                      </div>
                                  </div>
                              </div>
-                             @if ($type == 3)
+                             <?php if($type == 3): ?>
                                  <div class="col-md-4 col-xl-3 mb-4">
                                      <div class="card shadow border-start-success py-2">
                                          <div class="card-body">
@@ -368,10 +350,11 @@
                                                      </div>
                                                      <div class="text-dark fw-bold h5 mb-0">
                                                          <span>
-                                                             @php
+                                                             <?php
                                                                  $con = OtherCommande::where('deliverer_id', $user->user_id)->get();
-                                                             @endphp
-                                                             {{ $con->count() }}
+                                                             ?>
+                                                             <?php echo e($con->count()); ?>
+
                                                          </span>
                                                      </div>
                                                  </div>
@@ -394,11 +377,11 @@
                                                      <div class="row g-0 align-items-center">
                                                          <div class="col-auto">
                                                              <div class="text-dark fw-bold h5 mb-0 me-3">
-                                                                 @if (count($frequent) > 0)
-                                                                     <span>{{ $frequent[0]->resto->name }}</span>
-                                                                 @else
+                                                                 <?php if(count($frequent) > 0): ?>
+                                                                     <span><?php echo e($frequent[0]->resto->name); ?></span>
+                                                                 <?php else: ?>
                                                                      Pas encore
-                                                                 @endif
+                                                                 <?php endif; ?>
                                                              </div>
                                                          </div>
 
@@ -410,7 +393,7 @@
                                          </div>
                                      </div>
                                  </div>
-                             @endif
+                             <?php endif; ?>
 
                              <div class="col-md-4 col-xl-3 mb-4">
                                  <div class="card shadow border-start-success py-2">
@@ -422,7 +405,7 @@
 
                                                  </div>
                                                  <div class="text-dark fw-bold h5 mb-0">
-                                                     @php
+                                                     <?php
                                                          $totalRevToday = 0;
                                                          
                                                          if ($type == 3) {
@@ -454,9 +437,9 @@
                                                              }
                                                          }
                                                          
-                                                     @endphp
+                                                     ?>
 
-                                                     <span>{{ $totalRevToday }} TND</span>
+                                                     <span><?php echo e($totalRevToday); ?> TND</span>
 
                                                  </div>
                                              </div>
@@ -473,16 +456,16 @@
                                          <div class="row align-items-center no-gutters">
                                              <div class="col me-2">
                                                  <div class="text-uppercase text-success fw-bold text-xs mb-1">
-                                                     @php
+                                                     <?php
                                                          $now = Carbon::now();
                                                          $month = $now->translatedFormat('M');
                                                          
-                                                     @endphp
-                                                     <span>Revenue du mois {{ $month }} </span>
+                                                     ?>
+                                                     <span>Revenue du mois <?php echo e($month); ?> </span>
 
                                                  </div>
                                                  <div class="text-dark fw-bold h5 mb-0">
-                                                     @php
+                                                     <?php
                                                          $totalRevToday = 0;
                                                          
                                                          if ($type == 3) {
@@ -513,9 +496,9 @@
                                                              }
                                                          }
                                                          
-                                                     @endphp
+                                                     ?>
 
-                                                     <span>{{ $totalRevToday }} TND</span>
+                                                     <span><?php echo e($totalRevToday); ?> TND</span>
 
                                                  </div>
                                              </div>
@@ -536,7 +519,7 @@
 
                                                  </div>
                                                  <div class="text-dark fw-bold h5 mb-0">
-                                                     @php
+                                                     <?php
                                                          $totalRev = 0;
                                                          
                                                          if ($type == 3) {
@@ -562,9 +545,9 @@
                                                              }
                                                          }
                                                          
-                                                     @endphp
+                                                     ?>
 
-                                                     <span>{{ $totalRev }} TND</span>
+                                                     <span><?php echo e($totalRev); ?> TND</span>
                                                  </div>
                                              </div>
                                              <div class="col-auto"><i
@@ -575,8 +558,8 @@
                                  </div>
                              </div>
                          </div>
-                     @endif
-                 @endif
+                     <?php endif; ?>
+                 <?php endif; ?>
              </div>
          </div>
 
@@ -614,3 +597,4 @@
      </script>
      <!-- Column -->
  </div>
+<?php /**PATH C:\wamp64\www\Delivgo\resources\views/dash/layouts/profile.blade.php ENDPATH**/ ?>

@@ -494,7 +494,7 @@ class UserController extends Controller
             $user->save();
             return response(json_encode(["type" => "success", "message" => "Ville à jour", "ville" => $req->address]), 200);
         } else {
-            return response(json_encode(["type" => "error", "message" => "Ville n'est pas supportée", "address" => $req->address]), 500);
+            return response(json_encode(["type" => "error", "message" => "$req->address  n'est pas encore supportée", "address" => $req->address]), 500);
         }
     }
 }
